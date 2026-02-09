@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="AddinVeMong.Views.MongDonDungTam"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AddinVeMong.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <GroupBox Header="Thông số hình học" Margin="0,0,0,10">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Chiều dài móng (l):" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="mm" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5,0"/>
+
+                        <TextBlock Text="Chiều rộng móng (b):" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="mm" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                        <TextBlock Text="Chiều dài cột (lc):" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="mm" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                        <TextBlock Text="Chiều rộng cột (bc):" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="mm" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                        <TextBlock Text="Chiều cao móng (h):" Grid.Row="4" Grid.Column="0" TextWrapping="Wrap"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="mm" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Thông số cao độ" Margin="0,0,0,10">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Chiều sâu chôn móng (hm):" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="mm" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                        <TextBlock Text="Chiều dày lớp bảo vệ (a):" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="mm" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,0 +1,20 @@
+﻿<Window x:Class="AddinVeMong.Views.GiaoDien"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AddinVeMong.Views"
+        mc:Ignorable="d"
+        Title="Revit Addin - Foundation" Height="450" Width="800">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Móng đơn đúng tâm">
+                <local:MongDonDungTam/>
+            </TabItem>
+
+            <TabItem Header="Mong đơn lệch tâm">
+                <local:MongDonLechTam/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
