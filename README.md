@@ -6,8 +6,7 @@
 - Visual Studio 2026
 
 ## Cấu hình file .addin
-```
-xml
+```xml
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
  <RevitAddIns>
          <AddIn Type="Command">
