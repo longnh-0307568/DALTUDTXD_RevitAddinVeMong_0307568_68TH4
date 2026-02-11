@@ -7,6 +7,7 @@
 
 ## Cấu hình file .addin
 ```
+xml
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
  <RevitAddIns>
          <AddIn Type="Command">
@@ -17,4 +18,6 @@
                  <VendorId>NAME</VendorId>
          </AddIn>
 </RevitAddIns>
-**Thay Path bằng đường dẫn riêng**
+```
+
+**Thay Path bằng đường dẫn riêng trên máy**
