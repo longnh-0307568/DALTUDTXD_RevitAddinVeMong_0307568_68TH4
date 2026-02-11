@@ -17,3 +17,4 @@
                  <VendorId>NAME</VendorId>
          </AddIn>
 </RevitAddIns>
+**Thay Path bằng đường dẫn riêng**
