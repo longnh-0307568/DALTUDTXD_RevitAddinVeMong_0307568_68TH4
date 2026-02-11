@@ -7,6 +7,132 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock  Text="Đây là giao diện Móng Đúng Tâm" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Margin="10" Grid.Column="0">
+                    <GroupBox Header="Thông số hình học" Margin="0,0,0,10" HorizontalAlignment="Left" Width="500">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+
+                            <TextBlock Text="Chiều dài móng (l):" Grid.Row="0" Grid.Column="0"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5,0"/>
+
+                            <TextBlock Text="Chiều rộng móng (b):" Grid.Row="1" Grid.Column="0"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                            <TextBlock Text="Chiều dài cột (lc):" Grid.Row="2" Grid.Column="0"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                            <TextBlock Text="Chiều rộng cột (bc):" Grid.Row="3" Grid.Column="0"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                            <TextBlock Text="Chiều cao móng (hc):" Grid.Row="4" Grid.Column="0" TextWrapping="Wrap"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                            <TextBlock Text="Độ lệch tâm phương X (ex):" Grid.Row="5" Grid.Column="0" TextWrapping="Wrap"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                            <TextBlock Text="Độ lệch tâm phương Y (ey):" Grid.Row="6" Grid.Column="0" TextWrapping="Wrap"/>
+                            <TextBox Grid.Row="6" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Thông số cao độ" Margin="0,0,0,10" HorizontalAlignment="Left" Width="500">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Chiều sâu chôn móng (hm):" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                            <TextBlock Text="Chiều dày lớp bảo vệ (a):" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Thông số thép phương X (cạnh dài)" Margin="0,0,0,10" HorizontalAlignment="Left" Width="500">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Đường kính (d):" Grid.Row="0" Grid.Column="0"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+
+                            <TextBlock Text="Số lượng thép:" Grid.Row="1" Grid.Column="0"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="thanh" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Thông số thép phương Y (cạnh ngắn)" Margin="0,0,0,10" HorizontalAlignment="Left" Width="500">
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Số lượng thép:" Grid.Row="0" Grid.Column="0"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="thanh" Grid.Row="0" Grid.Column="2"/>
+
+                            <TextBlock Text="Đường kính thép:" Grid.Row="1" Grid.Column="0"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="2"/>
+                            <TextBlock Text="mm" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5.0"/>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
