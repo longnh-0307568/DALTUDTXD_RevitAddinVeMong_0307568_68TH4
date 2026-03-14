@@ -6,7 +6,7 @@
 
         xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
 
-        Title="Đồ án Revit - Hùng" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Addin Revit" Height="600" Width="800" WindowStartupLocation="CenterScreen">
 
 
 
@@ -104,11 +104,11 @@
 
                 <ribbon:RibbonGroup Header="Loại móng" Background="White">
 
-                    <ribbon:RibbonSplitButton Label="Móng Đơn" LargeImageSource="https://img.icons8.com/color/48/foundation.png">
+                    <ribbon:RibbonSplitButton Label="Móng đơn" LargeImageSource="/AddinVeMong;component/Assets/Images/IsolatedFooting.png">
 
-                        <ribbon:RibbonMenuItem Header="Đúng Tâm" Click="BtnDungTam_Click" ImageSource="https://img.icons8.com/color/32/foundation.png"/>
+                        <ribbon:RibbonMenuItem Header="Đúng Tâm" Click="OnCentricInput" ImageSource="/AddinVeMong;component/Assets/Images/CentricFooting.png"/>
 
-                        <ribbon:RibbonMenuItem Header="Lệch Tâm" Click="BtnLechTam_Click" ImageSource="https://img.icons8.com/color/32/structure.png"/>
+                        <ribbon:RibbonMenuItem Header="Lệch Tâm" Click="OnEccentricInput" ImageSource="/AddinVeMong;component/Assets/Images/EccentricFooting.PNG"/>
 
                     </ribbon:RibbonSplitButton>
 
@@ -130,7 +130,7 @@
 
                 <ribbon:RibbonGroup Header="Thông tin" Background="White">
 
-                    <ribbon:RibbonButton Label="Hướng Dẫn" LargeImageSource="https://img.icons8.com/color/48/help.png" />
+                    <ribbon:RibbonButton Label="Hướng Dẫn" LargeImageSource="/AddinVeMong;component/Assets/Images/Help.png"/>
 
                 </ribbon:RibbonGroup>
 
@@ -162,7 +162,7 @@
 
                         <Grid Margin="10,5,0,0">
 
-                            <Grid x:Name="InputDungTam" Visibility="Visible">
+                            <Grid x:Name="InputCentric" Visibility="Visible">
 
                                 <Grid.ColumnDefinitions>
 
@@ -182,39 +182,31 @@
 
                                     <RowDefinition Height="Auto"/>
 
-                                    <RowDefinition Height="Auto"/>
-
                                 </Grid.RowDefinitions>
 
 
 
                                 <Label Content="Chiều dài (l):" Grid.Row="0" FontWeight="Normal"/>
 
-                                <TextBox x:Name="txtL_DungTam" Grid.Row="0" Grid.Column="1"/>
+                                <TextBox x:Name="txtLengthCentric" Grid.Row="0" Grid.Column="1"/>
 
 
 
                                 <Label Content="Chiều rộng (b):" Grid.Row="1" FontWeight="Normal"/>
 
-                                <TextBox x:Name="txtB_DungTam" Grid.Row="1" Grid.Column="1"/>
+                                <TextBox x:Name="txtWidthCentric" Grid.Row="1" Grid.Column="1"/>
 
 
 
-                                <Label Content="Chiều cao móng (h):" Grid.Row="2" FontWeight="Normal"/>
+                                <Label Content="Chiều dày móng (h):" Grid.Row="2" FontWeight="Normal"/>
 
-                                <TextBox x:Name="txtH_DungTam" Grid.Row="2" Grid.Column="1"/>
-
-
-
-                                <Label Content="Chiều dày đế (h):" Grid.Row="3" FontWeight="Normal"/>
-
-                                <TextBox x:Name="txtH_De_DungTam" Grid.Row="3" Grid.Column="1"/>
+                                <TextBox x:Name="txtHeightCentric" Grid.Row="2" Grid.Column="1"/>
 
 
 
-                                <Label Content="Góc xoay:" Grid.Row="4" FontWeight="Normal"/>
+                                <Label Content="Góc xoay:" Grid.Row="3" FontWeight="Normal"/>
 
-                                <ComboBox x:Name="cbXoay_DungTam" Grid.Row="4" Grid.Column="1" Height="28"  HorizontalAlignment="Left" Margin="0,5">
+                                <ComboBox x:Name="cbRotationCentric" Grid.Row="3" Grid.Column="1" Height="28"  HorizontalAlignment="Left" Margin="0,5">
 
                                     <ComboBoxItem Content="0° (Dọc)" IsSelected="True"/>
 
@@ -226,7 +218,7 @@
 
 
 
-                            <Grid x:Name="InputLechTam" Visibility="Collapsed">
+                            <Grid x:Name="InputEccentric" Visibility="Collapsed">
 
                                 <Grid.ColumnDefinitions>
 

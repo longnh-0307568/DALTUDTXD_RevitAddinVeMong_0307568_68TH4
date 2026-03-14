@@ -6,7 +6,7 @@ using Autodesk.Revit.UI;
 namespace AddinVeMong
 {
     [Transaction(TransactionMode.Manual)]
-    public class Class1 : IExternalCommand
+    public class App : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {

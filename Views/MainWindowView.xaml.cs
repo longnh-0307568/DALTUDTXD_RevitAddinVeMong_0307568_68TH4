@@ -17,16 +17,16 @@ namespace AddinVeMong.Views
             _commanData = _commandData;
         }
 
-        private void BtnDungTam_Click(object sender, RoutedEventArgs e)
+        private void OnCentricInput(object sender, RoutedEventArgs e)
         {
-            InputDungTam.Visibility = Visibility.Visible;
-            InputLechTam.Visibility = Visibility.Collapsed;
+            InputCentric.Visibility = Visibility.Visible;
+            InputEccentric.Visibility = Visibility.Collapsed;
         }
 
-        private void BtnLechTam_Click(object sender, RoutedEventArgs e)
+        private void OnEccentricInput(object sender, RoutedEventArgs e)
         {
-            InputDungTam.Visibility = Visibility.Collapsed;
-            InputLechTam.Visibility = Visibility.Visible;
+            InputCentric.Visibility = Visibility.Collapsed;
+            InputEccentric.Visibility = Visibility.Visible;
         }
     }
 }
