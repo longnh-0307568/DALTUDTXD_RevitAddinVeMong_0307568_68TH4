@@ -6,10 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\MauMongDungTam.jpg" />
+    <None Remove="Assets\Images\CentricFooting.png" />
+    <None Remove="Assets\Images\EccentricFooting.png" />
+    <None Remove="Assets\Images\IsolatedFooting.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +25,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\MauMongDungTam.jpg">
+    <Resource Include="Assets\Images\CentricFooting.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\EccentricFooting.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\IsolatedFooting.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
