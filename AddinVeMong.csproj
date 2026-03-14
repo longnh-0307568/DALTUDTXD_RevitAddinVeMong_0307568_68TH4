@@ -6,11 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Assets\MauMongDungTam.jpg" />
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="RevitAPI">
@@ -22,13 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\MauMongDungTam.jpg">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
 
 </Project>
