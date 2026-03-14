@@ -118,7 +118,7 @@
 
                 <ribbon:RibbonGroup Header="Thao tác" Background="White">
 
-                    <ribbon:RibbonButton Label="VẼ MÓNG"/>
+                    <ribbon:RibbonButton Label="Vẽ" LargeImageSource="/AddinVeMong;component/Assets/Images/Draw.png"/>
 
                 </ribbon:RibbonGroup>
 
