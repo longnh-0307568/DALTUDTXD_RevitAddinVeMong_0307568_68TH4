@@ -11,7 +11,9 @@
 
   <ItemGroup>
     <None Remove="Assets\Images\CentricFooting.png" />
+    <None Remove="Assets\Images\Draw.png" />
     <None Remove="Assets\Images\EccentricFooting.png" />
+    <None Remove="Assets\Images\Help.png" />
     <None Remove="Assets\Images\IsolatedFooting.png" />
   </ItemGroup>
 
@@ -28,9 +30,11 @@
     <Resource Include="Assets\Images\CentricFooting.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Images\Draw.png" />
     <Resource Include="Assets\Images\EccentricFooting.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Images\Help.png" />
   </ItemGroup>
 
   <ItemGroup>
