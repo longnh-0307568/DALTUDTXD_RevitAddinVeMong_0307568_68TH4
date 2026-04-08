@@ -6,12 +6,55 @@
         xmlns:local="clr-namespace:AddinVeMong.Views"
         mc:Ignorable="d"
         Title="RebarView" Height="450" Width="800">
-    <Grid>
-        <StackPanel VerticalAlignment="Center">
-            <Label Content="{Binding InfoText}" 
-                   HorizontalAlignment="Center" 
-                   FontSize="18" FontWeight="Bold"/>
-            <Button Content="Thực hiện vẽ" Width="100" Height="30" Margin="0,20,0,0"/>
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="THÔNG SỐ CỐT THÉP" FontSize="16" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Foreground="#1565C0" Margin="0,0,0,15"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Số lượng (n)" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Đường kính (Φ)" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Thép phương dài:" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                     Text="{Binding LongCount, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                     Text="{Binding LongDiameter, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Thép phương ngắn:" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                     Text="{Binding ShortCount, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="2" Grid.Column="2" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                     Text="{Binding ShortDiameter, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Thép chờ cột:" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                     Text="{Binding StarterCount, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="3" Grid.Column="2" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                     Text="{Binding StarterDiameter, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Hủy" Width="80" Height="30" Margin="10,0" IsCancel="True"/>
+            <Button Content="Tạo Thép" Command="{Binding DrawRebarCommand}" 
+                    Width="100" Height="30" Background="#2E7D32" Foreground="White" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </Window>
