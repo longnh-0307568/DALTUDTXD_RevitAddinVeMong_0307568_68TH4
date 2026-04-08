@@ -19,6 +19,7 @@ namespace AddinVeMong
 
             // ĐƯỜNG DẪN COMMAND MỚI (Lưu ý có chữ .Commands)
             string aboutCommandPath = "AddinVeMong.Commands.AboutCommand";
+            string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string testCommandPath = "AddinVeMong.TestCommand";
 
             RibbonPanel panelGioiThieu = application.CreateRibbonPanel(tabName, "Giới thiệu");
@@ -28,8 +29,7 @@ namespace AddinVeMong
             PushButton btnAbout = panelGioiThieu.AddItem(btnAboutData) as PushButton;
             btnAbout.LargeImage = CreateImage(assemblyName, "About.png");
 
-            // Các nút còn lại tạm thời vẫn để TestCommand
-            PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, testCommandPath);
+            PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, supportCommandPath);
             btnSupportData.Image = CreateImage(assemblyName, "Help.png");
 
             PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, testCommandPath);
