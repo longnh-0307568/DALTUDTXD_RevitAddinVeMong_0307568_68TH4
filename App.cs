@@ -21,13 +21,12 @@ namespace AddinVeMong
             string aboutCommandPath = "AddinVeMong.Commands.AboutCommand";
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
+            string placeRebarPath = "AddinVeMong.Commands.PlaceRebarCommand";
             string testCommandPath = "AddinVeMong.TestCommand";
 
-            RibbonPanel panelGioiThieu = application.CreateRibbonPanel(tabName, "Giới thiệu");
-
-            // Sửa nút Giới thiệu trỏ về aboutCommandPath
+            RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
             PushButtonData btnAboutData = new PushButtonData("btnAbout", "Giới thiệu", assemblyPath, aboutCommandPath);
-            PushButton btnAbout = panelGioiThieu.AddItem(btnAboutData) as PushButton;
+            PushButton btnAbout = panelAbout.AddItem(btnAboutData) as PushButton;
             btnAbout.LargeImage = CreateImage(assemblyName, "About.png");
 
             PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, supportCommandPath);
@@ -36,13 +35,12 @@ namespace AddinVeMong
             PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, settingCommandPath);
             btnSettingsData.Image = CreateImage(assemblyName, "Setting.png");
 
-            panelGioiThieu.AddStackedItems(btnSupportData, btnSettingsData);
+            panelAbout.AddStackedItems(btnSupportData, btnSettingsData);
 
-            RibbonPanel panelThep = application.CreateRibbonPanel(tabName, "Thép");
-            PushButtonData btnDatThepData = new PushButtonData("btnPlaceRebar", "Đặt thép", assemblyPath, testCommandPath);
-            PushButton btnDatThep = panelThep.AddItem(btnDatThepData) as PushButton;
-            btnDatThep.LargeImage = CreateImage(assemblyName, "Draw.png");
-
+            RibbonPanel panelRebar = application.CreateRibbonPanel(tabName, "Thép");
+            PushButtonData btnPlaceRebarData = new PushButtonData("btnPlaceRebar", "Đặt thép", assemblyPath, placeRebarPath);
+            PushButton btnPlaceRebar = panelRebar.AddItem(btnPlaceRebarData) as PushButton;
+            btnPlaceRebar.LargeImage = CreateImage(assemblyName, "Rebar.png");
             return Result.Succeeded;
         }
 
