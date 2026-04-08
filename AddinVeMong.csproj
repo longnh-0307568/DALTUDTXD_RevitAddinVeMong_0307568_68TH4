@@ -25,4 +25,19 @@
 		</Reference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Resource Update="Assets\Images\About.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Update="Assets\Images\Help.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Update="Assets\Images\Rebar.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Update="Assets\Images\Setting.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+
 </Project>
