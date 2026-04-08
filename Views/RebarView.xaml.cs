@@ -23,5 +23,12 @@ namespace AddinVeMong.Views
         {
             InitializeComponent();
         }
+
+        // Đóng window khi click nút
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            this.Close();
+        }
     }
 }
