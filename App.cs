@@ -11,65 +11,51 @@ namespace AddinVeMong
     {
         public Result OnStartup(UIControlledApplication application)
         {
-            // 1. Tạo Ribbon Tab
             string tabName = "THIẾT KẾ MÓNG";
             application.CreateRibbonTab(tabName);
 
-            // 2. Lấy thông tin Assembly
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
-            string assemblyName = Assembly.GetExecutingAssembly().GetName().Name; // Sẽ là "AddinVeMong"
-            string testCommand = "AddinVeMong.TestCommand";
+            string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
-            // --- PANEL 1: GIỚI THIỆU ---
+            // ĐƯỜNG DẪN COMMAND MỚI (Lưu ý có chữ .Commands)
+            string aboutCommandPath = "AddinVeMong.Commands.AboutCommand";
+            string testCommandPath = "AddinVeMong.TestCommand";
+
             RibbonPanel panelGioiThieu = application.CreateRibbonPanel(tabName, "Giới thiệu");
 
-            // Nút Giới thiệu (Nút lớn)
-            PushButtonData btnAboutData = new PushButtonData("btnAbout", "Giới thiệu", assemblyPath, testCommand);
+            // Sửa nút Giới thiệu trỏ về aboutCommandPath
+            PushButtonData btnAboutData = new PushButtonData("btnAbout", "Giới thiệu", assemblyPath, aboutCommandPath);
             PushButton btnAbout = panelGioiThieu.AddItem(btnAboutData) as PushButton;
             btnAbout.LargeImage = CreateImage(assemblyName, "About.png");
 
-            // Nút Hỗ trợ (Nút nhỏ trong Stack)
-            PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, testCommand);
-            btnSupportData.Image = CreateImage(assemblyName, "Help.png"); // File ảnh của bạn là Help.png hoặc Support.png
+            // Các nút còn lại tạm thời vẫn để TestCommand
+            PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, testCommandPath);
+            btnSupportData.Image = CreateImage(assemblyName, "Help.png");
 
-            // Nút Cài đặt (Nút nhỏ trong Stack)
-            PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, testCommand);
+            PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, testCommandPath);
             btnSettingsData.Image = CreateImage(assemblyName, "Setting.png");
 
             panelGioiThieu.AddStackedItems(btnSupportData, btnSettingsData);
 
-
-            // --- PANEL 2: THÉP ---
             RibbonPanel panelThep = application.CreateRibbonPanel(tabName, "Thép");
-
-            PushButtonData btnDatThepData = new PushButtonData("btnPlaceRebar", "Đặt thép", assemblyPath, testCommand);
+            PushButtonData btnDatThepData = new PushButtonData("btnPlaceRebar", "Đặt thép", assemblyPath, testCommandPath);
             PushButton btnDatThep = panelThep.AddItem(btnDatThepData) as PushButton;
-            btnDatThep.LargeImage = CreateImage(assemblyName, "Draw.png"); // Ví dụ dùng ảnh Draw.png có trong csproj của bạn
+            btnDatThep.LargeImage = CreateImage(assemblyName, "Draw.png");
 
             return Result.Succeeded;
         }
 
-        /// <summary>
-        /// Hàm tạo BitmapImage từ Resource bằng Pack URI
-        /// </summary>
         private BitmapImage CreateImage(string assemblyName, string imageName)
         {
             try
             {
-                // Cấu trúc URI chuẩn để lấy Resource từ file DLL
                 string uriPath = $"pack://application:,,,/{assemblyName};component/Assets/Images/{imageName}";
                 return new BitmapImage(new Uri(uriPath));
             }
-            catch
-            {
-                return null;
-            }
+            catch { return null; }
         }
 
-        public Result OnShutdown(UIControlledApplication application)
-        {
-            return Result.Succeeded;
-        }
+        public Result OnShutdown(UIControlledApplication application) => Result.Succeeded;
     }
 
     [Transaction(TransactionMode.Manual)]
@@ -77,7 +63,7 @@ namespace AddinVeMong
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("Revit Addin Test", "Nút hoạt động bình thường!");
+            TaskDialog.Show("Revit Addin Test", "Nút này chưa có Popup riêng!");
             return Result.Succeeded;
         }
     }
