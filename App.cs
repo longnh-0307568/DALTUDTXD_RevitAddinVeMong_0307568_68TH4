@@ -20,6 +20,7 @@ namespace AddinVeMong
             // ĐƯỜNG DẪN COMMAND MỚI (Lưu ý có chữ .Commands)
             string aboutCommandPath = "AddinVeMong.Commands.AboutCommand";
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
+            string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
             string testCommandPath = "AddinVeMong.TestCommand";
 
             RibbonPanel panelGioiThieu = application.CreateRibbonPanel(tabName, "Giới thiệu");
@@ -32,7 +33,7 @@ namespace AddinVeMong
             PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, supportCommandPath);
             btnSupportData.Image = CreateImage(assemblyName, "Help.png");
 
-            PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, testCommandPath);
+            PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, settingCommandPath);
             btnSettingsData.Image = CreateImage(assemblyName, "Setting.png");
 
             panelGioiThieu.AddStackedItems(btnSupportData, btnSettingsData);
