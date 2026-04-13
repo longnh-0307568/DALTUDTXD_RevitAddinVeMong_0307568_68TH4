@@ -7,15 +7,16 @@
 
 ## Cấu hình file .addin
 ```xml
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
- <RevitAddIns>
-         <AddIn Type="Command">
-                 <Assembly>Path\AddinVeMong.dll</Assembly>
-                 <AddInId>CCE62F77-4926-427E-9C21-67C822D13A4D</AddInId>
-                 <FullClassName>AddinVeMong.App</FullClassName>
-                 <Text>AddinVeMong</Text> 
-                 <VendorId>NAME</VendorId>
-         </AddIn>
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>AddinVeMong</Name>
+    <Assembly>path\AddinVeMong.dll</Assembly>
+    <AddInId>1F3A5B7E-9C8D-4A2B-8E1F-3D4C5B6A7E8F</AddInId>
+    <FullClassName>AddinVeMong.App</FullClassName>
+    <VendorId>com.yourname</VendorId>
+    <VendorDescription>Phần mềm vẽ móng</VendorDescription>
+  </AddIn>
 </RevitAddIns>
 ```
 
