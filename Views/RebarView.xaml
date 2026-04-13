@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AddinVeMong.Views"
         mc:Ignorable="d"
-        Title="RebarView" Height="450" Width="800">
+        Title="Thiết lập cốt thép móng" Height="550" Width="400" 
+        WindowStartupLocation="CenterScreen" Background="#F5F5F5">
+
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -13,47 +14,110 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="THÔNG SỐ CỐT THÉP" FontSize="16" FontWeight="Bold" 
+        <TextBlock Text="CẤU HÌNH CỐT THÉP" FontSize="18" FontWeight="Bold" 
                    HorizontalAlignment="Center" Foreground="#1565C0" Margin="0,0,0,15"/>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.5*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-            </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Expander Header="THÉP CẠNH DÀI" IsExpanded="True" Margin="0,5" FontWeight="Bold">
+                    <Grid Margin="10,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="Số lượng (n)" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="Đường kính (Φ)" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <Label Content="Số lượng (thanh):" Grid.Row="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding LongCount}" Grid.Row="0" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Thép phương dài:" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                     Text="{Binding LongCount, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Grid.Row="1" Grid.Column="2" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                     Text="{Binding LongDiameter, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="Đường kính (mm):" Grid.Row="1" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <ComboBox SelectedValue="{Binding LongDiameter}" Grid.Row="1" Grid.Column="1" Margin="5,2">
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">10</System:Int32>
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">12</System:Int32>
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">14</System:Int32>
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">16</System:Int32>
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">18</System:Int32>
+                        </ComboBox>
 
-            <Label Grid.Row="2" Grid.Column="0" Content="Thép phương ngắn:" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                     Text="{Binding ShortCount, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Grid.Row="2" Grid.Column="2" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                     Text="{Binding ShortDiameter, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="Khoảng cách a (mm):" Grid.Row="2" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding LongSpacing}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center" Background="#EEEEEE" IsReadOnly="True"/>
+                    </Grid>
+                </Expander>
 
-            <Label Grid.Row="3" Grid.Column="0" Content="Thép chờ cột:" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                     Text="{Binding StarterCount, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Grid.Row="3" Grid.Column="2" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                     Text="{Binding StarterDiameter, UpdateSourceTrigger=PropertyChanged}"/>
-        </Grid>
+                <Expander Header="THÉP CẠNH NGẮN" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                    <Grid Margin="10,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Số lượng (thanh):" Grid.Row="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding ShortCount}" Grid.Row="0" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
+
+                        <Label Content="Đường kính (mm):" Grid.Row="1" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <ComboBox SelectedValue="{Binding ShortDiameter}" Grid.Row="1" Grid.Column="1" Margin="5,2">
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">10</System:Int32>
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">12</System:Int32>
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">14</System:Int32>
+                            <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">16</System:Int32>
+                        </ComboBox>
+
+                        <Label Content="Khoảng cách a (mm):" Grid.Row="2" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding ShortSpacing}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center" Background="#EEEEEE" IsReadOnly="True"/>
+                    </Grid>
+                </Expander>
+
+                <Expander Header="THÉP CHỜ CỘT (STARTER BARS)" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                    <StackPanel Margin="10,5">
+                        <TextBlock Text="Thép chờ giúp kết nối móng với cột phía trên." FontSize="11" FontStyle="Italic" Foreground="Gray" Margin="5,0,0,5" TextWrapping="Wrap"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Content="Đường kính:" Grid.Row="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,2">
+                                <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">16</System:Int32>
+                                <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">18</System:Int32>
+                                <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">20</System:Int32>
+                                <System:Int32 xmlns:System="clr-namespace:System;assembly=mscorlib">22</System:Int32>
+                            </ComboBox>
+
+                            <Label Content="Số thanh nX, nY:" Grid.Row="1" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                <TextBox Text="{Binding StarterNX}" Width="50" Margin="5,2" VerticalContentAlignment="Center"/>
+                                <TextBlock Text="x" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding StarterNY}" Width="50" Margin="5,2" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <Label Content="Chiều dài chờ (mm):" Grid.Row="2" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox Text="{Binding StarterLength}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
             <Button Content="Hủy" Width="80" Height="30" Margin="10,0" IsCancel="True"/>
-            <Button Content="Tạo Thép" Command="{Binding DrawRebarCommand}" 
+            <Button Content="Tạo Thép" 
+                    Command="{Binding DrawRebarCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                     Width="100" Height="30" Background="#2E7D32" Foreground="White" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
