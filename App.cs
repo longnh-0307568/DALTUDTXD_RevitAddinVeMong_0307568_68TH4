@@ -12,6 +12,7 @@ namespace AddinVeMong
         public Result OnStartup(UIControlledApplication application)
         {
             string tabName = "THIẾT KẾ MÓNG";
+
             application.CreateRibbonTab(tabName);
 
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
@@ -22,6 +23,7 @@ namespace AddinVeMong
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
             string placeRebarPath = "AddinVeMong.Commands.PlaceRebarCommand";
+            string createChamferFootingPath = "AddinVeMong.Commands.Cmd_CreateChamferFooting";
             string testCommandPath = "AddinVeMong.TestCommand";
 
             RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
@@ -41,6 +43,19 @@ namespace AddinVeMong
             PushButtonData btnPlaceRebarData = new PushButtonData("btnPlaceRebar", "Đặt thép", assemblyPath, placeRebarPath);
             PushButton btnPlaceRebar = panelRebar.AddItem(btnPlaceRebarData) as PushButton;
             btnPlaceRebar.LargeImage = CreateImage(assemblyName, "Rebar.png");
+
+            RibbonPanel panelFooting = application.CreateRibbonPanel(tabName, "Móng");
+            // Tạo PulldownButton
+            PulldownButtonData pullDownFootingData = new PulldownButtonData("pullDownFooting", "Móng đơn");
+            PulldownButton pullDownFooting = panelFooting.AddItem(pullDownFootingData) as PulldownButton;
+            //pullDownFooting.LargeImage = CreateImage(assemblyName, "Footing.png");
+
+            // Thêm Item "Móng vát" vào trong menu thả xuống
+            PushButtonData btnChamferFootingData = new PushButtonData("btnChamferFooting", "Móng vát", assemblyPath, createChamferFootingPath);
+            btnChamferFootingData.ToolTip = "Vẽ móng đơn vát cạnh bằng cách chọn điểm";
+            //btnChamferFootingData.Image = CreateImage(assemblyName, "ChamferIcon.png"); // Icon nhỏ cho item
+            pullDownFooting.AddPushButton(btnChamferFootingData);
+
             return Result.Succeeded;
         }
 
