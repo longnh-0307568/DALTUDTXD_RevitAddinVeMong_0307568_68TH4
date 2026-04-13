@@ -5,7 +5,7 @@ using Autodesk.Revit.UI.Selection;
 using System;
 using System.Collections.Generic;
 
-namespace AddinVeMong.ViewModels
+namespace AddinVeMong.Commands
 {
     [Transaction(TransactionMode.Manual)]
     public class Cmd_CreateChamferFooting : IExternalCommand
