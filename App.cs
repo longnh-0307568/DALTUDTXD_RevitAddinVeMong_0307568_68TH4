@@ -11,7 +11,7 @@ namespace AddinVeMong
     {
         public Result OnStartup(UIControlledApplication application)
         {
-            string tabName = "THIẾT KẾ MÓNG";
+            string tabName = "Thiết Kế Móng";
 
             application.CreateRibbonTab(tabName);
 
