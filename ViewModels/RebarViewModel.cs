@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using AddinVeMong.Commands;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using AddinVeMong.Commands;
-using Autodesk.Revit.UI;
 
 namespace AddinVeMong.ViewModels
 {
@@ -10,9 +11,19 @@ namespace AddinVeMong.ViewModels
     {
         private ExternalCommandData _commandData;
 
-        public RebarViewModel(ExternalCommandData commandData)
+        // 1. THÊM THUỘC TÍNH SELECTEDHOST ĐỂ REBARLOGIC TRUY CẬP
+        private Element _selectedHost;
+        public Element SelectedHost
+        {
+            get => _selectedHost;
+            set { _selectedHost = value; OnPropertyChanged(); }
+        }
+
+        // 2. CẬP NHẬT CONSTRUCTOR ĐỂ NHẬN MÓNG (HOST) TỪ COMMAND
+        public RebarViewModel(ExternalCommandData commandData, Element host)
         {
             _commandData = commandData;
+            SelectedHost = host; // Gán móng được chọn vào thuộc tính
             DrawRebarCommand = new RelayCommand(ExecuteDraw);
         }
 
@@ -46,43 +57,36 @@ namespace AddinVeMong.ViewModels
             set { _shortCount = value; OnPropertyChanged(); }
         }
 
-        private int _shortDiameter = 14;
+        private int _shortDiameter = 12;
         public int ShortDiameter
         {
             get => _shortDiameter;
             set { _shortDiameter = value; OnPropertyChanged(); }
         }
 
-        private int _shortSpacing = 150;
-        public int ShortSpacing
-        {
-            get => _shortSpacing;
-            set { _shortSpacing = value; OnPropertyChanged(); }
-        }
-
-        // --- THÉP CHỜ CỘT (STARTER BARS) ---
-        private int _starterDiameter = 18;
+        // --- THÉP CHỜ CỘT ---
+        private int _starterDiameter = 16;
         public int StarterDiameter
         {
             get => _starterDiameter;
             set { _starterDiameter = value; OnPropertyChanged(); }
         }
 
-        private int _starterNX = 2; // Số thanh theo phương X
+        private int _starterNX = 2;
         public int StarterNX
         {
             get => _starterNX;
             set { _starterNX = value; OnPropertyChanged(); }
         }
 
-        private int _starterNY = 2; // Số thanh theo phương Y
+        private int _starterNY = 2;
         public int StarterNY
         {
             get => _starterNY;
             set { _starterNY = value; OnPropertyChanged(); }
         }
 
-        private int _starterLength = 600; // Chiều dài đoạn chờ nhô lên
+        private int _starterLength = 600;
         public int StarterLength
         {
             get => _starterLength;
@@ -96,10 +100,9 @@ namespace AddinVeMong.ViewModels
         {
             var window = obj as System.Windows.Window;
 
-            // Ở đây bạn sẽ gọi lớp Logic vẽ thép trong thư mục Commands
-            // Ví dụ: RebarLogic.Execute(_commandData, this);
-
-            TaskDialog.Show("Thông báo", "Đang chuyển dữ liệu sang logic vẽ thép...");
+            // 3. GỌI LOGIC VẼ THÉP TỪ REBARLOGIC (Giữ nguyên BasisY bên trong đó)
+            // Truyền 'this' (chính là ViewModel này) vào để Logic lấy được LongCount, LongDiameter...
+            RebarLogic.ExecuteDrawRebar(_commandData, this);
 
             window?.Close();
         }

@@ -11,11 +11,23 @@ namespace AddinVeMong.Commands
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            RebarView window = new RebarView();
-            window.DataContext = new RebarViewModel(commandData); // Kết nối với ViewModel mới
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            Document doc = uidoc.Document;
 
-            window.ShowDialog();
-            return Result.Succeeded;
+            try
+            {
+                // Chọn móng trước
+                Reference r = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element, "Chọn móng để đặt thép");
+                Element host = doc.GetElement(r);
+
+                // Truyền host vào ViewModel
+                var vm = new RebarViewModel(commandData, host);
+                var view = new AddinVeMong.Views.RebarView { DataContext = vm };
+
+                view.ShowDialog();
+                return Result.Succeeded;
+            }
+            catch (Exception) { return Result.Cancelled; }
         }
     }
 }

@@ -17,10 +17,10 @@ namespace AddinVeMong.ViewModels
               $"Phiên bản: {version} (Beta)\n" +
               $"Sản phẩm thuộc đồ án môn học: Lập trình ứng dụng trong xây dựng\n\n" +
               $"Thực hiện bởi: Nhóm\n" +
-              $"- Sinh viên 1: Nguyễn Hoàng Long\n" +
-              $"- Sinh viên 2: Đoàn Quang Ánh\n" +
-              $"- Sinh viên 3: Nguyễn Hữu Hùng\n" +
-              $"Giảng viên hướng dẫn: Thầy Nguyễn Văn Hải\n" +
+              $"- Sinh viên 1: \n" +
+              $"- Sinh viên 2: \n" +
+              $"- Sinh viên 3: \n" +
+              $"Giảng viên hướng dẫn: \n" +
               $"------------------------------------------\n" +
               $"Cảm ơn thầy/cô đã sử dụng Add-in trên thiết bị: {computerName}";
         }
