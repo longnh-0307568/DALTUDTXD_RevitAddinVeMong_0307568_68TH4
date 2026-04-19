@@ -12,7 +12,7 @@
 <RevitAddIns>
   <AddIn Type="Application">
     <Name>AddinVeMong</Name>
-    <Assembly>path\AddinVeMong.dll</Assembly>
+    <Assembly>Path\AddinVeMong.dll</Assembly>
     <AddInId>1F3A5B7E-9C8D-4A2B-8E1F-3D4C5B6A7E8F</AddInId>
     <FullClassName>AddinVeMong.App</FullClassName>
     <VendorId>com.yourname</VendorId>
