@@ -44,7 +44,7 @@
                         </ComboBox>
 
                         <Label Content="Khoảng cách a (mm):" Grid.Row="2" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding LongSpacing}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center" Background="#EEEEEE" IsReadOnly="True"/>
+                        <TextBox Text="{Binding LongSpacing}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
@@ -72,7 +72,7 @@
                         </ComboBox>
 
                         <Label Content="Khoảng cách a (mm):" Grid.Row="2" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding ShortSpacing}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center" Background="#EEEEEE" IsReadOnly="True"/>
+                        <TextBox Text="{Binding ShortSpacing}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
