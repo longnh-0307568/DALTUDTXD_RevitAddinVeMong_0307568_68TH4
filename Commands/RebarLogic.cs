@@ -10,98 +10,102 @@ namespace AddinVeMong.Commands
 {
     public static class RebarLogic
     {
-        // Đổi tên hàm thành ExecuteDrawRebar để khớp với lời gọi từ ViewModel của bạn
         public static void ExecuteDrawRebar(ExternalCommandData commandData, RebarViewModel vm)
         {
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
             try
             {
-                // 1. LẤY MÓNG TỪ VIEWMODEL (Sử dụng thuộc tính SelectedHost bạn vừa thêm)
                 Element host = vm.SelectedHost;
+                if (host == null) return;
 
-                if (host == null)
-                {
-                    TaskDialog.Show("Lỗi", "Không tìm thấy móng đã chọn.");
-                    return;
-                }
-
-                // 2. LẤY THÔNG TIN HÌNH HỌC
                 BoundingBoxXYZ bbox = host.get_BoundingBox(null);
-                if (bbox == null) throw new Exception("Không lấy được ranh giới móng.");
+                if (bbox == null) return;
 
-                XYZ min = bbox.Min;
-                XYZ max = bbox.Max;
-
-                // Tính toán các thông số khoảng cách
-                double lengthY = max.Y - min.Y;
-                // Sử dụng 50mm lớp bảo vệ theo TCVN
+                // Lớp bảo vệ 50mm
                 double offset = UnitUtils.ConvertToInternalUnits(50, UnitTypeId.Millimeters);
 
                 using (Transaction trans = new Transaction(doc, "Vẽ thép móng"))
                 {
                     trans.Start();
 
-                    // 3. TÌM LOẠI THÉP (BARTYPE)
-                    // Tìm loại thép có tên chứa con số đường kính từ giao diện (vm.LongDiameter)
-                    RebarBarType barType = new FilteredElementCollector(doc)
-                        .OfClass(typeof(RebarBarType))
-                        .Cast<RebarBarType>()
-                        .FirstOrDefault(x => x.Name.Contains(vm.LongDiameter.ToString()));
+                    // 1. VẼ THÉP CẠNH DÀI (Dọc phương X, rải phương Y)
+                    Rebar longBar = CreateLongRebar(doc, host, bbox, offset, vm);
 
-                    // Nếu không tìm thấy, lấy loại thép đầu tiên trong dự án để tránh crash
-                    if (barType == null)
+                    // 2. VẼ THÉP CẠNH NGẮN (Dọc phương Y, rải phương X)
+                    // Thép này sẽ nằm đè lên trên thép dài
+                    if (longBar != null)
                     {
-                        barType = new FilteredElementCollector(doc)
-                            .OfClass(typeof(RebarBarType))
-                            .FirstElement() as RebarBarType;
-                    }
-
-                    if (barType == null)
-                        throw new Exception("Dự án chưa nạp thư viện thép (Rebar Bar Type).");
-
-                    // 4. ĐỊNH NGHĨA ĐƯỜNG DẪN THANH THÉP (THANH ĐẦU TIÊN)
-                    // Vẽ dọc theo phương X, cao độ Z cách đáy móng một khoảng offset
-                    XYZ startPoint = new XYZ(min.X + offset, min.Y + offset, min.Z + offset);
-                    XYZ endPoint = new XYZ(max.X - offset, min.Y + offset, min.Z + offset);
-                    Line line = Line.CreateBound(startPoint, endPoint);
-
-                    // 5. TẠO THANH THÉP
-                    // Sử dụng XYZ.BasisY làm Normal vector như bạn mong muốn
-                    Rebar rebar = Rebar.CreateFromCurves(
-                        doc,
-                        RebarStyle.Standard,
-                        barType,
-                        null,
-                        null,
-                        host,
-                        XYZ.BasisY,
-                        new List<Curve> { line },
-                        RebarHookOrientation.Right,
-                        RebarHookOrientation.Right,
-                        true,
-                        true);
-
-                    // 6. RẢI THÉP THEO SỐ LƯỢNG (LAYOUT)
-                    if (rebar != null)
-                    {
-                        RebarShapeDrivenAccessor accessor = rebar.GetShapeDrivenAccessor();
-                        // Rải theo số lượng thanh LongCount nhập từ UI
-                        accessor.SetLayoutAsFixedNumber(
-                            vm.LongCount,
-                            lengthY - (2 * offset),
-                            true, true, true);
+                        CreateShortRebar(doc, host, bbox, offset, vm);
                     }
 
                     trans.Commit();
                 }
 
-                TaskDialog.Show("Thành công", $"Đã vẽ xong {vm.LongCount} thanh thép cạnh dài.");
+                TaskDialog.Show("Thành công", "Đã vẽ xong hệ thép móng.");
             }
             catch (Exception ex)
             {
-                TaskDialog.Show("Lỗi Logic", "Lỗi khi vẽ thép: " + ex.Message);
+                TaskDialog.Show("Lỗi Logic", "Lỗi: " + ex.Message);
             }
+        }
+
+        private static Rebar CreateLongRebar(Document doc, Element host, BoundingBoxXYZ bbox, double offset, RebarViewModel vm)
+        {
+            RebarBarType barType = GetBarType(doc, vm.LongDiameter);
+            if (barType == null) return null;
+
+            double z = bbox.Min.Z + offset;
+            XYZ start = new XYZ(bbox.Min.X + offset, bbox.Min.Y + offset, z);
+            XYZ end = new XYZ(bbox.Max.X - offset, bbox.Min.Y + offset, z);
+            Line line = Line.CreateBound(start, end);
+
+            Rebar rebar = Rebar.CreateFromCurves(doc, RebarStyle.Standard, barType, null, null, host, XYZ.BasisY, new List<Curve> { line }, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+
+            if (rebar != null)
+            {
+                double lengthY = (bbox.Max.Y - bbox.Min.Y) - (2 * offset);
+                rebar.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(vm.LongCount, lengthY, true, true, true);
+            }
+            return rebar;
+        }
+
+        private static void CreateShortRebar(Document doc, Element host, BoundingBoxXYZ bbox, double offset, RebarViewModel vm)
+        {
+            RebarBarType longType = GetBarType(doc, vm.LongDiameter);
+            RebarBarType shortType = GetBarType(doc, vm.ShortDiameter);
+            if (longType == null || shortType == null) return;
+
+            // Lấy bán kính của cả hai loại thép
+            double longRadius = longType.BarModelDiameter / 2.0;
+            double shortRadius = shortType.BarModelDiameter / 2.0;
+
+            // Cao độ chuẩn: Tâm thép dài + Bán kính thép dài + Bán kính thép ngắn
+            // Như vậy mép ngoài của chúng sẽ tiếp xúc nhau (khoảng cách = 0)
+            double z = bbox.Min.Z + offset + longRadius + shortRadius;
+
+            XYZ start = new XYZ(bbox.Min.X + offset, bbox.Min.Y + offset, z);
+            XYZ end = new XYZ(bbox.Min.X + offset, bbox.Max.Y - offset, z);
+            Line line = Line.CreateBound(start, end);
+
+            // Dùng BasisX làm Normal để rải dọc theo phương X
+            Rebar rebar = Rebar.CreateFromCurves(doc, RebarStyle.Standard, shortType, null, null, host, XYZ.BasisX, new List<Curve> { line }, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+
+            if (rebar != null)
+            {
+                double lengthX = (bbox.Max.X - bbox.Min.X) - (2 * offset);
+                rebar.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(vm.ShortCount, lengthX, true, true, true);
+            }
+        }
+
+        private static RebarBarType GetBarType(Document doc, int diameter)
+        {
+            RebarBarType type = new FilteredElementCollector(doc)
+                .OfClass(typeof(RebarBarType))
+                .Cast<RebarBarType>()
+                .FirstOrDefault(x => x.Name.Contains(diameter.ToString()));
+
+            return type ?? new FilteredElementCollector(doc).OfClass(typeof(RebarBarType)).FirstElement() as RebarBarType;
         }
     }
 }
