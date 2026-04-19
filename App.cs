@@ -23,7 +23,7 @@ namespace AddinVeMong
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
             string placeRebarPath = "AddinVeMong.Commands.PlaceRebarCommand";
-            string createChamferFootingPath = "AddinVeMong.Commands.Cmd_CreateChamferFooting";
+            string createChamferFootingPath = "AddinVeMong.Commands.CreateChamferFootingCommand";
             string testCommandPath = "AddinVeMong.TestCommand";
 
             RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
