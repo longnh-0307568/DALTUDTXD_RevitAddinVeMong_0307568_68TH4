@@ -118,7 +118,7 @@
             <Button Content="Tạo Thép" 
                     Command="{Binding DrawRebarCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                    Width="100" Height="30" Background="#2E7D32" Foreground="White" FontWeight="Bold"/>
+                    Width="100" Height="30" Background="#1565C0" Foreground="White" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </Window>
