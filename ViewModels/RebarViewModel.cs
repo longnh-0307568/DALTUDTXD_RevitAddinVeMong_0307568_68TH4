@@ -12,18 +12,18 @@ namespace AddinVeMong.ViewModels
         private ExternalCommandData _commandData;
 
         // 1. THÊM THUỘC TÍNH SELECTEDHOST ĐỂ REBARLOGIC TRUY CẬP
-        private Element _selectedHost;
-        public Element SelectedHost
+        private List<Element> _selectedHosts;
+        public List<Element> SelectedHosts
         {
-            get => _selectedHost;
-            set { _selectedHost = value; OnPropertyChanged(); }
+            get => _selectedHosts;
+            set { _selectedHosts = value; OnPropertyChanged(); }
         }
 
-        // 2. CẬP NHẬT CONSTRUCTOR ĐỂ NHẬN MÓNG (HOST) TỪ COMMAND
-        public RebarViewModel(ExternalCommandData commandData, Element host)
+        // Cập nhật Constructor để nhận List<Element>
+        public RebarViewModel(ExternalCommandData commandData, List<Element> hosts)
         {
             _commandData = commandData;
-            SelectedHost = host; // Gán móng được chọn vào thuộc tính
+            SelectedHosts = hosts; // Lưu danh sách móng
             DrawRebarCommand = new RelayCommand(ExecuteDraw);
         }
 
