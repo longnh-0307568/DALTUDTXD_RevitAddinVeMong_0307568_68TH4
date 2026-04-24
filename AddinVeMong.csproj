@@ -15,6 +15,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Commands\CreateEccentricFootingCommand.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Commands\CreateEccentricFootingCommand.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="RevitAPI">
 			<HintPath>C:\Program Files\Autodesk\Revit 2025\RevitAPI.dll</HintPath>
 			<Private>False</Private>
@@ -39,7 +47,7 @@
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Update="Assets\Images\Rebar.png">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Update="Assets\Images\Setting.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
