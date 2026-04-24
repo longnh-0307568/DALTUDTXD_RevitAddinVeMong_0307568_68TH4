@@ -1,0 +1,61 @@
+<Window x:Class="AddinVeMong.Views.FootingView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Thông số móng vát" Height="400" Width="350"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="THÔNG SỐ MÓNG VÁT" FontSize="18" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Foreground="#1565C0" Margin="0,0,0,20"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+
+            <!-- Kích thước mặt bằng -->
+            <Label Grid.Row="0" Grid.Column="0" Content="Kích thước đáy (mm):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding BaseSize}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Kích thước thân (mm):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding MidSize}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Kích thước đỉnh (mm):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding TopSize}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
+            <!-- Chiều cao -->
+            <Label Grid.Row="3" Grid.Column="0" Content="Chiều cao đế (mm):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding HBase}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Chiều cao đứng (mm):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="5" Text="{Binding HStraight}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
+            <Label Grid.Row="5" Grid.Column="0" Content="Chiều cao vát (mm):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="5" Text="{Binding HChamfer}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Hủy" Width="80" Height="30" Margin="10,0" IsCancel="True" Background="#F44336" Foreground="White" BorderThickness="0"/>
+            <Button Content="Vẽ Móng" Command="{Binding DrawCommand}" 
+                    Width="100" Height="30" Background="#2E7D32" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+        </StackPanel>
+    </Grid>
+</Window>
