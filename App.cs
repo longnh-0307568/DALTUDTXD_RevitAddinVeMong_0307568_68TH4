@@ -23,7 +23,7 @@ namespace AddinVeMong
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
             string placeRebarPath = "AddinVeMong.Commands.PlaceRebarCommand";
             string createChamferFootingPath = "AddinVeMong.Commands.ChamferFootingCommand";
-            string createEccentricChamferFootingPath = "AddingVeMong.Commands.CreateEccentricFootingCommand";
+            string createEccentricChamferFootingPath = "AddinVeMong.Commands.CreateEccentricFootingCommand";
             string testCommandPath = "AddinVeMong.TestCommand";
 
             // Tạo pannel Giới thiệu

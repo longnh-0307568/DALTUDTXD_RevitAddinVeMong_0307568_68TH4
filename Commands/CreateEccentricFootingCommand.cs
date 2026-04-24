@@ -7,7 +7,7 @@ using Autodesk.Revit.UI;
 using System;
 using System.Linq;
 
-namespace AddinVeMong1
+namespace AddinVeMong.Commands
 {
     [Transaction(TransactionMode.Manual)]
     public class CmdVeMongLechTam : IExternalCommand
