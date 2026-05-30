@@ -15,14 +15,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Commands\CreateEccentricFootingCommand.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="Commands\CreateEccentricFootingCommand.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Reference Include="RevitAPI">
 			<HintPath>C:\Program Files\Autodesk\Revit 2025\RevitAPI.dll</HintPath>
 			<Private>False</Private>

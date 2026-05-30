@@ -13,16 +13,7 @@ namespace AddinVeMong.ViewModels
             string userName = Environment.UserName;
             string computerName = Environment.MachineName;
 
-            DisplayText = $"PROJECT: ADD-IN THIẾT KẾ MÓNG ĐƠN VÁT\n" +
-              $"Phiên bản: {version} (Beta)\n" +
-              $"Sản phẩm thuộc đồ án môn học: Lập trình ứng dụng trong xây dựng\n\n" +
-              $"Thực hiện bởi: Nhóm\n" +
-              $"- Sinh viên 1: \n" +
-              $"- Sinh viên 2: \n" +
-              $"- Sinh viên 3: \n" +
-              $"Giảng viên hướng dẫn: \n" +
-              $"------------------------------------------\n" +
-              $"Cảm ơn thầy/cô đã sử dụng Add-in trên thiết bị: {computerName}";
+            DisplayText = $"PROJECT: ADD-IN THIẾT KẾ MÓNG ĐƠN VÁT\n";
         }
     }
 }
