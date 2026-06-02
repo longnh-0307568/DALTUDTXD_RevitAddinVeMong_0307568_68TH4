@@ -112,33 +112,43 @@
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
 
-                        <Label Content="Đường kính thép dọc:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center">
+                        <Label Content="Kích thước cột X (mm):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding ColumnWidthX}" Grid.Row="0" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="(Ví dụ: 220, 300)" Grid.Row="0" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
+
+                        <Label Content="Kích thước cột Y (mm):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding ColumnWidthY}" Grid.Row="1" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="(Ví dụ: 220, 400)" Grid.Row="1" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
+
+                        <Label Content="Đường kính thép dọc:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center">
                             <sys:Int32>16</sys:Int32>
                             <sys:Int32>18</sys:Int32>
                             <sys:Int32>20</sys:Int32>
                             <sys:Int32>22</sys:Int32>
                             <sys:Int32>25</sys:Int32>
                         </ComboBox>
-                        <TextBlock Text="(Cố định 4 thanh góc)" Grid.Row="0" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
+                        <TextBlock Text="(Cố định 4 thanh góc)" Grid.Row="2" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
 
-                        <Label Content="Chiều dài chân vịt (mm):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding StarterHookLength}" Grid.Row="1" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
+                        <Label Content="Chiều dài chân vịt (mm):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding StarterHookLength}" Grid.Row="3" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
 
-                        <Label Content="Chiều dài chờ cột (mm):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding StarterLength}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
+                        <Label Content="Chiều dài chờ cột (mm):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding StarterLength}" Grid.Row="4" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
 
-                        <Label Content="Đường kính thép đai:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <ComboBox SelectedValue="{Binding StirrupDiameter}" Grid.Row="3" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center">
+                        <Label Content="Đường kính thép đai:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <ComboBox SelectedValue="{Binding StirrupDiameter}" Grid.Row="5" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center">
                             <sys:Int32>6</sys:Int32>
                             <sys:Int32>8</sys:Int32>
                             <sys:Int32>10</sys:Int32>
                         </ComboBox>
 
-                        <Label Content="Khoảng cách đai (mm):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding StirrupSpacing}" Grid.Row="4" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
+                        <Label Content="Khoảng cách đai (mm):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox Text="{Binding StirrupSpacing}" Grid.Row="6" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
