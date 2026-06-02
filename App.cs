@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
 
@@ -15,65 +16,61 @@ namespace AddinVeMong
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
             string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
-            // ĐƯỜNG DẪN COMMAND
+            // ĐƯỜNG DẪN COMMAND HỆ THỐNG
             string aboutCommandPath = "AddinVeMong.Commands.AboutCommand";
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
 
-            // ĐƯỜNG DẪN 2 COMMAND MỚI CHO MÓNG ĐÚNG TÂM VÀ LỆCH TÂM
-            string placeRebarConcentricPath = "AddinVeMong.Commands.PlaceRebarConcentricCommand";
-            string placeRebarEccentricPath = "AddinVeMong.Commands.PlaceRebarEccentricCommand";
+            // ĐƯỜNG DẪN 2 COMMAND MỞ UI (Đã cập nhật tên class cho hợp lý)
+            string showConcentricUIPath = "AddinVeMong.Commands.ShowConcentricWindowCommand";
+            string showEccentricUIPath = "AddinVeMong.Commands.ShowEccentricWindowCommand";
 
-            // Tạo pannel Giới thiệu
+            // Tạo panel Giới thiệu
             RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
-            // Thêm nút 'Giới thiệu' vào pannel
+
             PushButtonData btnAboutData = new PushButtonData("btnAbout", "Giới thiệu", assemblyPath, aboutCommandPath);
             PushButton btnAbout = panelAbout.AddItem(btnAboutData) as PushButton;
             btnAbout.LargeImage = CreateImage(assemblyName, "About.png");
 
-            // Nút 'Hỗ trợ'
             PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, supportCommandPath);
             btnSupportData.Image = CreateImage(assemblyName, "Help.png");
 
-            // Nút 'Cài đặt'
             PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, settingCommandPath);
             btnSettingsData.Image = CreateImage(assemblyName, "Setting.png");
 
-            // Thêm 2 nút kiểu Stack
             panelAbout.AddStackedItems(btnSupportData, btnSettingsData);
 
-            // CẬP NHẬT PANEL 'THÉP' SỬ DỤNG PULLDOWN BUTTON
+            // PANEL 'THÉP' SỬ DỤNG PULLDOWN BUTTON
             RibbonPanel panelRebar = application.CreateRibbonPanel(tabName, "Thép");
 
-            // 1. Khởi tạo nút thả xuống (Pulldown Button) đóng vai trò là menu cha
+            // 1. Khởi tạo nút thả xuống (Pulldown Button) làm menu cha
             PulldownButtonData pulldownRebarData = new PulldownButtonData("pdPlaceRebar", "Đặt thép");
             PulldownButton pulldownRebar = panelRebar.AddItem(pulldownRebarData) as PulldownButton;
-            pulldownRebar.LargeImage = CreateImage(assemblyName, "Rebar.png"); // Icon chính hiển thị trên Ribbon
+            pulldownRebar.LargeImage = CreateImage(assemblyName, "Rebar.png");
 
-            // 2. Thêm nút con thứ nhất: Móng đơn đúng tâm
+            // 2. Thêm nút con: Mở UI Móng đơn đúng tâm
             PushButtonData btnConcentricData = new PushButtonData(
                 "btnDungTam",
                 "Móng đơn đúng tâm",
                 assemblyPath,
-                placeRebarConcentricPath
+                showConcentricUIPath
             );
-            btnConcentricData.LargeImage = CreateImage(assemblyName, "Rebar.png"); // Bạn có thể đổi tên icon riêng nếu muốn
+            btnConcentricData.LargeImage = CreateImage(assemblyName, "CentricChamfer.png");
             pulldownRebar.AddPushButton(btnConcentricData);
 
-            // 3. Thêm nút con thứ hai: Móng đơn lệch tâm
+            // 3. Thêm nút con: Mở UI Móng đơn lệch tâm
             PushButtonData btnEccentricData = new PushButtonData(
                 "btnLechTam",
                 "Móng đơn lệch tâm",
                 assemblyPath,
-                placeRebarEccentricPath
+                showEccentricUIPath
             );
-            btnEccentricData.LargeImage = CreateImage(assemblyName, "Rebar.png"); // Bạn có thể đổi tên icon riêng nếu muốn
+            btnEccentricData.LargeImage = CreateImage(assemblyName, "EccentricChamfer.png");
             pulldownRebar.AddPushButton(btnEccentricData);
 
             return Result.Succeeded;
         }
 
-        // Hỗ trợ tạo đường dẫn để chỉ cần nhập tên icon
         private BitmapImage CreateImage(string assemblyName, string imageName)
         {
             try
