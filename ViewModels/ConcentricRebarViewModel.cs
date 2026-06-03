@@ -146,6 +146,7 @@ namespace AddinVeMong.ViewModels
         {
             try
             {
+                // Lay doi tuong mong duoc chon
                 var selectedIds = _uiDoc.Selection.GetElementIds();
                 if (selectedIds.Count == 0)
                 {
@@ -156,13 +157,37 @@ namespace AddinVeMong.ViewModels
                 Element footingElement = _doc.GetElement(selectedIds.First());
                 if (footingElement.Category == null || footingElement.Category.Id.IntegerValue != (int)BuiltInCategory.OST_StructuralFoundation)
                 {
-                    TaskDialog.Show("Lỗi dữ liệu", "Đối tượng Bạn chọn không phải là Móng đơn. Vui lòng chọn lại!");
+                    TaskDialog.Show("Lỗi dữ liệu", "Đối tượng được chọn không phải là Móng đơn. Vui lòng chọn lại!");
                     return;
                 }
 
                 FamilyInstance footingInstance = footingElement as FamilyInstance;
                 if (footingInstance == null) return;
 
+                // Quet tim cau kien cot be tong lien ket phia tren dinh mong
+                Element columnElement = null;
+                var boundingBox = footingElement.get_BoundingBox(null);
+                if (boundingBox != null)
+                {
+                    XYZ tolerance = new XYZ(0.1, 0.1, 2.0);
+                    Outline outline = new Outline(boundingBox.Min, boundingBox.Max + tolerance);
+                    BoundingBoxIntersectsFilter boxFilter = new BoundingBoxIntersectsFilter(outline);
+
+                    var connectedColumns = new FilteredElementCollector(_doc)
+                        .OfCategory(BuiltInCategory.OST_StructuralColumns)
+                        .OfClass(typeof(FamilyInstance))
+                        .WherePasses(boxFilter)
+                        .ToList();
+
+                    if (connectedColumns.Count > 0)
+                    {
+                        columnElement = connectedColumns.First();
+                    }
+                }
+
+                Element columnHostElement = columnElement ?? footingElement;
+
+                // Thu thap thong so hinh hoc mong
                 ElementType footingType = _doc.GetElement(footingElement.GetTypeId()) as ElementType;
                 if (footingType == null) return;
 
@@ -172,7 +197,7 @@ namespace AddinVeMong.ViewModels
 
                 if (pLength == null || pWidth == null || pHeight == null)
                 {
-                    TaskDialog.Show("Lỗi Family", "Không tìm thấy các thông số thuộc tính kích thước trong Family móng này.");
+                    TaskDialog.Show("Lỗi Family", "Không tìm thấy thông số thuộc tính kích thước trong Family móng.");
                     return;
                 }
 
@@ -180,20 +205,22 @@ namespace AddinVeMong.ViewModels
                 double footingWidthMm = UnitUtils.ConvertFromInternalUnits(pWidth.AsDouble(), UnitTypeId.Millimeters);
                 double footingHeightMm = UnitUtils.ConvertFromInternalUnits(pHeight.AsDouble(), UnitTypeId.Millimeters);
 
-                int coverValue = this.Cover;
-                int longDia = this.LongDiameter;
-                int longSpc = this.LongSpacing;
-                int shortDia = this.ShortDiameter;
-                int shortSpc = this.ShortSpacing;
+                double coverFoot = UnitUtils.ConvertToInternalUnits(this.Cover, UnitTypeId.Millimeters);
+                double lengthFoot = UnitUtils.ConvertToInternalUnits(footingLengthMm, UnitTypeId.Millimeters);
+                double widthFoot = UnitUtils.ConvertToInternalUnits(footingWidthMm, UnitTypeId.Millimeters);
+                double heightFoot = UnitUtils.ConvertToInternalUnits(footingHeightMm, UnitTypeId.Millimeters);
 
-                // Trích xuất hệ toạ độ xoay cục bộ của móng
+                // Lay he toa do cuc bo cua mong
                 Transform tf = footingInstance.GetTransform();
-                XYZ uX = tf.BasisX; // Hướng trục X cục bộ (gắn với tham số Width trong family này)
-                XYZ uY = tf.BasisY; // Hướng trục Y cục bộ (gắn với tham số Length trong family này)
+                XYZ uX = tf.BasisX;
+                XYZ uY = tf.BasisY;
                 XYZ uZ = tf.BasisZ;
                 XYZ footingCenter = tf.Origin;
 
-                using (Transaction trans = new Transaction(_doc, "Tạo Lưới Thép Đáy Móng"))
+                // Lay khung nhin 3D hien hanh de cau hinh hiển thị đặc
+                View3D activeView3D = _doc.ActiveView as View3D;
+
+                using (Transaction trans = new Transaction(_doc, "Tạo Toàn Bộ Thép Móng và Cổ Cột"))
                 {
                     trans.Start();
 
@@ -204,110 +231,166 @@ namespace AddinVeMong.ViewModels
 
                     if (barTypes.Count == 0)
                     {
-                        TaskDialog.Show("Thiếu Dữ Liệu", "Dự án chưa load Family Thép. Vui lòng load Family thép trước!");
+                        TaskDialog.Show("Thiếu Dữ Liệu", "Dự án chưa được tải Family Thép.");
                         trans.RollBack();
                         return;
                     }
 
-                    RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(longDia.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - longDia) < 0.1);
-                    RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(shortDia.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - shortDia) < 0.1);
+                    RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.LongDiameter) < 0.1);
+                    RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.ShortDiameter) < 0.1);
+                    RebarBarType starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StarterDiameter) < 0.1);
+                    RebarBarType stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StirrupDiameter) < 0.1);
 
                     if (longBarType == null) longBarType = barTypes.FirstOrDefault();
                     if (shortBarType == null) shortBarType = barTypes.FirstOrDefault();
+                    if (starterBarType == null) starterBarType = barTypes.FirstOrDefault();
+                    if (stirrupBarType == null) stirrupBarType = barTypes.FirstOrDefault();
 
-                    RebarStyle style = RebarStyle.Standard;
-
-                    double coverFoot = UnitUtils.ConvertToInternalUnits(coverValue, UnitTypeId.Millimeters);
-                    double lengthFoot = UnitUtils.ConvertToInternalUnits(footingLengthMm, UnitTypeId.Millimeters); // Chiều dọc (uY)
-                    double widthFoot = UnitUtils.ConvertToInternalUnits(footingWidthMm, UnitTypeId.Millimeters);   // Chiều ngang (uX)
-                    double heightFoot = UnitUtils.ConvertToInternalUnits(footingHeightMm, UnitTypeId.Millimeters);
+                    RebarStyle styleStandard = RebarStyle.Standard;
+                    RebarStyle styleStirrup = RebarStyle.StirrupTie;
 
                     double zBottom = -heightFoot + coverFoot;
                     XYZ baseCenter = footingCenter + uZ * zBottom;
 
                     List<Curve> curvesLong = new List<Curve>();
                     List<Curve> curvesShort = new List<Curve>();
-                    XYZ normalLong;
-                    XYZ normalShort;
-                    double distWidthLong;
-                    double distWidthShort;
+                    XYZ normalLong, normalShort;
+                    double distWidthLong, distWidthShort;
 
                     double hookLong = UnitUtils.ConvertToInternalUnits(this.LongHookLength, UnitTypeId.Millimeters);
                     double hookShort = UnitUtils.ConvertToInternalUnits(this.ShortHookLength, UnitTypeId.Millimeters);
-                    double longDiaFoot = UnitUtils.ConvertToInternalUnits(longDia, UnitTypeId.Millimeters);
+                    double longDiaFoot = UnitUtils.ConvertToInternalUnits(this.LongDiameter, UnitTypeId.Millimeters);
 
-                    // ⭐ THUẬT TOÁN ĐÃ ĐƯỢC CHUẨN HOÁ THEO QUY CÁCH HIỂN THỊ THỰC TẾ:
+                    // 1. Ve luoi thep day mong
                     if (lengthFoot >= widthFoot)
                     {
-                        // TRƯỜNG HỢP MÓNG DỌC (Giống hình của Bạn): Cạnh dọc uY dài hơn cạnh ngang uX
-
-                        // 1. Thép dài phải chạy DỌC theo trục uY, mặt phẳng đứng có pháp tuyến là uX
                         XYZ p2 = baseCenter + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
                         XYZ p3 = baseCenter + uX * (-widthFoot / 2 + coverFoot) + uY * (lengthFoot / 2 - coverFoot);
                         XYZ p1 = p2 + uZ * hookLong;
                         XYZ p4 = p3 + uZ * hookLong;
                         curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
-
-                        normalLong = uX; // Rải tịnh tiến theo phương ngang uX
+                        normalLong = uX;
                         distWidthLong = widthFoot - (2 * coverFoot);
 
-                        // 2. Thép ngắn chạy NGANG theo trục uX, nằm đè lên thép dài, mặt phẳng đứng có pháp tuyến là uY
                         XYZ baseCenterShort = footingCenter + uZ * (zBottom + longDiaFoot);
                         XYZ q2 = baseCenterShort + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
                         XYZ q3 = baseCenterShort + uX * (widthFoot / 2 - coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
                         XYZ q1 = q2 + uZ * hookShort;
                         XYZ q4 = q3 + uZ * hookShort;
                         curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
-
-                        normalShort = uY; // Rải tịnh tiến theo phương dọc uY
+                        normalShort = uY;
                         distWidthShort = lengthFoot - (2 * coverFoot);
                     }
                     else
                     {
-                        // TRƯỜNG HỢP MÓNG NGANG: Cạnh ngang uX dài hơn cạnh dọc uY
-
-                        // 1. Thép dài chạy NGANG theo trục uX, mặt phẳng đứng có pháp tuyến là uY
                         XYZ p2 = baseCenter + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
                         XYZ p3 = baseCenter + uX * (widthFoot / 2 - coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
                         XYZ p1 = p2 + uZ * hookLong;
                         XYZ p4 = p3 + uZ * hookLong;
                         curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
-
-                        normalLong = uY; // Rải tịnh tiến theo phương dọc uY
+                        normalLong = uY;
                         distWidthLong = lengthFoot - (2 * coverFoot);
 
-                        // 2. Thép ngắn chạy DỌC theo trục uY, nằm đè lên thép dài, mặt phẳng đứng có pháp tuyến là uX
                         XYZ baseCenterShort = footingCenter + uZ * (zBottom + longDiaFoot);
                         XYZ q2 = baseCenterShort + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
                         XYZ q3 = baseCenterShort + uX * (-widthFoot / 2 + coverFoot) + uY * (lengthFoot / 2 - coverFoot);
                         XYZ q1 = q2 + uZ * hookShort;
                         XYZ q4 = q3 + uZ * hookShort;
                         curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
-
-                        normalShort = uX; // Rải tịnh tiến theo phương ngang uX
+                        normalShort = uX;
                         distWidthShort = widthFoot - (2 * coverFoot);
                     }
 
-                    // ============================================================
-                    // BƯỚC 5: TIẾN HÀNH SINH THÉP VÀ PHÂN PHỐI RẢI
-                    // ============================================================
                     if (longBarType != null && curvesLong.Count > 0)
                     {
-                        Rebar rebarLong = Rebar.CreateFromCurves(_doc, style, longBarType, null, null, footingElement, normalLong, curvesLong, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+                        Rebar rebarLong = Rebar.CreateFromCurves(_doc, styleStandard, longBarType, null, null, footingElement, normalLong, curvesLong, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
                         if (rebarLong != null)
                         {
-                            double spacingLongFoot = UnitUtils.ConvertToInternalUnits(longSpc, UnitTypeId.Millimeters);
-                            rebarLong.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(spacingLongFoot, distWidthLong, true, true, true);
+                            rebarLong.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(UnitUtils.ConvertToInternalUnits(this.LongSpacing, UnitTypeId.Millimeters), distWidthLong, true, true, true);
+                            SetRebarSolid3D(rebarLong, activeView3D);
                         }
                     }
 
                     if (shortBarType != null && curvesShort.Count > 0)
                     {
-                        Rebar rebarShort = Rebar.CreateFromCurves(_doc, style, shortBarType, null, null, footingElement, normalShort, curvesShort, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+                        Rebar rebarShort = Rebar.CreateFromCurves(_doc, styleStandard, shortBarType, null, null, footingElement, normalShort, curvesShort, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
                         if (rebarShort != null)
                         {
-                            double spacingShortFoot = UnitUtils.ConvertToInternalUnits(shortSpc, UnitTypeId.Millimeters);
-                            rebarShort.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(spacingShortFoot, distWidthShort, true, true, true);
+                            rebarShort.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(UnitUtils.ConvertToInternalUnits(this.ShortSpacing, UnitTypeId.Millimeters), distWidthShort, true, true, true);
+                            SetRebarSolid3D(rebarShort, activeView3D);
+                        }
+                    }
+
+                    // 2. Ve thep cho co cot
+                    double colXFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthX, UnitTypeId.Millimeters);
+                    double colYFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthY, UnitTypeId.Millimeters);
+                    double starterHookFoot = UnitUtils.ConvertToInternalUnits(this.StarterHookLength, UnitTypeId.Millimeters);
+                    double starterLenFoot = UnitUtils.ConvertToInternalUnits(this.StarterLength, UnitTypeId.Millimeters);
+                    double shortDiaFoot = UnitUtils.ConvertToInternalUnits(this.ShortDiameter, UnitTypeId.Millimeters);
+
+                    double zStarterBottom = zBottom + longDiaFoot + shortDiaFoot;
+                    XYZ starterBaseCenter = footingCenter + uZ * zStarterBottom;
+
+                    XYZ corner1 = starterBaseCenter + uX * (colXFoot / 2) + uY * (colYFoot / 2);
+                    XYZ corner2 = starterBaseCenter + uX * (-colXFoot / 2) + uY * (colYFoot / 2);
+                    XYZ corner3 = starterBaseCenter + uX * (-colXFoot / 2) + uY * (-colYFoot / 2);
+                    XYZ corner4 = starterBaseCenter + uX * (colXFoot / 2) + uY * (-colYFoot / 2);
+
+                    List<XYZ> columnCorners = new List<XYZ> { corner1, corner2, corner3, corner4 };
+                    List<XYZ> hookDirections = new List<XYZ> { uX, -uX, -uX, uX };
+                    List<XYZ> starterNormals = new List<XYZ> { uY, uY, uY, uY };
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        XYZ cPt = columnCorners[i];
+                        XYZ hDir = hookDirections[i];
+                        XYZ sNormal = starterNormals[i];
+
+                        List<Curve> sCurves = new List<Curve>();
+                        XYZ pBẻChân = cPt + hDir * starterHookFoot;
+                        XYZ pĐỉnhChờ = cPt + uZ * (starterLenFoot + Math.Abs(zStarterBottom));
+
+                        sCurves.Add(Line.CreateBound(pBẻChân, cPt));
+                        sCurves.Add(Line.CreateBound(cPt, pĐỉnhChờ));
+
+                        if (starterBarType != null)
+                        {
+                            Rebar starterRebar = Rebar.CreateFromCurves(_doc, styleStandard, starterBarType, null, null, columnHostElement, sNormal, sCurves, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+                            if (starterRebar != null)
+                            {
+                                SetRebarSolid3D(starterRebar, activeView3D);
+                            }
+                        }
+                    }
+
+                    // 3. Ve thep dai co cot
+                    CurveLoop stirrupLoop = new CurveLoop();
+                    XYZ stirrupBaseCenter = footingCenter + uZ * zStarterBottom;
+
+                    XYZ s1 = stirrupBaseCenter + uX * (colXFoot / 2) + uY * (colYFoot / 2);
+                    XYZ s2 = stirrupBaseCenter + uX * (-colXFoot / 2) + uY * (colYFoot / 2);
+                    XYZ s3 = stirrupBaseCenter + uX * (-colXFoot / 2) + uY * (-colYFoot / 2);
+                    XYZ s4 = stirrupBaseCenter + uX * (colXFoot / 2) + uY * (-colYFoot / 2);
+
+                    stirrupLoop.Append(Line.CreateBound(s1, s2));
+                    stirrupLoop.Append(Line.CreateBound(s2, s3));
+                    stirrupLoop.Append(Line.CreateBound(s3, s4));
+                    stirrupLoop.Append(Line.CreateBound(s4, s1));
+
+                    if (stirrupBarType != null && stirrupLoop.Count() > 0)
+                    {
+                        List<Curve> finalStirrupProfile = stirrupLoop.ToList();
+                        Rebar stirrupRebar = Rebar.CreateFromCurves(_doc, styleStirrup, stirrupBarType, null, null, columnHostElement, uZ, finalStirrupProfile, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+
+                        if (stirrupRebar != null)
+                        {
+                            double stirrupSpcFoot = UnitUtils.ConvertToInternalUnits(this.StirrupSpacing, UnitTypeId.Millimeters);
+                            double heightInsideFooting = Math.Abs(zStarterBottom);
+                            double heightOutsideFooting = stirrupSpcFoot * 2;
+
+                            double totalStirrupDistributionLength = heightInsideFooting + heightOutsideFooting;
+                            stirrupRebar.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(stirrupSpcFoot, totalStirrupDistributionLength, true, true, true);
+                            SetRebarSolid3D(stirrupRebar, activeView3D);
                         }
                     }
 
@@ -323,6 +406,29 @@ namespace AddinVeMong.ViewModels
             catch (Exception ex)
             {
                 TaskDialog.Show("Lỗi thực thi", $"Có lỗi xảy ra: {ex.Message}");
+            }
+        }
+
+        // Ham tro giup thiet lap hien thi dac 3D Solid va hien thi xuyen thau tren Revit 2025
+        private void SetRebarSolid3D(Rebar rebar, View3D view3D)
+        {
+            if (rebar == null || view3D == null) return;
+
+            try
+            {
+                // Thiet lap khong bi che khuat trong view 3D
+                rebar.SetUnobscuredInView(view3D, true);
+
+                // Thiet lap hien thi dang khoi dac (Solid) thong qua Parameter he thong tren Revit 2025
+                Parameter solidParam = rebar.LookupParameter("Solid In View");
+                if (solidParam != null && !solidParam.IsReadOnly)
+                {
+                    solidParam.Set(1);
+                }
+            }
+            catch
+            {
+                // Bo qua neu xay ra xung dot view
             }
         }
 
