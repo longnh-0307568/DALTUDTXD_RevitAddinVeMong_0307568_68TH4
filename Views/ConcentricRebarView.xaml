@@ -5,9 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Thiết lập cốt thép móng đúng tâm" Height="680" Width="650" 
+        Title="Thiết lập cốt thép móng đúng tâm" Height="780" Width="650" 
         WindowStartupLocation="CenterScreen" Background="#F5F5F5">
-
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AddinVeMong;component/Resources/Styles/TextBoxStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,8 +40,9 @@
                         </Grid.RowDefinitions>
 
                         <Label Content="Lớp bê tông bảo vệ (mm):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding Cover}" Grid.Row="0" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
-                        <TextBlock Text="(Mặc định: 50)" Grid.Row="0" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
+                        <TextBox Text="{Binding Cover}" Grid.Row="0" Grid.Column="1" Margin="5,2"
+                                 Tag="Mặc định: 50"
+                                 Style="{StaticResource PlaceholderTextBoxStyle}" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
@@ -117,12 +125,14 @@
                         </Grid.RowDefinitions>
 
                         <Label Content="Kích thước cột X (mm):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding ColumnWidthX}" Grid.Row="0" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
-                        <TextBlock Text="(Ví dụ: 220, 300)" Grid.Row="0" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
+                        <TextBox Text="{Binding ColumnWidthX}" Grid.Row="0" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"
+                                 Tag="(Ví dụ: 220, 300)"
+                                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
                         <Label Content="Kích thước cột Y (mm):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox Text="{Binding ColumnWidthY}" Grid.Row="1" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
-                        <TextBlock Text="(Ví dụ: 220, 400)" Grid.Row="1" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
+                        <TextBox Text="{Binding ColumnWidthY}" Grid.Row="1" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"
+                                 Tag="(Ví dụ: 220, 400)"
+                                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
                         <Label Content="Đường kính thép dọc:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
                         <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center">
@@ -132,7 +142,6 @@
                             <sys:Int32>22</sys:Int32>
                             <sys:Int32>25</sys:Int32>
                         </ComboBox>
-                        <TextBlock Text="(Cố định 4 thanh góc)" Grid.Row="2" Grid.Column="2" Foreground="Gray" VerticalAlignment="Center" Margin="5,0" FontSize="11" FontStyle="Italic"/>
 
                         <Label Content="Chiều dài chân vịt (mm):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal"/>
                         <TextBox Text="{Binding StarterHookLength}" Grid.Row="3" Grid.Column="1" Margin="5,2" VerticalContentAlignment="Center"/>
