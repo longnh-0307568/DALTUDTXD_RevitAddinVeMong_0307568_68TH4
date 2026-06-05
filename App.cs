@@ -75,7 +75,7 @@ namespace AddinVeMong
         {
             try
             {
-                string uriPath = $"pack://application:,,,/{assemblyName};component/Assets/Images/{imageName}";
+                string uriPath = $"pack://application:,,,/{assemblyName};component/Resources/Images/{imageName}";
                 return new BitmapImage(new Uri(uriPath));
             }
             catch { return null; }
