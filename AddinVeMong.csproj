@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Resource Include="Assets\Images\*.png" />
+		<Resource Include="Resources\Images\*.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,22 +26,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Update="Assets\Images\About.png">
+	  <Resource Update="Resources\Images\About.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
-	  <Resource Update="Assets\Images\EccentricChamfer.png">
+	  <Resource Update="Resources\Images\EccentricChamfer.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
-	  <Resource Update="Assets\Images\CentricChamfer.png">
+	  <Resource Update="Resources\Images\CentricChamfer.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
-	  <Resource Update="Assets\Images\Help.png">
+	  <Resource Update="Resources\Images\Help.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
-	  <Resource Update="Assets\Images\Rebar.png">
+	  <Resource Update="Resources\Images\Rebar.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
-	  <Resource Update="Assets\Images\Setting.png">
+	  <Resource Update="Resources\Images\Setting.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	</ItemGroup>
