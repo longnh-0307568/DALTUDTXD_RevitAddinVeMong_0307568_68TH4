@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Addin Ve Mong</Name>
+    <!-- Đường dẫn tới file DLL sau khi build. Vui lòng đảm bảo build project trước khi mở Revit -->
+    <Assembly>d:\dalaptrinh\DALTUDTXD_RevitAddinVeMong_0307568_68TH4\bin\Debug\net8.0-windows\AddinVeMong.dll</Assembly>
+    <FullClassName>AddinVeMong.App</FullClassName>
+    <ClientId>1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d</ClientId>
+    <VendorId>AddinVeMong</VendorId>
+    <VendorDescription>Addin Vẽ Móng</VendorDescription>
+  </AddIn>
+</RevitAddIns>
