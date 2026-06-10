@@ -124,6 +124,24 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Độ lệch tâm X (mm):.
+        /// </summary>
+        public static string EccentricityX {
+            get {
+                return ResourceManager.GetString("EccentricityX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Độ lệch tâm Y (mm):.
+        /// </summary>
+        public static string EccentricityY {
+            get {
+                return ResourceManager.GetString("EccentricityY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hình chiếu đứng.
         /// </summary>
         public static string ElevationView {
@@ -192,6 +210,15 @@ namespace AddinVeMong.Resources.Localization {
         public static string SecColumn {
             get {
                 return ResourceManager.GetString("SecColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. ĐỘ LỆCH TÂM CỘT.
+        /// </summary>
+        public static string SecEccentricity {
+            get {
+                return ResourceManager.GetString("SecEccentricity", resourceCulture);
             }
         }
         

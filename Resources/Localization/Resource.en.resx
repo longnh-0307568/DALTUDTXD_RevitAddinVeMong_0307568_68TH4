@@ -80,4 +80,7 @@
   <data name="LanguageLabel" xml:space="preserve"><value>Language:</value></data>
   <data name="ThemeLabel" xml:space="preserve"><value>Theme:</value></data>
   <data name="BtnSave" xml:space="preserve"><value>Save Settings</value></data>
+  <data name="SecEccentricity" xml:space="preserve"><value>2. COLUMN ECCENTRICITY</value></data>
+  <data name="EccentricityX" xml:space="preserve"><value>Eccentricity X (mm):</value></data>
+  <data name="EccentricityY" xml:space="preserve"><value>Eccentricity Y (mm):</value></data>
 </root>

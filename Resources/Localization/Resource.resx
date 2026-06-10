@@ -79,4 +79,7 @@
   <data name="LanguageLabel" xml:space="preserve"><value>Ngôn ngữ (Language):</value></data>
   <data name="ThemeLabel" xml:space="preserve"><value>Giao diện (Theme):</value></data>
   <data name="BtnSave" xml:space="preserve"><value>Lưu cài đặt</value></data>
+  <data name="SecEccentricity" xml:space="preserve"><value>2. ĐỘ LỆCH TÂM CỘT</value></data>
+  <data name="EccentricityX" xml:space="preserve"><value>Độ lệch tâm X (mm):</value></data>
+  <data name="EccentricityY" xml:space="preserve"><value>Độ lệch tâm Y (mm):</value></data>
 </root>
