@@ -5,11 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AddinVeMong.Views"
         mc:Ignorable="d"
-        Title="Setting" Height="200" Width="400" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Label Content="{Binding TitleText}" 
-               FontSize="20" 
-               HorizontalAlignment="Center" 
-               VerticalAlignment="Center"/>
+        Title="Cài đặt (Settings)" Height="250" Width="400" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Cài đặt hệ thống" 
+                   FontSize="18" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,20" 
+                   Grid.Row="0"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,10">
+            <Label Content="Ngôn ngữ (Language):" 
+                   Width="150" 
+                   VerticalAlignment="Center" 
+                   FontSize="13"/>
+            <ComboBox Width="180" Height="25" VerticalContentAlignment="Center">
+                <ComboBoxItem Content="Tiếng Việt" IsSelected="True"/>
+                <ComboBoxItem Content="English"/>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,10">
+            <Label Content="Giao diện (Theme):" 
+                   Width="150" 
+                   VerticalAlignment="Center" 
+                   FontSize="13"/>
+            <ComboBox Width="180" Height="25" VerticalContentAlignment="Center">
+                <ComboBoxItem Content="Sáng (Light)" IsSelected="True"/>
+                <ComboBoxItem Content="Tối (Dark)"/>
+                <ComboBoxItem Content="Theo hệ thống"/>
+            </ComboBox>
+        </StackPanel>
+
+        <Button Content="Lưu cài đặt" 
+                Grid.Row="3" 
+                Width="100" 
+                Height="30" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom"
+                Background="#007ACC" 
+                Foreground="White" 
+                FontWeight="Bold"/>
     </Grid>
 </Window>
