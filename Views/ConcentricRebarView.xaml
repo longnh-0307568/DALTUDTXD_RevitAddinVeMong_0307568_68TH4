@@ -32,7 +32,13 @@
         <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,10,0">
             <StackPanel>
 
-                <Expander Header="{x:Static lang:Resource.SecGeneral}" IsExpanded="True" Margin="0,5" FontWeight="Bold">
+                <Expander IsExpanded="True" Margin="0,5">
+                    <Expander.Header>
+                        <TextBlock Text="{x:Static lang:Resource.SecGeneral}" 
+                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   FontWeight="Bold"/>
+                    </Expander.Header>
+
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -44,11 +50,17 @@
 
                         <TextBlock Text="{x:Static lang:Resource.ConcreteCover}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding Cover, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4"
-                                 Tag="Mặc định: 50" Style="{StaticResource PlaceholderTextBoxStyle}" VerticalContentAlignment="Center"/>
+                 Tag="Mặc định: 50" Style="{StaticResource PlaceholderTextBoxStyle}" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
-                <Expander Header="{x:Static lang:Resource.SecLongBar}" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                <Expander IsExpanded="False" Margin="0,5">
+                    <Expander.Header>
+                        <TextBlock Text="{x:Static lang:Resource.SecLongBar}" 
+                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   FontWeight="Bold"/>
+                    </Expander.Header>
+
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -82,7 +94,13 @@
                     </Grid>
                 </Expander>
 
-                <Expander Header="{x:Static lang:Resource.SecShortBar}" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                <Expander IsExpanded="False" Margin="0,5">
+                    <Expander.Header>
+                        <TextBlock Text="{x:Static lang:Resource.SecShortBar}" 
+                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   FontWeight="Bold"/>
+                    </Expander.Header>
+
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -116,7 +134,13 @@
                     </Grid>
                 </Expander>
 
-                <Expander Header="{x:Static lang:Resource.SecColumn}" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                <Expander IsExpanded="False" Margin="0,5">
+                    <Expander.Header>
+                        <TextBlock Text="{x:Static lang:Resource.SecColumn}" 
+                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   FontWeight="Bold"/>
+                    </Expander.Header>
+
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -134,11 +158,11 @@
 
                         <TextBlock Text="{x:Static lang:Resource.ColWidthX}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding ColumnWidthX, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
-                                 Tag="(Ví dụ: 220, 300)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                 Tag="(Ví dụ: 220, 300)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
                         <TextBlock Text="{x:Static lang:Resource.ColWidthY}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding ColumnWidthY, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
-                                 Tag="(Ví dụ: 220, 400)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                 Tag="(Ví dụ: 220, 400)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
                         <TextBlock Text="{x:Static lang:Resource.MainDiameter}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">

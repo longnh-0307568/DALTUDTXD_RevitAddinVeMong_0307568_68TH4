@@ -79,6 +79,15 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lưu cài đặt.
+        /// </summary>
+        public static string BtnSave {
+            get {
+                return ResourceManager.GetString("BtnSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kích thước cột X (mm):.
         /// </summary>
         public static string ColWidthX {
@@ -138,6 +147,15 @@ namespace AddinVeMong.Resources.Localization {
         public static string HookLength {
             get {
                 return ResourceManager.GetString("HookLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngôn ngữ (Language):.
+        /// </summary>
+        public static string LanguageLabel {
+            get {
+                return ResourceManager.GetString("LanguageLabel", resourceCulture);
             }
         }
         
@@ -205,6 +223,15 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cài đặt hệ thống.
+        /// </summary>
+        public static string SettingTitle {
+            get {
+                return ResourceManager.GetString("SettingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Khoảng cách a (mm):.
         /// </summary>
         public static string Spacing {
@@ -237,6 +264,15 @@ namespace AddinVeMong.Resources.Localization {
         public static string StirrupSpacing {
             get {
                 return ResourceManager.GetString("StirrupSpacing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giao diện (Theme):.
+        /// </summary>
+        public static string ThemeLabel {
+            get {
+                return ResourceManager.GetString("ThemeLabel", resourceCulture);
             }
         }
         
