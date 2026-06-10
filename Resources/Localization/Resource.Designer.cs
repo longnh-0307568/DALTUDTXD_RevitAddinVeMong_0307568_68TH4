@@ -151,7 +151,7 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chiều dài chân vịt (mm):.
+        ///   Looks up a localized string similar to Đoạn uốn neo (mm):.
         /// </summary>
         public static string FootHookLength {
             get {
