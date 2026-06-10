@@ -21,52 +21,135 @@ namespace AddinVeMong
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
 
-            // ĐƯỜNG DẪN 2 COMMAND MỞ UI (Đã cập nhật tên class cho hợp lý)
+            // ĐƯỜNG DẪN 2 COMMAND MỞ UI
             string showConcentricUIPath = "AddinVeMong.Commands.ShowConcentricWindowCommand";
             string showEccentricUIPath = "AddinVeMong.Commands.ShowEccentricWindowCommand";
 
-            // Tạo panel Giới thiệu
-            RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
+            // ĐƯỜNG DẪN COMMAND LOAD FAMILY
+            string loadFoundationFamilyPath =
+                "AddinVeMong.Commands.LoadFoundationFamilyCommand";
 
-            PushButtonData btnAboutData = new PushButtonData("btnAbout", "Giới thiệu", assemblyPath, aboutCommandPath);
-            PushButton btnAbout = panelAbout.AddItem(btnAboutData) as PushButton;
-            btnAbout.LargeImage = CreateImage(assemblyName, "About.png");
+            string loadRebarFamilyPath =
+                "AddinVeMong.Commands.LoadRebarFamilyCommand";
 
-            PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, supportCommandPath);
-            btnSupportData.Image = CreateImage(assemblyName, "Help.png");
+            // PANEL GIỚI THIỆU
 
-            PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, settingCommandPath);
-            btnSettingsData.Image = CreateImage(assemblyName, "Setting.png");
+            RibbonPanel panelAbout =
+                application.CreateRibbonPanel(tabName, "Giới thiệu");
 
-            panelAbout.AddStackedItems(btnSupportData, btnSettingsData);
+            PushButtonData btnAboutData = new PushButtonData(
+                "btnAbout",
+                "Giới thiệu",
+                assemblyPath,
+                aboutCommandPath
+            );
 
-            // PANEL 'THÉP' SỬ DỤNG PULLDOWN BUTTON
-            RibbonPanel panelRebar = application.CreateRibbonPanel(tabName, "Thép");
+            PushButton btnAbout =
+                panelAbout.AddItem(btnAboutData) as PushButton;
 
-            // 1. Khởi tạo nút thả xuống (Pulldown Button) làm menu cha
-            PulldownButtonData pulldownRebarData = new PulldownButtonData("pdPlaceRebar", "Đặt thép");
-            PulldownButton pulldownRebar = panelRebar.AddItem(pulldownRebarData) as PulldownButton;
-            pulldownRebar.LargeImage = CreateImage(assemblyName, "Rebar.png");
+            btnAbout.LargeImage =
+                CreateImage(assemblyName, "About.png");
 
-            // 2. Thêm nút con: Mở UI Móng đơn đúng tâm
+            PushButtonData btnSupportData = new PushButtonData(
+                "btnSupport",
+                "Hỗ trợ",
+                assemblyPath,
+                supportCommandPath
+            );
+
+            btnSupportData.Image =
+                CreateImage(assemblyName, "Help.png");
+
+            PushButtonData btnSettingsData = new PushButtonData(
+                "btnSettings",
+                "Cài đặt",
+                assemblyPath,
+                settingCommandPath
+            );
+
+            btnSettingsData.Image =
+                CreateImage(assemblyName, "Setting.png");
+
+            panelAbout.AddStackedItems(
+                btnSupportData,
+                btnSettingsData
+            );
+
+            // PANEL THÉP
+
+            RibbonPanel panelRebar =
+                application.CreateRibbonPanel(tabName, "Thép");
+
+            PulldownButtonData pulldownRebarData =
+                new PulldownButtonData(
+                    "pdPlaceRebar",
+                    "Đặt thép"
+                );
+
+            PulldownButton pulldownRebar =
+                panelRebar.AddItem(pulldownRebarData) as PulldownButton;
+
+            pulldownRebar.LargeImage =
+                CreateImage(assemblyName, "Rebar.png");
+
+            // Móng đúng tâm
             PushButtonData btnConcentricData = new PushButtonData(
                 "btnDungTam",
                 "Móng đơn đúng tâm",
                 assemblyPath,
                 showConcentricUIPath
             );
-            btnConcentricData.LargeImage = CreateImage(assemblyName, "CentricChamfer.png");
+
+            btnConcentricData.LargeImage =
+                CreateImage(assemblyName, "CentricChamfer.png");
+
             pulldownRebar.AddPushButton(btnConcentricData);
 
-            // 3. Thêm nút con: Mở UI Móng đơn lệch tâm
+            // Móng lệch tâm
             PushButtonData btnEccentricData = new PushButtonData(
                 "btnLechTam",
                 "Móng đơn lệch tâm",
                 assemblyPath,
                 showEccentricUIPath
             );
-            btnEccentricData.LargeImage = CreateImage(assemblyName, "EccentricChamfer.png");
+
+            btnEccentricData.LargeImage =
+                CreateImage(assemblyName, "EccentricChamfer.png");
+
             pulldownRebar.AddPushButton(btnEccentricData);
+
+
+            // PANEL THƯ VIỆN
+            RibbonPanel panelLibrary =
+                application.CreateRibbonPanel(tabName, "Thư viện");
+
+            // Tải family móng
+            PushButtonData btnLoadFoundationData = new PushButtonData(
+                "btnLoadFoundation",
+                "Tải family\nmóng",
+                assemblyPath,
+                loadFoundationFamilyPath
+            );
+
+            btnLoadFoundationData.Image =
+                CreateImage(assemblyName, "LoadFoundation.png");
+
+            // Tải family thép
+            PushButtonData btnLoadRebarData = new PushButtonData(
+                "btnLoadRebar",
+                "Tải family\nthép",
+                assemblyPath,
+                loadRebarFamilyPath
+            );
+
+            btnLoadRebarData.Image =
+                CreateImage(assemblyName, "LoadRebar.png");
+
+            // Add stacked buttons
+            panelLibrary.AddStackedItems(
+                btnLoadFoundationData,
+                btnLoadRebarData
+            );
 
             return Result.Succeeded;
         }
@@ -75,12 +158,18 @@ namespace AddinVeMong
         {
             try
             {
-                string uriPath = $"pack://application:,,,/{assemblyName};component/Resources/Images/{imageName}";
+                string uriPath =
+                    $"pack://application:,,,/{assemblyName};component/Resources/Images/{imageName}";
+
                 return new BitmapImage(new Uri(uriPath));
             }
-            catch { return null; }
+            catch
+            {
+                return null;
+            }
         }
 
-        public Result OnShutdown(UIControlledApplication application) => Result.Succeeded;
+        public Result OnShutdown(UIControlledApplication application)
+            => Result.Succeeded;
     }
 }
