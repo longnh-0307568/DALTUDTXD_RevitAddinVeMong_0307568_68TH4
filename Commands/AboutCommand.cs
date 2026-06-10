@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using AddinVeMong.Views;
 using AddinVeMong.ViewModels;
+using AddinVeMong.Helpers; // Đảm bảo namespace chứa ThemeManager
 
 namespace AddinVeMong.Commands
 {
@@ -11,8 +12,12 @@ namespace AddinVeMong.Commands
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            // Khởi tạo giao diện và dữ liệu
             AboutView window = new AboutView();
+
+            // ĐỒNG BỘ THEME: Lấy theme hiện tại từ ThemeManager bơm vào Window
+            window.Resources.MergedDictionaries.Add(ThemeManager.CurrentThemeResource);
+
+            // Gán ViewModel
             window.DataContext = new AboutViewModel();
 
             window.ShowDialog();
