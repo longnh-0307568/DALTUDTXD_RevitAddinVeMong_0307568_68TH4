@@ -75,4 +75,8 @@
   <data name="PlanView" xml:space="preserve"><value>Hình chiếu bằng</value></data>
   <data name="BtnCancel" xml:space="preserve"><value>Hủy</value></data>
   <data name="BtnCreate" xml:space="preserve"><value>Tạo Thép</value></data>
+  <data name="SettingTitle" xml:space="preserve"><value>Cài đặt hệ thống</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Ngôn ngữ (Language):</value></data>
+  <data name="ThemeLabel" xml:space="preserve"><value>Giao diện (Theme):</value></data>
+  <data name="BtnSave" xml:space="preserve"><value>Lưu cài đặt</value></data>
 </root>

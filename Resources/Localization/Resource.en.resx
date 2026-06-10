@@ -75,4 +75,9 @@
   <data name="PlanView" xml:space="preserve"><value>Top Plan View</value></data>
   <data name="BtnCancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="BtnCreate" xml:space="preserve"><value>Create Rebar</value></data>
+
+  <data name="SettingTitle" xml:space="preserve"><value>System Settings</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Language:</value></data>
+  <data name="ThemeLabel" xml:space="preserve"><value>Theme:</value></data>
+  <data name="BtnSave" xml:space="preserve"><value>Save Settings</value></data>
 </root>

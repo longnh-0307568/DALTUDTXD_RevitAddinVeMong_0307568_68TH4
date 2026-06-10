@@ -4,8 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AddinVeMong.Views"
+        xmlns:lang="clr-namespace:AddinVeMong.Resources.Localization"
         mc:Ignorable="d"
-        Title="Cài đặt (Settings)" Height="250" Width="400" WindowStartupLocation="CenterScreen">
+        Title="Cài đặt (Settings)" Height="250" Width="400" WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource WindowBackgroundColor}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AddinVeMong;component/Resources/Styles/LightTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -15,7 +25,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Cài đặt hệ thống" 
+        <TextBlock Text="{x:Static lang:Resource.SettingTitle}" 
+                   Foreground="{DynamicResource TextPrimaryColor}"
                    FontSize="18" 
                    FontWeight="Bold" 
                    HorizontalAlignment="Center" 
@@ -23,36 +34,37 @@
                    Grid.Row="0"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,10">
-            <Label Content="Ngôn ngữ (Language):" 
+            <Label Content="{x:Static lang:Resource.LanguageLabel}" 
+                   Foreground="{DynamicResource TextPrimaryColor}"
                    Width="150" 
                    VerticalAlignment="Center" 
                    FontSize="13"/>
-            <ComboBox Width="180" Height="25" VerticalContentAlignment="Center">
-                <ComboBoxItem Content="Tiếng Việt" IsSelected="True"/>
-                <ComboBoxItem Content="English"/>
-            </ComboBox>
+            <ComboBox Width="180" Height="25" VerticalContentAlignment="Center"
+                      ItemsSource="{Binding Languages}"
+                      SelectedItem="{Binding SelectedLanguage}"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,10">
-            <Label Content="Giao diện (Theme):" 
+            <Label Content="{x:Static lang:Resource.ThemeLabel}" 
+                   Foreground="{DynamicResource TextPrimaryColor}"
                    Width="150" 
                    VerticalAlignment="Center" 
                    FontSize="13"/>
-            <ComboBox Width="180" Height="25" VerticalContentAlignment="Center">
-                <ComboBoxItem Content="Sáng (Light)" IsSelected="True"/>
-                <ComboBoxItem Content="Tối (Dark)"/>
-                <ComboBoxItem Content="Theo hệ thống"/>
-            </ComboBox>
+            <ComboBox Width="180" Height="25" VerticalContentAlignment="Center"
+                      ItemsSource="{Binding Themes}"
+                      SelectedItem="{Binding SelectedTheme}"/>
         </StackPanel>
 
-        <Button Content="Lưu cài đặt" 
+        <Button Content="{x:Static lang:Resource.BtnSave}" 
                 Grid.Row="3" 
                 Width="100" 
                 Height="30" 
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
-                Background="#007ACC" 
-                Foreground="White" 
-                FontWeight="Bold"/>
+                FontWeight="Bold"
+                Command="{Binding SaveSettingsCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                Background="{DynamicResource PrimaryButtonBgColor}" 
+                Foreground="{DynamicResource PrimaryButtonFgColor}"/>
     </Grid>
 </Window>

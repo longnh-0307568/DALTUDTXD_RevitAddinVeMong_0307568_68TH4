@@ -14,6 +14,14 @@ namespace AddinVeMong.Commands
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            // TIẾNG VIỆT LÀM MẶC ĐỊNH
+            // Giúp form thép tự động đọc file Resource.resx gốc (Tiếng Việt) ngay lần đầu mở lên
+
+            string cultureCode = SettingViewModel.CurrentLanguageSettings == "English" ? "en" : "vi";
+            var culture = new System.Globalization.CultureInfo(cultureCode);
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+
             UIDocument uiDoc = commandData.Application.ActiveUIDocument;
             Document doc = uiDoc.Document;
 
@@ -32,25 +40,31 @@ namespace AddinVeMong.Commands
                 List<Element> selectedFootings = new List<Element>();
                 foreach (Reference r in pickedRefs)
                 {
-                    Element elem = doc.GetElement(r.ElementId);
-                    if (elem != null) selectedFootings.Add(elem);
+                    Element elem = doc.GetElement(r);
+                    if (elem != null)
+                    {
+                        selectedFootings.Add(elem);
+                    }
                 }
 
-                // Nếu người dùng không chọn móng nào, hủy lệnh
-                if (selectedFootings.Count == 0) return Result.Cancelled;
+                // Nếu người dùng không chọn cấu kiện nào hoặc bấm Finish khi chưa chọn
+                if (selectedFootings.Count == 0)
+                {
+                    TaskDialog.Show("Thông báo", "Bạn chưa chọn cấu kiện móng nào!");
+                    return Result.Cancelled;
+                }
 
-
-                // 2. CHỌN XONG MÓNG MỚI HIỆN WINDOW
                 // Khởi tạo giao diện cửa sổ (View) 
                 ConcentricRebarView window = new ConcentricRebarView();
 
-                // Khởi tạo bộ não xử lý (ViewModel), TRUYỀN THÊM danh sách móng đã chọn vào đây để sửa lỗi argument
-                ConcentricRebarViewModel viewModel = new ConcentricRebarViewModel(commandData, selectedFootings);
 
-                // Gán DataContext để Binding hoạt động
+                // Ép cửa sổ Form Thép nhận theme hiện tại từ ThemeManager (Ghi đè hoàn toàn LightTheme trong XAML)
+                window.Resources.MergedDictionaries.Add(Helpers.ThemeManager.CurrentThemeResource);
+
+                // Khởi tạo bộ não xử lý (ViewModel)
+                ConcentricRebarViewModel viewModel = new ConcentricRebarViewModel(commandData, selectedFootings);
                 window.DataContext = viewModel;
 
-                // Hiển thị cửa sổ dưới dạng Dialog
                 window.ShowDialog();
 
                 return Result.Succeeded;
