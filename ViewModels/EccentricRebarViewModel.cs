@@ -1,232 +1,144 @@
 using AddinVeMong.Commands;
+using AddinVeMong.Models;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
 namespace AddinVeMong.ViewModels
 {
-    // KHÔNG khai báo lại BarPreviewX và BarPreviewY ở đây nữa vì đã có bên ConcentricViewModel, tránh lỗi trùng lặp dữ liệu.
-
-    public class EccentricRebarViewModel : INotifyPropertyChanged
+    public class EccentricRebarViewModel : ConcentricRebarViewModel
     {
-        private readonly ExternalCommandData _commandData;
         private readonly Document _doc;
-        private readonly UIDocument _uiDoc;
-        private readonly List<Element> _selectedFootings; // Lưu trữ danh sách móng đã được chọn trước đó từ Command
+        private readonly List<Element> _selectedFootings;
 
-        #region Preview Collections
-        private ObservableCollection<BarPreviewX> _previewShortBars = new ObservableCollection<BarPreviewX>();
-        public ObservableCollection<BarPreviewX> PreviewShortBars
-        {
-            get => _previewShortBars;
-            set { _previewShortBars = value; OnPropertyChanged(); }
-        }
+        public FootingRebarModel Model { get; set; }
 
-        private ObservableCollection<BarPreviewY> _previewLongBars = new ObservableCollection<BarPreviewY>();
-        public ObservableCollection<BarPreviewY> PreviewLongBars
-        {
-            get => _previewLongBars;
-            set { _previewLongBars = value; OnPropertyChanged(); }
-        }
-        #endregion
+        public new ICommand DrawRebarCommand { get; }
 
-        #region 1. Thuộc tính Thông số chung
-        private int _cover = 50;
+        #region Properties Binding
         public int Cover
         {
-            get => _cover;
-            set { _cover = value; OnPropertyChanged(); }
-        }
-        #endregion
-
-        #region 2. Thuộc tính Độ lệch tâm
-        private int _eccentricityX = 0;
-        public int EccentricityX
-        {
-            get => _eccentricityX;
-            set { _eccentricityX = value; OnPropertyChanged(); }
+            get => Model.Cover;
+            set { Model.Cover = value; OnPropertyChanged(); }
         }
 
-        private int _eccentricityY = 0;
-        public int EccentricityY
-        {
-            get => _eccentricityY;
-            set { _eccentricityY = value; OnPropertyChanged(); }
-        }
-        #endregion
-
-        #region 3. Thuộc tính Thép cạnh dài
-        private int _longDiameter = 12;
         public int LongDiameter
         {
-            get => _longDiameter;
-            set { _longDiameter = value; OnPropertyChanged(); }
+            get => Model.LongDiameter;
+            set { Model.LongDiameter = value; OnPropertyChanged(); }
         }
 
-        private int _longSpacing = 150;
         public int LongSpacing
         {
-            get => _longSpacing;
-            set { _longSpacing = value; OnPropertyChanged(); }
+            get => Model.LongSpacing;
+            set { Model.LongSpacing = value; OnPropertyChanged(); }
         }
 
-        private int _longQuantity = 10;
         public int LongQuantity
         {
-            get => _longQuantity;
-            set
-            {
-                _longQuantity = value;
-                OnPropertyChanged();
-                UpdatePreview();
-            }
+            get => Model.LongQuantity;
+            set { Model.LongQuantity = value; OnPropertyChanged(); }
         }
 
-        private int _longHookLength = 150;
         public int LongHookLength
         {
-            get => _longHookLength;
-            set { _longHookLength = value; OnPropertyChanged(); }
+            get => Model.LongHookLength;
+            set { Model.LongHookLength = value; OnPropertyChanged(); }
         }
-        #endregion
 
-        #region 4. Thuộc tính Thép cạnh ngắn
-        private int _shortDiameter = 12;
         public int ShortDiameter
         {
-            get => _shortDiameter;
-            set { _shortDiameter = value; OnPropertyChanged(); }
+            get => Model.ShortDiameter;
+            set { Model.ShortDiameter = value; OnPropertyChanged(); }
         }
 
-        private int _shortSpacing = 150;
         public int ShortSpacing
         {
-            get => _shortSpacing;
-            set { _shortSpacing = value; OnPropertyChanged(); }
+            get => Model.ShortSpacing;
+            set { Model.ShortSpacing = value; OnPropertyChanged(); }
         }
 
-        private int _shortQuantity = 8;
         public int ShortQuantity
         {
-            get => _shortQuantity;
-            set
-            {
-                _shortQuantity = value;
-                OnPropertyChanged();
-                UpdatePreview();
-            }
+            get => Model.ShortQuantity;
+            set { Model.ShortQuantity = value; OnPropertyChanged(); }
         }
 
-        private int _shortHookLength = 150;
         public int ShortHookLength
         {
-            get => _shortHookLength;
-            set { _shortHookLength = value; OnPropertyChanged(); }
+            get => Model.ShortHookLength;
+            set { Model.ShortHookLength = value; OnPropertyChanged(); }
         }
-        #endregion
 
-        #region 5. Thuộc tính Thép cổ cột và Thép đai
-        private int _columnWidthX = 300;
         public int ColumnWidthX
         {
-            get => _columnWidthX;
-            set { _columnWidthX = value; OnPropertyChanged(); }
+            get => Model.ColumnWidthX;
+            set { Model.ColumnWidthX = value; OnPropertyChanged(); }
         }
 
-        private int _columnWidthY = 300;
         public int ColumnWidthY
         {
-            get => _columnWidthY;
-            set { _columnWidthY = value; OnPropertyChanged(); }
+            get => Model.ColumnWidthY;
+            set { Model.ColumnWidthY = value; OnPropertyChanged(); }
         }
 
-        private int _starterDiameter = 18;
         public int StarterDiameter
         {
-            get => _starterDiameter;
-            set { _starterDiameter = value; OnPropertyChanged(); }
+            get => Model.StarterDiameter;
+            set { Model.StarterDiameter = value; OnPropertyChanged(); }
         }
 
-        private int _starterHookLength = 250;
         public int StarterHookLength
         {
-            get => _starterHookLength;
-            set { _starterHookLength = value; OnPropertyChanged(); }
+            get => Model.StarterHookLength;
+            set { Model.StarterHookLength = value; OnPropertyChanged(); }
         }
 
-        private int _starterLength = 600;
         public int StarterLength
         {
-            get => _starterLength;
-            set { _starterLength = value; OnPropertyChanged(); }
+            get => Model.StarterLength;
+            set { Model.StarterLength = value; OnPropertyChanged(); }
         }
 
-        private int _stirrupDiameter = 6;
         public int StirrupDiameter
         {
-            get => _stirrupDiameter;
-            set { _stirrupDiameter = value; OnPropertyChanged(); }
+            get => Model.StirrupDiameter;
+            set { Model.StirrupDiameter = value; OnPropertyChanged(); }
         }
 
-        private int _stirrupSpacing = 150;
         public int StirrupSpacing
         {
-            get => _stirrupSpacing;
-            set { _stirrupSpacing = value; OnPropertyChanged(); }
+            get => Model.StirrupSpacing;
+            set { Model.StirrupSpacing = value; OnPropertyChanged(); }
+        }
+
+        public int EccentricityX
+        {
+            get => Model.EccentricityX;
+            set { Model.EccentricityX = value; OnPropertyChanged(); }
+        }
+
+        public int EccentricityY
+        {
+            get => Model.EccentricityY;
+            set { Model.EccentricityY = value; OnPropertyChanged(); }
         }
         #endregion
 
-        public ICommand DrawRebarCommand { get; }
-
         public EccentricRebarViewModel(ExternalCommandData commandData, List<Element> selectedFootings)
+            : base(commandData, selectedFootings)
         {
-            _commandData = commandData;
             _doc = commandData.Application.ActiveUIDocument.Document;
-            _uiDoc = commandData.Application.ActiveUIDocument;
             _selectedFootings = selectedFootings ?? new List<Element>();
 
+            Model = new FootingRebarModel();
+
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
-
-            UpdatePreview();
-        }
-
-        private void UpdatePreview()
-        {
-            // Cập nhật Thép cạnh ngắn (phương Y) cho giao diện UI Preview
-            PreviewShortBars.Clear();
-            int shortQty = ShortQuantity;
-            if (shortQty > 1)
-            {
-                double startX = 5;
-                double endX = 265;
-                double step = (endX - startX) / (shortQty - 1);
-                for (int i = 0; i < shortQty; i++)
-                {
-                    PreviewShortBars.Add(new BarPreviewX { XPosition = startX + (i * step) });
-                }
-            }
-
-            // Cập nhật Thép cạnh dài (phương X) cho giao diện UI Preview
-            PreviewLongBars.Clear();
-            int longQty = LongQuantity;
-            if (longQty > 1)
-            {
-                double startY = 5;
-                double endY = 175;
-                double step = (endY - startY) / (longQty - 1);
-                for (int i = 0; i < longQty; i++)
-                {
-                    PreviewLongBars.Add(new BarPreviewY { YPosition = startY + (i * step) });
-                }
-            }
         }
 
         private void ExecuteDrawRebar(object parameter)
@@ -245,7 +157,6 @@ namespace AddinVeMong.ViewModels
                 {
                     trans.Start();
 
-                    // Tìm các kiểu đường kính RebarBarType trong dự án
                     var barTypes = new FilteredElementCollector(_doc)
                         .OfClass(typeof(RebarBarType))
                         .Cast<RebarBarType>()
@@ -271,13 +182,11 @@ namespace AddinVeMong.ViewModels
                     RebarStyle styleStandard = RebarStyle.Standard;
                     RebarStyle styleStirrup = RebarStyle.StirrupTie;
 
-                    // Lặp qua từng móng đơn được chọn
                     foreach (Element footingElement in _selectedFootings)
                     {
                         FamilyInstance footingInstance = footingElement as FamilyInstance;
                         if (footingInstance == null) continue;
 
-                        // Tìm cột tương ứng giao với móng hiện tại (Giống hệt Concentric)
                         Element columnElement = null;
                         var boundingBox = footingElement.get_BoundingBox(null);
                         if (boundingBox != null)
@@ -310,20 +219,17 @@ namespace AddinVeMong.ViewModels
                         double footingWidthMm = UnitUtils.ConvertFromInternalUnits(pWidth.AsDouble(), UnitTypeId.Millimeters);
                         double footingHeightMm = UnitUtils.ConvertFromInternalUnits(pHeight.AsDouble(), UnitTypeId.Millimeters);
 
-                        // Quy đổi đơn vị sang Internal (Feet)
                         double coverFoot = UnitUtils.ConvertToInternalUnits(this.Cover, UnitTypeId.Millimeters);
                         double lengthFoot = UnitUtils.ConvertToInternalUnits(footingLengthMm, UnitTypeId.Millimeters);
                         double widthFoot = UnitUtils.ConvertToInternalUnits(footingWidthMm, UnitTypeId.Millimeters);
                         double heightFoot = UnitUtils.ConvertToInternalUnits(footingHeightMm, UnitTypeId.Millimeters);
 
-                        // Lấy Hệ tọa độ cục bộ của móng
                         Transform tf = footingInstance.GetTransform();
-                        XYZ uX = tf.BasisX; // Hướng X cấu kiện
-                        XYZ uY = tf.BasisY; // Hướng Y cấu kiện
-                        XYZ uZ = tf.BasisZ; // Hướng Z cấu kiện
+                        XYZ uX = tf.BasisX;
+                        XYZ uY = tf.BasisY;
+                        XYZ uZ = tf.BasisZ;
                         XYZ footingCenter = tf.Origin;
 
-                        // Điểm cao độ đáy móng (đã trừ lớp bảo vệ)
                         double zBottom = -heightFoot + coverFoot;
                         XYZ baseCenter = footingCenter + uZ * zBottom;
 
@@ -331,7 +237,6 @@ namespace AddinVeMong.ViewModels
                         List<Curve> curvesShort = new List<Curve>();
                         XYZ normalLong, normalShort;
 
-                        // Chuyển thông số móc thép sang Feet
                         double hookLong = UnitUtils.ConvertToInternalUnits(this.LongHookLength, UnitTypeId.Millimeters);
                         double hookShort = UnitUtils.ConvertToInternalUnits(this.ShortHookLength, UnitTypeId.Millimeters);
                         double longDiaFoot = UnitUtils.ConvertToInternalUnits(this.LongDiameter, UnitTypeId.Millimeters);
@@ -342,7 +247,6 @@ namespace AddinVeMong.ViewModels
                         double totalDistLong = (this.LongQuantity > 1) ? longSpacingFoot * (this.LongQuantity - 1) : 0;
                         double totalDistShort = (this.ShortQuantity > 1) ? shortSpacingFoot * (this.ShortQuantity - 1) : 0;
 
-                        // --- ÁP DỤNG THUẬT TOÁN ĐẶT THÉP MÓNG PHƯƠNG X VÀ Y Y HỆT MÃ CONCENTRIC ---
                         if (lengthFoot >= widthFoot)
                         {
                             double startX_Long = -totalDistLong / 2;
@@ -382,7 +286,6 @@ namespace AddinVeMong.ViewModels
                             normalShort = uX;
                         }
 
-                        // SỬA LỖI: Gọi đúng overload 12 đối số cho Rebar thép móng phương dọc (X)
                         if (longBarType != null && curvesLong.Count > 0)
                         {
                             Rebar rebarLong = Rebar.CreateFromCurves(_doc, styleStandard, longBarType, null, null, footingElement, normalLong, curvesLong, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
@@ -393,7 +296,6 @@ namespace AddinVeMong.ViewModels
                             }
                         }
 
-                        // SỬA LỖI: Gọi đúng overload 12 đối số cho Rebar thép móng phương ngang (Y)
                         if (shortBarType != null && curvesShort.Count > 0)
                         {
                             Rebar rebarShort = Rebar.CreateFromCurves(_doc, styleStandard, shortBarType, null, null, footingElement, normalShort, curvesShort, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
@@ -404,7 +306,6 @@ namespace AddinVeMong.ViewModels
                             }
                         }
 
-                        // --- 3. DỰNG THÉP CHỜ CỔ CỘT VÀ ĐAI THEO ĐỘ LỆCH TÂM BIẾN LƯU GIAO DIỆN ECCENTRIC ---
                         double colXFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthX, UnitTypeId.Millimeters);
                         double colYFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthY, UnitTypeId.Millimeters);
                         double eccXFoot = UnitUtils.ConvertToInternalUnits(this.EccentricityX, UnitTypeId.Millimeters);
@@ -415,7 +316,6 @@ namespace AddinVeMong.ViewModels
 
                         double zStarterBottom = zBottom + longDiaFoot + UnitUtils.ConvertToInternalUnits(this.ShortDiameter, UnitTypeId.Millimeters);
 
-                        // Áp dụng độ lệch tâm eccXFoot, eccYFoot để tìm tâm thực tế của vị trí cổ cột lệch
                         XYZ columnCenter = footingCenter + (uX * eccXFoot) + (uY * eccYFoot);
                         XYZ starterBaseCenter = columnCenter + uZ * zStarterBottom;
 
@@ -428,7 +328,6 @@ namespace AddinVeMong.ViewModels
                         List<XYZ> hookDirections = new List<XYZ> { uX, -uX, -uX, uX };
                         List<XYZ> starterNormals = new List<XYZ> { uY, uY, uY, uY };
 
-                        // Tạo 4 thanh thép dọc cổ cột lệch tâm
                         for (int i = 0; i < 4; i++)
                         {
                             XYZ cPt = columnCorners[i];
@@ -442,7 +341,6 @@ namespace AddinVeMong.ViewModels
                             sCurves.Add(Line.CreateBound(pBẻChân, cPt));
                             sCurves.Add(Line.CreateBound(cPt, pĐỉnhChờ));
 
-                            // SỬA LỖI: Sử dụng overload 12 đối số cho thép chờ cổ cột
                             if (starterBarType != null)
                             {
                                 Rebar starterRebar = Rebar.CreateFromCurves(_doc, styleStandard, starterBarType, null, null, columnHostElement, sNormal, sCurves, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
@@ -450,14 +348,12 @@ namespace AddinVeMong.ViewModels
                             }
                         }
 
-                        // --- 4. TẠO THÉP ĐAI CỘT LỆCH TÂM ---
                         CurveLoop stirrupLoop = new CurveLoop();
                         stirrupLoop.Append(Line.CreateBound(corner1, corner2));
                         stirrupLoop.Append(Line.CreateBound(corner2, corner3));
                         stirrupLoop.Append(Line.CreateBound(corner3, corner4));
                         stirrupLoop.Append(Line.CreateBound(corner4, corner1));
 
-                        // SỬA LỖI: Sử dụng overload 12 đối số cho thép đai cột
                         if (stirrupBarType != null && stirrupLoop.Count() > 0)
                         {
                             List<Curve> finalStirrupProfile = stirrupLoop.ToList();
@@ -479,7 +375,6 @@ namespace AddinVeMong.ViewModels
                     trans.Commit();
                 }
 
-                // Đóng Window UI sau khi thực thi vẽ thành công
                 if (parameter is Window window)
                 {
                     window.DialogResult = true;
@@ -491,28 +386,5 @@ namespace AddinVeMong.ViewModels
                 TaskDialog.Show("Lỗi thực thi", $"Có lỗi xảy ra: {ex.Message}");
             }
         }
-
-        private void SetRebarSolid3D(Rebar rebar, View3D view3D)
-        {
-            if (rebar == null || view3D == null) return;
-            try
-            {
-                rebar.SetUnobscuredInView(view3D, true);
-                Parameter solidParam = rebar.LookupParameter("Solid In View");
-                if (solidParam != null && !solidParam.IsReadOnly)
-                {
-                    solidParam.Set(1);
-                }
-            }
-            catch { }
-        }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }
