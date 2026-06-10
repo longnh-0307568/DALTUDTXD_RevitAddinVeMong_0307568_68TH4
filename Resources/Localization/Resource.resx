@@ -66,7 +66,7 @@
   <data name="ColWidthX" xml:space="preserve"><value>Kích thước cột X (mm):</value></data>
   <data name="ColWidthY" xml:space="preserve"><value>Kích thước cột Y (mm):</value></data>
   <data name="MainDiameter" xml:space="preserve"><value>Đường kính thép dọc:</value></data>
-  <data name="FootHookLength" xml:space="preserve"><value>Chiều dài chân vịt (mm):</value></data>
+  <data name="FootHookLength" xml:space="preserve"><value>Đoạn uốn neo (mm):</value></data>
   <data name="StarterLength" xml:space="preserve"><value>Chiều dài chờ cột (mm):</value></data>
   <data name="StirrupDiameter" xml:space="preserve"><value>Đường kính thép đai:</value></data>
   <data name="StirrupSpacing" xml:space="preserve"><value>Khoảng cách đai (mm):</value></data>
