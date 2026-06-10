@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:lang="clr-namespace:AddinVeMong.Resources.Localization"
         mc:Ignorable="d"
-        Title="Thiết lập cốt thép móng đúng tâm" Height="680" Width="680" 
+        Title="{x:Static lang:Resource.WindowTitle}" Height="680" Width="680" 
         WindowStartupLocation="CenterScreen" Background="#F5F5F5" ResizeMode="NoResize">
     <Window.Resources>
         <ResourceDictionary>
@@ -27,11 +28,10 @@
             <ColumnDefinition Width="350" />
         </Grid.ColumnDefinitions>
 
-
         <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,10,0">
             <StackPanel>
 
-                <Expander Header="1. THÔNG SỐ CHUNG (MÓNG &amp; BÊ TÔNG)" IsExpanded="True" Margin="0,5" FontWeight="Bold">
+                <Expander Header="{x:Static lang:Resource.SecGeneral}" IsExpanded="True" Margin="0,5" FontWeight="Bold">
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -41,13 +41,13 @@
                             <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Lớp bê tông bảo vệ (mm):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.ConcreteCover}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding Cover, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4"
                                  Tag="Mặc định: 50" Style="{StaticResource PlaceholderTextBoxStyle}" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
-                <Expander Header="2. THÉP CẠNH DÀI (PHƯƠNG X)" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                <Expander Header="{x:Static lang:Resource.SecLongBar}" IsExpanded="False" Margin="0,5" FontWeight="Bold">
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -60,7 +60,7 @@
                             <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Đường kính (mm):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.Diameter}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <ComboBox SelectedValue="{Binding LongDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>10</sys:Int32>
                             <sys:Int32>12</sys:Int32>
@@ -70,18 +70,18 @@
                             <sys:Int32>20</sys:Int32>
                         </ComboBox>
 
-                        <TextBlock Text="Khoảng cách a (mm):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.Spacing}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding LongSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
-                        <TextBlock Text="Số lượng thanh:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.Quantity}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding LongQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
-                        <TextBlock Text="Chiều dài bẻ móc (mm):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.HookLength}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding LongHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
-                <Expander Header="3. THÉP CẠNH NGẮN (PHƯƠNG Y)" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                <Expander Header="{x:Static lang:Resource.SecShortBar}" IsExpanded="False" Margin="0,5" FontWeight="Bold">
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -94,7 +94,7 @@
                             <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Đường kính (mm):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.Diameter}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <ComboBox SelectedValue="{Binding ShortDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>10</sys:Int32>
                             <sys:Int32>12</sys:Int32>
@@ -104,18 +104,18 @@
                             <sys:Int32>20</sys:Int32>
                         </ComboBox>
 
-                        <TextBlock Text="Khoảng cách a (mm):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.Spacing}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding ShortSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
-                        <TextBlock Text="Số lượng thanh:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.Quantity}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding ShortQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
-                        <TextBlock Text="Chiều dài bẻ móc (mm):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.HookLength}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding ShortHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
-                <Expander Header="4. THÉP CỔ CỘT &amp; ĐAI" IsExpanded="False" Margin="0,5" FontWeight="Bold">
+                <Expander Header="{x:Static lang:Resource.SecColumn}" IsExpanded="False" Margin="0,5" FontWeight="Bold">
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -131,15 +131,15 @@
                             <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Kích thước cột X (mm):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.ColWidthX}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding ColumnWidthX, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
                                  Tag="(Ví dụ: 220, 300)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
-                        <TextBlock Text="Kích thước cột Y (mm):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.ColWidthY}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding ColumnWidthY, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
                                  Tag="(Ví dụ: 220, 400)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
-                        <TextBlock Text="Đường kính thép dọc:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.MainDiameter}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>16</sys:Int32>
                             <sys:Int32>18</sys:Int32>
@@ -148,20 +148,20 @@
                             <sys:Int32>25</sys:Int32>
                         </ComboBox>
 
-                        <TextBlock Text="Chiều dài chân vịt (mm):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.FootHookLength}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding StarterHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
-                        <TextBlock Text="Chiều dài chờ cột (mm):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.StarterLength}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding StarterLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
-                        <TextBlock Text="Đường kính thép đai:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.StirrupDiameter}" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <ComboBox SelectedValue="{Binding StirrupDiameter}" Grid.Row="5" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>6</sys:Int32>
                             <sys:Int32>8</sys:Int32>
                             <sys:Int32>10</sys:Int32>
                         </ComboBox>
 
-                        <TextBlock Text="Khoảng cách đai (mm):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
+                        <TextBlock Text="{x:Static lang:Resource.StirrupSpacing}" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
                         <TextBox Text="{Binding StirrupSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
@@ -182,14 +182,14 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="Hình chiếu đứng" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="#333333"/>
+                    <TextBlock Grid.Row="0" Text="{x:Static lang:Resource.ElevationView}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="#333333"/>
 
                     <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Canvas Width="400" Height="400" Background="White">
                             <Rectangle Canvas.Left="50" Canvas.Top="250" Width="300" Height="80" Fill="#EAEAEA" Stroke="#555555" StrokeThickness="2" ToolTip="Khối móng đơn"/>
                             <Rectangle Canvas.Left="155" Canvas.Top="120" Width="90" Height="130" Fill="#DCDCD5" Stroke="#555555" StrokeThickness="2" ToolTip="Cổ cột"/>
                             <Rectangle Canvas.Left="60" Canvas.Top="260" Width="280" Height="65" Stroke="#999999" StrokeDashArray="4,4" StrokeThickness="1"/>
-                            <Line X1="65" Y1="313" X2="335" Y2="313" Stroke="Red" StrokeThickness="3" ToolTip="Thép cạnh dài (Phương X)"/>
+                            <Line X1="65" Y1="313" X2="335" Y2="313" Stroke="Red" StrokeThickness="3" ToolTip="{x:Static lang:Resource.SecLongBar}"/>
 
                             <ItemsControl ItemsSource="{Binding PreviewShortBars}" Canvas.Left="65" Canvas.Top="303">
                                 <ItemsControl.ItemsPanel>
@@ -205,7 +205,7 @@
                                 </ItemsControl.ItemContainerStyle>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Ellipse Width="8" Height="8" Fill="Blue" ToolTip="Thép cạnh ngắn (Phương Y)"/>
+                                        <Ellipse Width="8" Height="8" Fill="Blue" ToolTip="{x:Static lang:Resource.SecShortBar}"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -230,14 +230,12 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="Hình chiếu bằng" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="#333333"/>
+                    <TextBlock Grid.Row="0" Text="{x:Static lang:Resource.PlanView}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="#333333"/>
 
                     <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Canvas Width="400" Height="400" Background="White">
                             <Rectangle Canvas.Left="50" Canvas.Top="100" Width="300" Height="200" Fill="#EAEAEA" Stroke="#555555" StrokeThickness="2" ToolTip="Khối móng đơn (Mặt bằng)"/>
-
                             <Rectangle Canvas.Left="145" Canvas.Top="160" Width="110" Height="80" Fill="#DCDCD5" Stroke="#555555" StrokeThickness="2" ToolTip="Cổ cột (Mặt bằng)"/>
-
                             <Rectangle Canvas.Left="60" Canvas.Top="110" Width="280" Height="180" Stroke="#999999" StrokeDashArray="4,4" StrokeThickness="1"/>
 
                             <ItemsControl ItemsSource="{Binding PreviewLongBars}" Canvas.Left="60" Canvas.Top="110">
@@ -254,7 +252,7 @@
                                 </ItemsControl.ItemContainerStyle>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Line X1="0" Y1="0" X2="280" Y2="0" Stroke="Red" StrokeThickness="2" ToolTip="Thép cạnh dài (Phương X)"/>
+                                        <Line X1="0" Y1="0" X2="280" Y2="0" Stroke="Red" StrokeThickness="2" ToolTip="{x:Static lang:Resource.SecLongBar}"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -273,7 +271,7 @@
                                 </ItemsControl.ItemContainerStyle>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Line X1="0" Y1="0" X2="0" Y2="180" Stroke="Blue" StrokeThickness="2" ToolTip="Thép cạnh ngắn (Phương Y)"/>
+                                        <Line X1="0" Y1="0" X2="0" Y2="180" Stroke="Blue" StrokeThickness="2" ToolTip="{x:Static lang:Resource.SecShortBar}"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -282,7 +280,6 @@
                             <Ellipse Canvas.Left="242" Canvas.Top="165" Width="8" Height="8" Fill="Green" ToolTip="Thép chờ dọc cột"/>
                             <Ellipse Canvas.Left="150" Canvas.Top="227" Width="8" Height="8" Fill="Green" ToolTip="Thép chờ dọc cột"/>
                             <Ellipse Canvas.Left="242" Canvas.Top="227" Width="8" Height="8" Fill="Green" ToolTip="Thép chờ dọc cột"/>
-
                             <Rectangle Canvas.Left="148" Canvas.Top="163" Width="102" Height="72" Stroke="#FFA500" StrokeThickness="1.5" ToolTip="Thép đai cột"/>
                         </Canvas>
                     </Viewbox>
@@ -291,8 +288,8 @@
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button Content="Hủy" Width="80" Height="30" Margin="10,0" IsCancel="True"/>
-            <Button Content="Tạo Thép" Command="{Binding DrawRebarCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100" Height="30" Background="#1565C0" Foreground="White" FontWeight="Bold"/>
+            <Button Content="{x:Static lang:Resource.BtnCancel}" Width="80" Height="30" Margin="10,0" IsCancel="True"/>
+            <Button Content="{x:Static lang:Resource.BtnCreate}" Command="{Binding DrawRebarCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100" Height="30" Background="#1565C0" Foreground="White" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </Window>

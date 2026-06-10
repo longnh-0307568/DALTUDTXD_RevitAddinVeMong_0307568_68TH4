@@ -26,6 +26,26 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Resources\Localization\Resource.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resource.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Localization\Resource.en.resx">
+	    <Generator></Generator>
+	    <CustomToolNamespace></CustomToolNamespace>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\Localization\Resource.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+	    <CustomToolNamespace>AddinVeMong.Resources.Localization</CustomToolNamespace>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Resource Update="Resources\Images\About.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
