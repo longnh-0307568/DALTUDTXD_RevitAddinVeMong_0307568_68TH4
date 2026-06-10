@@ -1,5 +1,5 @@
 ﻿using AddinVeMong.Commands;
-using AddinVeMong.Models; // Khai báo sử dụng thư mục Models
+using AddinVeMong.Models;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
@@ -67,7 +67,7 @@ namespace AddinVeMong.ViewModels
 
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
 
-            // ĐĂNG KÝ SỰ KIỆN: Khi dữ liệu số lượng trong Model thay đổi, tự động gọi hàm Preview của ViewModel
+            // Khi dữ liệu số lượng trong Model thay đổi, tự động gọi hàm Preview của ViewModel
             RebarData.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(FootingRebarModel.ShortQuantity))
@@ -148,7 +148,7 @@ namespace AddinVeMong.ViewModels
                         return;
                     }
 
-                    // ĐỔI SANG THAM CHIẾU TỪ MODEL (RebarData.LongDiameter, RebarData.ShortDiameter,...)
+                    // Tham chiếu từ model (RebarData.LongDiameter, RebarData.ShortDiameter,...)
                     RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.LongDiameter) < 0.1);
                     RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.ShortDiameter) < 0.1);
                     RebarBarType starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.StarterDiameter) < 0.1);
@@ -199,7 +199,7 @@ namespace AddinVeMong.ViewModels
                         double footingWidthMm = UnitUtils.ConvertFromInternalUnits(pWidth.AsDouble(), UnitTypeId.Millimeters);
                         double footingHeightMm = UnitUtils.ConvertFromInternalUnits(pHeight.AsDouble(), UnitTypeId.Millimeters);
 
-                        // ĐỔI SANG THAM CHIẾU TỪ MODEL (RebarData.Cover)
+                        // Tham chiếu từ model (RebarData.Cover)
                         double coverFoot = UnitUtils.ConvertToInternalUnits(RebarData.Cover, UnitTypeId.Millimeters);
                         double lengthFoot = UnitUtils.ConvertToInternalUnits(footingLengthMm, UnitTypeId.Millimeters);
                         double widthFoot = UnitUtils.ConvertToInternalUnits(footingWidthMm, UnitTypeId.Millimeters);
@@ -218,7 +218,7 @@ namespace AddinVeMong.ViewModels
                         List<Curve> curvesShort = new List<Curve>();
                         XYZ normalLong, normalShort;
 
-                        // ĐỔI SANG THAM CHIẾU TỪ MODEL (RebarData.LongHookLength, RebarData.ShortHookLength,...)
+                        // Tham chiếu từ model (RebarData.LongHookLength, RebarData.ShortHookLength,...)
                         double hookLong = UnitUtils.ConvertToInternalUnits(RebarData.LongHookLength, UnitTypeId.Millimeters);
                         double hookShort = UnitUtils.ConvertToInternalUnits(RebarData.ShortHookLength, UnitTypeId.Millimeters);
                         double longDiaFoot = UnitUtils.ConvertToInternalUnits(RebarData.LongDiameter, UnitTypeId.Millimeters);
@@ -288,7 +288,7 @@ namespace AddinVeMong.ViewModels
                             }
                         }
 
-                        // ĐỔI SANG THAM CHIẾU TỪ MODEL (RebarData.ColumnWidthX, RebarData.ColumnWidthY,...)
+                        // Tham chiếu từ model (RebarData.ColumnWidthX, RebarData.ColumnWidthY,...)
                         double colXFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthX, UnitTypeId.Millimeters);
                         double colYFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthY, UnitTypeId.Millimeters);
                         double starterHookFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterHookLength, UnitTypeId.Millimeters);

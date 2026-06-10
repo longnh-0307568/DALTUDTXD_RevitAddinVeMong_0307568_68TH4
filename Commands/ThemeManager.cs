@@ -33,7 +33,7 @@ namespace AddinVeMong.Helpers
             }
             catch (Exception ex)
             {
-                // Đề phòng lỗi đường dẫn thì nạp tạm LightTheme mặc định tránh sập ứng dụng
+                // Đề phòng lỗi đường dẫn thì nạp tạm LightTheme mặc định
                 _currentThemeResource = new ResourceDictionary
                 {
                     Source = new Uri("/AddinVeMong;component/Resources/Styles/LightTheme.xaml", UriKind.RelativeOrAbsolute)

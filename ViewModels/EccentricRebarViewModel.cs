@@ -150,7 +150,7 @@ namespace AddinVeMong.ViewModels
 
                 View3D activeView3D = _doc.ActiveView as View3D;
 
-                using (Transaction trans = new Transaction(_doc, "Vẽ Thép Móng Lệch Tâm Hàng Loạt"))
+                using (Transaction trans = new Transaction(_doc, "Vẽ thép móng lệch tâm"))
                 {
                     trans.Start();
 
@@ -161,7 +161,7 @@ namespace AddinVeMong.ViewModels
 
                     if (barTypes.Count == 0)
                     {
-                        TaskDialog.Show("Thiếu Dữ Liệu", "Dự án chưa được tải Family Thép.");
+                        TaskDialog.Show("Thiếu dữ liệu", "Dự án chưa được tải Family thép.");
                         trans.RollBack();
                         return;
                     }

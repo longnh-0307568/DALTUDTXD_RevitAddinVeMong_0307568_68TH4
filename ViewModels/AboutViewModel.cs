@@ -17,7 +17,7 @@ namespace AddinVeMong.ViewModels
             // Giới thiệu ngắn gọn dưới 5 dòng
             Description = "Công cụ hỗ trợ kỹ sư tự động hóa quá trình mô hình cốt thép móng đơn vát trong Revit.\n" +
                           "Chức năng chính: Quản lý thông số hình học, tự động bố trí thép cạnh dài, thép cạnh ngắn,\n" +
-                          "thép cổ cột và thép đai. Giúp tăng tốc độ thiết kế và đảm bảo tính chính xác cao.";
+                          "thép cổ cột và thép đai. Giúp tăng tốc độ thiết kế.";
 
             string version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0";
             VersionInfo = $"Phiên bản: {version}";

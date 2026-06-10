@@ -14,7 +14,7 @@ namespace AddinVeMong.Commands
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            // TIẾNG VIỆT LÀM MẶC ĐỊNH
+            // tiếng việt mặc định
             // Giúp form thép tự động đọc file Resource.resx gốc (Tiếng Việt) ngay lần đầu mở lên
 
             string cultureCode = SettingViewModel.CurrentLanguageSettings == "English" ? "en" : "vi";
@@ -71,7 +71,6 @@ namespace AddinVeMong.Commands
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-                // Xử lý êm đẹp trường hợp người dùng bấm ESC hoặc Cancel khi đang chọn móng, không báo lỗi bậy
                 return Result.Cancelled;
             }
             catch (Exception ex)

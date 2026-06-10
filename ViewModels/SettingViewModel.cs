@@ -13,7 +13,7 @@ namespace AddinVeMong.ViewModels
     {
         public string TitleText { get; set; }
 
-        // BIẾN TĨNH LƯU TRẠNG THÁI NGÔN NGỮ (Mặc định ban đầu luôn là Tiếng Việt)
+        // Biến lưu trạng thái ngôn ngữ (Mặc định ban đầu luôn là Tiếng Việt)
         public static string CurrentLanguageSettings { get; set; } = "Tiếng Việt";
 
         // Biến tĩnh lưu trạng thái Theme
@@ -50,10 +50,9 @@ namespace AddinVeMong.ViewModels
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            // 3. ĐỔI THEME QUA THEMEMANAGER (Sửa lỗi dứt điểm tại đây)
+            // 3. Đổi qua ThemeManager
             AddinVeMong.Helpers.ThemeManager.UpdateTheme(SelectedTheme);
 
-            // 4. Hiển thị thông báo
             if (cultureCode == "en")
             {
                 MessageBox.Show("Settings saved successfully!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
