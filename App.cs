@@ -16,23 +16,23 @@ namespace AddinVeMong
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
             string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
-            // ĐƯỜNG DẪN COMMAND HỆ THỐNG
+            // đường dẫn command about
             string aboutCommandPath = "AddinVeMong.Commands.AboutCommand";
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
 
-            // ĐƯỜNG DẪN 2 COMMAND MỞ UI
+            // đường dẫn command mở form thép
             string showConcentricUIPath = "AddinVeMong.Commands.ShowConcentricWindowCommand";
             string showEccentricUIPath = "AddinVeMong.Commands.ShowEccentricWindowCommand";
 
-            // ĐƯỜNG DẪN COMMAND LOAD FAMILY
+            // đường dẫn command load family
             string loadFoundationFamilyPath =
                 "AddinVeMong.Commands.LoadFoundationFamilyCommand";
 
             string loadRebarFamilyPath =
                 "AddinVeMong.Commands.LoadRebarFamilyCommand";
 
-            // PANEL GIỚI THIỆU
+            // panel about
 
             RibbonPanel panelAbout =
                 application.CreateRibbonPanel(tabName, "Giới thiệu");
@@ -75,7 +75,7 @@ namespace AddinVeMong
                 btnSettingsData
             );
 
-            // PANEL THÉP
+            // panel thép
 
             RibbonPanel panelRebar =
                 application.CreateRibbonPanel(tabName, "Thép");
@@ -119,7 +119,7 @@ namespace AddinVeMong
             pulldownRebar.AddPushButton(btnEccentricData);
 
 
-            // PANEL THƯ VIỆN
+            // panel thư viện
             RibbonPanel panelLibrary =
                 application.CreateRibbonPanel(tabName, "Thư viện");
 
