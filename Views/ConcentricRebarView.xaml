@@ -49,7 +49,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="{x:Static lang:Resource.ConcreteCover}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding Cover, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4"
+                        <TextBox Text="{Binding RebarData.Cover, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4"
                  Tag="Mặc định: 50" Style="{StaticResource PlaceholderTextBoxStyle}" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
@@ -74,7 +74,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="{x:Static lang:Resource.Diameter}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <ComboBox SelectedValue="{Binding LongDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
+                        <ComboBox SelectedValue="{Binding RebarData.LongDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>10</sys:Int32>
                             <sys:Int32>12</sys:Int32>
                             <sys:Int32>14</sys:Int32>
@@ -84,13 +84,13 @@
                         </ComboBox>
 
                         <TextBlock Text="{x:Static lang:Resource.Spacing}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding LongSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.LongSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
                         <TextBlock Text="{x:Static lang:Resource.Quantity}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding LongQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.LongQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
                         <TextBlock Text="{x:Static lang:Resource.HookLength}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding LongHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.LongHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
@@ -114,7 +114,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="{x:Static lang:Resource.Diameter}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <ComboBox SelectedValue="{Binding ShortDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
+                        <ComboBox SelectedValue="{Binding RebarData.ShortDiameter}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>10</sys:Int32>
                             <sys:Int32>12</sys:Int32>
                             <sys:Int32>14</sys:Int32>
@@ -124,13 +124,13 @@
                         </ComboBox>
 
                         <TextBlock Text="{x:Static lang:Resource.Spacing}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding ShortSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.ShortSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
                         <TextBlock Text="{x:Static lang:Resource.Quantity}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding ShortQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.ShortQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
                         <TextBlock Text="{x:Static lang:Resource.HookLength}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding ShortHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.ShortHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
@@ -157,15 +157,15 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="{x:Static lang:Resource.ColWidthX}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding ColumnWidthX, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
+                        <TextBox Text="{Binding RebarData.ColumnWidthX, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
                  Tag="(Ví dụ: 220, 300)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
                         <TextBlock Text="{x:Static lang:Resource.ColWidthY}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding ColumnWidthY, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
+                        <TextBox Text="{Binding RebarData.ColumnWidthY, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"
                  Tag="(Ví dụ: 220, 400)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
                         <TextBlock Text="{x:Static lang:Resource.MainDiameter}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
+                        <ComboBox SelectedValue="{Binding RebarData.StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>16</sys:Int32>
                             <sys:Int32>18</sys:Int32>
                             <sys:Int32>20</sys:Int32>
@@ -174,20 +174,20 @@
                         </ComboBox>
 
                         <TextBlock Text="{x:Static lang:Resource.FootHookLength}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding StarterHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.StarterHookLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
                         <TextBlock Text="{x:Static lang:Resource.StarterLength}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding StarterLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.StarterLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
 
                         <TextBlock Text="{x:Static lang:Resource.StirrupDiameter}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <ComboBox SelectedValue="{Binding StirrupDiameter}" Grid.Row="5" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
+                        <ComboBox SelectedValue="{Binding RebarData.StirrupDiameter}" Grid.Row="5" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>6</sys:Int32>
                             <sys:Int32>8</sys:Int32>
                             <sys:Int32>10</sys:Int32>
                         </ComboBox>
 
                         <TextBlock Text="{x:Static lang:Resource.StirrupSpacing}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <TextBox Text="{Binding StirrupSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding RebarData.StirrupSpacing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center"/>
                     </Grid>
                 </Expander>
 
