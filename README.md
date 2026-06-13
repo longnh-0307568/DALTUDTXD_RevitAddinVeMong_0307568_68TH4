@@ -1,6 +1,16 @@
 ﻿# AddinVeMong
-<img width="1264" height="806" alt="image" src="https://github.com/user-attachments/assets/88a2dfd6-92e3-42bf-b457-94641b439754" />
+<img width="1148" height="783" alt="image" src="https://github.com/user-attachments/assets/1307c7d5-c3bb-41e3-a232-8caf5bc6eab2" />
 
+
+
+## Cấu trúc thư mục
+Resources
+= Styles: Chứa style cho textbox
+- Localization: Chứa bản dịch
+- Images: Icon cho button
+Views: Chứa giao diện
+ViewModels: Chứa logic vẽ thép
+Models: Lưu dữ liệu
 
 ## Phiên bản sử dụng
 - Revit 2025.0.2
@@ -12,7 +22,7 @@
   <AddIn Type="Application">
     <Name>AddinVeMong</Name>
     <Assembly>Path\AddinVeMong.dll</Assembly>
-    <AddInId>1F3A5B7E-9C8D-4A2B-8E1F-3D4C5B6A7E8F</AddInId>
+    <AddInId>67E41F9B-ECB4-43F3-84CA-694CF65154B5</AddInId>
     <FullClassName>AddinVeMong.App</FullClassName>
     <VendorId>com.yourname</VendorId>
     <VendorDescription>Phần mềm vẽ móng</VendorDescription>
