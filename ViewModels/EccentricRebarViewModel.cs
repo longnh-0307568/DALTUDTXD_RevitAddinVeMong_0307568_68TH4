@@ -12,6 +12,16 @@ using System.Windows.Input;
 
 namespace AddinVeMong.ViewModels
 {
+    public class BarPreviewX
+    {
+        public double XPosition { get; set; }
+    }
+
+    public class BarPreviewY
+    {
+        public double YPosition { get; set; }
+    }
+
     public class EccentricRebarViewModel : INotifyPropertyChanged
     {
         private readonly ExternalCommandData _commandData;
@@ -50,6 +60,18 @@ namespace AddinVeMong.ViewModels
         private int _longSpacing = 150;
         public int LongSpacing { get => _longSpacing; set { _longSpacing = value; OnPropertyChanged(); } }
 
+        private int _longQuantity = 10;
+        public int LongQuantity
+        {
+            get => _longQuantity;
+            set
+            {
+                _longQuantity = value;
+                OnPropertyChanged();
+                UpdateLongBarsPreview();
+            }
+        }
+
         private int _longHookLength = 150;
         public int LongHookLength { get => _longHookLength; set { _longHookLength = value; OnPropertyChanged(); } }
         #endregion
@@ -60,6 +82,18 @@ namespace AddinVeMong.ViewModels
 
         private int _shortSpacing = 150;
         public int ShortSpacing { get => _shortSpacing; set { _shortSpacing = value; OnPropertyChanged(); } }
+
+        private int _shortQuantity = 8;
+        public int ShortQuantity
+        {
+            get => _shortQuantity;
+            set
+            {
+                _shortQuantity = value;
+                OnPropertyChanged();
+                UpdateShortBarsPreview();
+            }
+        }
 
         private int _shortHookLength = 150;
         public int ShortHookLength { get => _shortHookLength; set { _shortHookLength = value; OnPropertyChanged(); } }
@@ -88,7 +122,23 @@ namespace AddinVeMong.ViewModels
         public int ColumnWidthY { get => _columnWidthY; set { _columnWidthY = value; OnPropertyChanged(); } }
         #endregion
 
-        #region 6. Lệnh thực thi (Command)
+        #region 6. CÁC THUỘC TÍNH PHỤC VỤ HIỂN THỊ PREVIEW
+        private System.Collections.ObjectModel.ObservableCollection<BarPreviewX> _previewShortBars;
+        public System.Collections.ObjectModel.ObservableCollection<BarPreviewX> PreviewShortBars
+        {
+            get => _previewShortBars;
+            set { _previewShortBars = value; OnPropertyChanged(); }
+        }
+
+        private System.Collections.ObjectModel.ObservableCollection<BarPreviewY> _previewLongBars;
+        public System.Collections.ObjectModel.ObservableCollection<BarPreviewY> PreviewLongBars
+        {
+            get => _previewLongBars;
+            set { _previewLongBars = value; OnPropertyChanged(); }
+        }
+        #endregion
+
+        #region 7. Lệnh thực thi (Command)
         public ICommand DrawRebarCommand { get; }
         #endregion
 
@@ -98,7 +148,49 @@ namespace AddinVeMong.ViewModels
             _uiDoc = commandData.Application.ActiveUIDocument;
             _doc = _uiDoc.Document;
 
+            PreviewShortBars = new System.Collections.ObjectModel.ObservableCollection<BarPreviewX>();
+            PreviewLongBars = new System.Collections.ObjectModel.ObservableCollection<BarPreviewY>();
+
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar, CanExecuteDrawRebar);
+
+            UpdateShortBarsPreview();
+            UpdateLongBarsPreview();
+        }
+
+        private void UpdateShortBarsPreview()
+        {
+            if (PreviewShortBars == null) return;
+            PreviewShortBars.Clear();
+
+            int quantity = ShortQuantity;
+            if (quantity <= 1) return;
+
+            double startX = 5;
+            double endX = 265;
+            double step = (endX - startX) / (quantity - 1);
+
+            for (int i = 0; i < quantity; i++)
+            {
+                PreviewShortBars.Add(new BarPreviewX { XPosition = startX + (i * step) });
+            }
+        }
+
+        private void UpdateLongBarsPreview()
+        {
+            if (PreviewLongBars == null) return;
+            PreviewLongBars.Clear();
+
+            int quantity = LongQuantity;
+            if (quantity <= 1) return;
+
+            double startY = 5;
+            double endY = 175;
+            double step = (endY - startY) / (quantity - 1);
+
+            for (int i = 0; i < quantity; i++)
+            {
+                PreviewLongBars.Add(new BarPreviewY { YPosition = startY + (i * step) });
+            }
         }
 
         private bool CanExecuteDrawRebar(object parameter) => true;
@@ -215,74 +307,7 @@ namespace AddinVeMong.ViewModels
                     double zBottom = -heightFoot + coverFoot;
                     XYZ baseCenter = footingCenter + uZ * zBottom;
 
-                    List<Curve> curvesLong = new List<Curve>();
-                    List<Curve> curvesShort = new List<Curve>();
-                    XYZ normalLong, normalShort;
-                    double distWidthLong, distWidthShort;
-
-                    double hookLong = UnitUtils.ConvertToInternalUnits(this.LongHookLength, UnitTypeId.Millimeters);
-                    double hookShort = UnitUtils.ConvertToInternalUnits(this.ShortHookLength, UnitTypeId.Millimeters);
                     double longDiaFoot = UnitUtils.ConvertToInternalUnits(this.LongDiameter, UnitTypeId.Millimeters);
-
-                    // 1. Lưới thép đáy (không đổi so với móng đúng tâm vì bao phủ toàn bộ đáy móng)
-                    if (lengthFoot >= widthFoot)
-                    {
-                        XYZ p2 = baseCenter + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
-                        XYZ p3 = baseCenter + uX * (-widthFoot / 2 + coverFoot) + uY * (lengthFoot / 2 - coverFoot);
-                        XYZ p1 = p2 + uZ * hookLong;
-                        XYZ p4 = p3 + uZ * hookLong;
-                        curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
-                        normalLong = uX;
-                        distWidthLong = widthFoot - (2 * coverFoot);
-
-                        XYZ baseCenterShort = footingCenter + uZ * (zBottom + longDiaFoot);
-                        XYZ q2 = baseCenterShort + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
-                        XYZ q3 = baseCenterShort + uX * (widthFoot / 2 - coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
-                        XYZ q1 = q2 + uZ * hookShort;
-                        XYZ q4 = q3 + uZ * hookShort;
-                        curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
-                        normalShort = uY;
-                        distWidthShort = lengthFoot - (2 * coverFoot);
-                    }
-                    else
-                    {
-                        XYZ p2 = baseCenter + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
-                        XYZ p3 = baseCenter + uX * (widthFoot / 2 - coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
-                        XYZ p1 = p2 + uZ * hookLong;
-                        XYZ p4 = p3 + uZ * hookLong;
-                        curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
-                        normalLong = uY;
-                        distWidthLong = lengthFoot - (2 * coverFoot);
-
-                        XYZ baseCenterShort = footingCenter + uZ * (zBottom + longDiaFoot);
-                        XYZ q2 = baseCenterShort + uX * (-widthFoot / 2 + coverFoot) + uY * (-lengthFoot / 2 + coverFoot);
-                        XYZ q3 = baseCenterShort + uX * (-widthFoot / 2 + coverFoot) + uY * (lengthFoot / 2 - coverFoot);
-                        XYZ q1 = q2 + uZ * hookShort;
-                        XYZ q4 = q3 + uZ * hookShort;
-                        curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
-                        normalShort = uX;
-                        distWidthShort = widthFoot - (2 * coverFoot);
-                    }
-
-                    if (longBarType != null && curvesLong.Count > 0)
-                    {
-                        Rebar rebarLong = Rebar.CreateFromCurves(_doc, styleStandard, longBarType, null, null, footingElement, normalLong, curvesLong, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
-                        if (rebarLong != null)
-                        {
-                            rebarLong.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(UnitUtils.ConvertToInternalUnits(this.LongSpacing, UnitTypeId.Millimeters), distWidthLong, true, true, true);
-                            SetRebarSolid3D(rebarLong, activeView3D);
-                        }
-                    }
-
-                    if (shortBarType != null && curvesShort.Count > 0)
-                    {
-                        Rebar rebarShort = Rebar.CreateFromCurves(_doc, styleStandard, shortBarType, null, null, footingElement, normalShort, curvesShort, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
-                        if (rebarShort != null)
-                        {
-                            rebarShort.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(UnitUtils.ConvertToInternalUnits(this.ShortSpacing, UnitTypeId.Millimeters), distWidthShort, true, true, true);
-                            SetRebarSolid3D(rebarShort, activeView3D);
-                        }
-                    }
 
                     // 2. Thép cổ cột - ĐẶT TẠI TÂM LỆCH (eccentricCenter)
                     double colXFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthX, UnitTypeId.Millimeters);
