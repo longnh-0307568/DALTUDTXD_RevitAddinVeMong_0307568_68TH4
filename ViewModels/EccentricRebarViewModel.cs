@@ -1,4 +1,4 @@
-using AddinVeMong.Commands;
+﻿using AddinVeMong.Commands;
 using AddinVeMong.Models;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
@@ -138,7 +138,7 @@ namespace AddinVeMong.ViewModels
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
         }
 
-        private void ExecuteDrawRebar(object parameter)
+        private void ExecuteDrawRebar(object? parameter)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace AddinVeMong.ViewModels
                     return;
                 }
 
-                View3D activeView3D = _doc.ActiveView as View3D;
+                View3D? activeView3D = _doc.ActiveView as View3D;
 
                 using (Transaction trans = new Transaction(_doc, "Vẽ thép móng lệch tâm"))
                 {
@@ -166,10 +166,10 @@ namespace AddinVeMong.ViewModels
                         return;
                     }
 
-                    RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.LongDiameter) < 0.1);
-                    RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.ShortDiameter) < 0.1);
-                    RebarBarType starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StarterDiameter) < 0.1);
-                    RebarBarType stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StirrupDiameter) < 0.1);
+                    RebarBarType? longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.LongDiameter) < 0.1);
+                    RebarBarType? shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.ShortDiameter) < 0.1);
+                    RebarBarType? starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StarterDiameter) < 0.1);
+                    RebarBarType? stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StirrupDiameter) < 0.1);
 
                     if (longBarType == null) longBarType = barTypes.FirstOrDefault();
                     if (shortBarType == null) shortBarType = barTypes.FirstOrDefault();
@@ -181,10 +181,10 @@ namespace AddinVeMong.ViewModels
 
                     foreach (Element footingElement in _selectedFootings)
                     {
-                        FamilyInstance footingInstance = footingElement as FamilyInstance;
+                        FamilyInstance? footingInstance = footingElement as FamilyInstance;
                         if (footingInstance == null) continue;
 
-                        Element columnElement = null;
+                        Element? columnElement = null;
                         var boundingBox = footingElement.get_BoundingBox(null);
                         if (boundingBox != null)
                         {
@@ -203,7 +203,7 @@ namespace AddinVeMong.ViewModels
 
                         Element columnHostElement = columnElement ?? footingElement;
 
-                        ElementType footingType = _doc.GetElement(footingElement.GetTypeId()) as ElementType;
+                        ElementType? footingType = _doc.GetElement(footingElement.GetTypeId()) as ElementType;
                         if (footingType == null) continue;
 
                         Parameter pHeight = footingType.LookupParameter("Foundation Thickness") ?? footingType.LookupParameter("Thickness");
@@ -260,7 +260,7 @@ namespace AddinVeMong.ViewModels
                             if (starterBarType != null)
                             {
                                 Rebar starterRebar = Rebar.CreateFromCurves(_doc, styleStandard, starterBarType, null, null, columnHostElement, sNormal, sCurves, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
-                                if (starterRebar != null) SetRebarSolid3D(starterRebar, activeView3D);
+                                if (starterRebar != null && activeView3D != null) SetRebarSolid3D(starterRebar, activeView3D);
                             }
                         }
 
@@ -283,7 +283,7 @@ namespace AddinVeMong.ViewModels
                                 double totalStirrupDistributionLength = heightInsideFooting + heightOutsideFooting;
 
                                 stirrupRebar.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(stirrupSpcFoot, totalStirrupDistributionLength, true, true, true);
-                                SetRebarSolid3D(stirrupRebar, activeView3D);
+                                if (activeView3D != null) SetRebarSolid3D(stirrupRebar, activeView3D);
                             }
                         }
                     }
