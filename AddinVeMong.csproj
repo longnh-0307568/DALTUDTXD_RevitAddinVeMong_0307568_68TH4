@@ -26,7 +26,33 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Resources\Localization\Resource.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resource.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Localization\Resource.en.resx">
+	    <Generator></Generator>
+	    <CustomToolNamespace></CustomToolNamespace>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\Localization\Resource.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+	    <CustomToolNamespace>AddinVeMong.Resources.Localization</CustomToolNamespace>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Resource Update="Resources\Images\About.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Update="Resources\Images\Centric.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Update="Resources\Images\Eccentric.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Update="Resources\Images\EccentricChamfer.png">
@@ -36,6 +62,12 @@
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Update="Resources\Images\Help.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Update="Resources\Images\LoadFoundation.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Update="Resources\Images\LoadRebar.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Update="Resources\Images\Rebar.png">

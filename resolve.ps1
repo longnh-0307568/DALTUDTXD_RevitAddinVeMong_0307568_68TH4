@@ -1,13 +1,28 @@
+$content = @'
 using AddinVeMong.Commands;
 using AddinVeMong.Models;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
 namespace AddinVeMong.ViewModels
 {
+    public class BarPreviewX
+    {
+        public double XPosition { get; set; }
+    }
+
+    public class BarPreviewY
+    {
+        public double YPosition { get; set; }
+    }
+
     public class EccentricRebarViewModel : ConcentricRebarViewModel
     {
         private readonly Document _doc;
@@ -39,7 +54,7 @@ namespace AddinVeMong.ViewModels
         public int LongQuantity
         {
             get => Model.LongQuantity;
-            set { Model.LongQuantity = value; OnPropertyChanged(); }
+            set { Model.LongQuantity = value; OnPropertyChanged(); UpdateLongBarsPreview(); }
         }
 
         public int LongHookLength
@@ -63,7 +78,7 @@ namespace AddinVeMong.ViewModels
         public int ShortQuantity
         {
             get => Model.ShortQuantity;
-            set { Model.ShortQuantity = value; OnPropertyChanged(); }
+            set { Model.ShortQuantity = value; OnPropertyChanged(); UpdateShortBarsPreview(); }
         }
 
         public int ShortHookLength
@@ -127,6 +142,22 @@ namespace AddinVeMong.ViewModels
         }
         #endregion
 
+        #region Preview Properties
+        private System.Collections.ObjectModel.ObservableCollection<BarPreviewX> _previewShortBars;
+        public System.Collections.ObjectModel.ObservableCollection<BarPreviewX> PreviewShortBars
+        {
+            get => _previewShortBars;
+            set { _previewShortBars = value; OnPropertyChanged(); }
+        }
+
+        private System.Collections.ObjectModel.ObservableCollection<BarPreviewY> _previewLongBars;
+        public System.Collections.ObjectModel.ObservableCollection<BarPreviewY> PreviewLongBars
+        {
+            get => _previewLongBars;
+            set { _previewLongBars = value; OnPropertyChanged(); }
+        }
+        #endregion
+
         public EccentricRebarViewModel(ExternalCommandData commandData, List<Element> selectedFootings)
             : base(commandData, selectedFootings)
         {
@@ -135,7 +166,49 @@ namespace AddinVeMong.ViewModels
 
             Model = new FootingRebarModel();
 
+            PreviewShortBars = new System.Collections.ObjectModel.ObservableCollection<BarPreviewX>();
+            PreviewLongBars = new System.Collections.ObjectModel.ObservableCollection<BarPreviewY>();
+
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
+
+            UpdateShortBarsPreview();
+            UpdateLongBarsPreview();
+        }
+
+        private void UpdateShortBarsPreview()
+        {
+            if (PreviewShortBars == null) return;
+            PreviewShortBars.Clear();
+
+            int quantity = ShortQuantity;
+            if (quantity <= 1) return;
+
+            double startX = 5;
+            double endX = 265;
+            double step = (endX - startX) / (quantity - 1);
+
+            for (int i = 0; i < quantity; i++)
+            {
+                PreviewShortBars.Add(new BarPreviewX { XPosition = startX + (i * step) });
+            }
+        }
+
+        private void UpdateLongBarsPreview()
+        {
+            if (PreviewLongBars == null) return;
+            PreviewLongBars.Clear();
+
+            int quantity = LongQuantity;
+            if (quantity <= 1) return;
+
+            double startY = 5;
+            double endY = 175;
+            double step = (endY - startY) / (quantity - 1);
+
+            for (int i = 0; i < quantity; i++)
+            {
+                PreviewLongBars.Add(new BarPreviewY { YPosition = startY + (i * step) });
+            }
         }
 
         private void ExecuteDrawRebar(object parameter)
@@ -144,13 +217,13 @@ namespace AddinVeMong.ViewModels
             {
                 if (_selectedFootings == null || _selectedFootings.Count == 0)
                 {
-                    TaskDialog.Show("Th√¥ng b√°o", "Kh√¥ng t√¨m th·∫•y d·ªØ li·ªáu m√≥ng ƒë∆∞·ª£c ch·ªçn.");
+                    TaskDialog.Show("ThÙng b·o", "KhÙng t?m th?y d? li?u mÛng ˝?c ch?n.");
                     return;
                 }
 
                 View3D activeView3D = _doc.ActiveView as View3D;
 
-                using (Transaction trans = new Transaction(_doc, "V·∫Ω th√©p m√≥ng l·ªách t√¢m"))
+                using (Transaction trans = new Transaction(_doc, "V? thÈp mÛng l?ch t‚m"))
                 {
                     trans.Start();
 
@@ -161,18 +234,14 @@ namespace AddinVeMong.ViewModels
 
                     if (barTypes.Count == 0)
                     {
-                        TaskDialog.Show("Thi·∫øu d·ªØ li·ªáu", "D·ª± √°n ch∆∞a ƒë∆∞·ª£c t·∫£i Family th√©p.");
+                        TaskDialog.Show("Thi?u d? li?u", "D? ·n ch˝a ˝?c t?i Family thÈp.");
                         trans.RollBack();
                         return;
                     }
 
-                    RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.LongDiameter) < 0.1);
-                    RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.ShortDiameter) < 0.1);
                     RebarBarType starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StarterDiameter) < 0.1);
                     RebarBarType stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StirrupDiameter) < 0.1);
 
-                    if (longBarType == null) longBarType = barTypes.FirstOrDefault();
-                    if (shortBarType == null) shortBarType = barTypes.FirstOrDefault();
                     if (starterBarType == null) starterBarType = barTypes.FirstOrDefault();
                     if (stirrupBarType == null) stirrupBarType = barTypes.FirstOrDefault();
 
@@ -206,11 +275,19 @@ namespace AddinVeMong.ViewModels
                         ElementType footingType = _doc.GetElement(footingElement.GetTypeId()) as ElementType;
                         if (footingType == null) continue;
 
+                        Parameter pLength = footingType.LookupParameter("Length");
+                        Parameter pWidth = footingType.LookupParameter("Width");
                         Parameter pHeight = footingType.LookupParameter("Foundation Thickness") ?? footingType.LookupParameter("Thickness");
-                        if (pHeight == null) continue;
 
+                        if (pLength == null || pWidth == null || pHeight == null) continue;
+
+                        double footingLengthMm = UnitUtils.ConvertFromInternalUnits(pLength.AsDouble(), UnitTypeId.Millimeters);
+                        double footingWidthMm = UnitUtils.ConvertFromInternalUnits(pWidth.AsDouble(), UnitTypeId.Millimeters);
                         double footingHeightMm = UnitUtils.ConvertFromInternalUnits(pHeight.AsDouble(), UnitTypeId.Millimeters);
+
                         double coverFoot = UnitUtils.ConvertToInternalUnits(this.Cover, UnitTypeId.Millimeters);
+                        double lengthFoot = UnitUtils.ConvertToInternalUnits(footingLengthMm, UnitTypeId.Millimeters);
+                        double widthFoot = UnitUtils.ConvertToInternalUnits(footingWidthMm, UnitTypeId.Millimeters);
                         double heightFoot = UnitUtils.ConvertToInternalUnits(footingHeightMm, UnitTypeId.Millimeters);
 
                         Transform tf = footingInstance.GetTransform();
@@ -221,7 +298,7 @@ namespace AddinVeMong.ViewModels
 
                         double zBottom = -heightFoot + coverFoot;
                         double longDiaFoot = UnitUtils.ConvertToInternalUnits(this.LongDiameter, UnitTypeId.Millimeters);
-                        
+
                         double colXFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthX, UnitTypeId.Millimeters);
                         double colYFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthY, UnitTypeId.Millimeters);
                         double eccXFoot = UnitUtils.ConvertToInternalUnits(this.EccentricityX, UnitTypeId.Millimeters);
@@ -251,11 +328,11 @@ namespace AddinVeMong.ViewModels
                             XYZ sNormal = starterNormals[i];
 
                             List<Curve> sCurves = new List<Curve>();
-                            XYZ pBeChan = cPt + hDir * starterHookFoot;
-                            XYZ pDinhCho = cPt + uZ * (starterLenFoot + Math.Abs(zStarterBottom));
+                            XYZ pB?Ch‚n = cPt + hDir * starterHookFoot;
+                            XYZ p–?nhCh? = cPt + uZ * (starterLenFoot + Math.Abs(zStarterBottom));
 
-                            sCurves.Add(Line.CreateBound(pBeChan, cPt));
-                            sCurves.Add(Line.CreateBound(cPt, pDinhCho));
+                            sCurves.Add(Line.CreateBound(pB?Ch‚n, cPt));
+                            sCurves.Add(Line.CreateBound(cPt, p–?nhCh?));
 
                             if (starterBarType != null)
                             {
@@ -299,8 +376,10 @@ namespace AddinVeMong.ViewModels
             }
             catch (Exception ex)
             {
-                TaskDialog.Show("L·ªói th·ª±c thi", $"C√≥ l·ªói x·∫£y ra: {ex.Message}");
+                TaskDialog.Show("L?i th?c thi", "CÛ l?i x?y ra: " + ex.Message);
             }
         }
     }
 }
+'@
+Set-Content -Path ViewModels\EccentricRebarViewModel.cs -Value $content

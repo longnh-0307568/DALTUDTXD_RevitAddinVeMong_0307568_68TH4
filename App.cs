@@ -15,17 +15,17 @@ namespace AddinVeMong
 
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
             string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-
-            // ĐƯỜNG DẪN COMMAND HỆ THỐNG
             string aboutCommandPath = "AddinVeMong.Commands.AboutCommand";
             string supportCommandPath = "AddinVeMong.Commands.SupportCommand";
             string settingCommandPath = "AddinVeMong.Commands.SettingCommand";
 
-            // ĐƯỜNG DẪN 2 COMMAND MỞ UI (Đã cập nhật tên class cho hợp lý)
             string showConcentricUIPath = "AddinVeMong.Commands.ShowConcentricWindowCommand";
             string showEccentricUIPath = "AddinVeMong.Commands.ShowEccentricWindowCommand";
 
-            // Tạo panel Giới thiệu
+            string loadFoundationFamilyPath = "AddinVeMong.Commands.LoadFoundationFamilyCommand";
+            string loadRebarFamilyPath = "AddinVeMong.Commands.LoadRebarFamilyCommand";
+
+            // panel Giới thiệu
             RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
 
             PushButtonData btnAboutData = new PushButtonData("btnAbout", "Giới thiệu", assemblyPath, aboutCommandPath);
@@ -40,7 +40,7 @@ namespace AddinVeMong
 
             panelAbout.AddStackedItems(btnSupportData, btnSettingsData);
 
-            // PANEL 'THÉP' SỬ DỤNG PULLDOWN BUTTON
+            // Panel thép
             RibbonPanel panelRebar = application.CreateRibbonPanel(tabName, "Thép");
 
             // 1. Khởi tạo nút thả xuống (Pulldown Button) làm menu cha
@@ -55,7 +55,7 @@ namespace AddinVeMong
                 assemblyPath,
                 showConcentricUIPath
             );
-            btnConcentricData.LargeImage = CreateImage(assemblyName, "CentricChamfer.png");
+            btnConcentricData.LargeImage = CreateImage(assemblyName, "Centric.png");
             pulldownRebar.AddPushButton(btnConcentricData);
 
             // 3. Thêm nút con: Mở UI Móng đơn lệch tâm
@@ -65,8 +65,35 @@ namespace AddinVeMong
                 assemblyPath,
                 showEccentricUIPath
             );
-            btnEccentricData.LargeImage = CreateImage(assemblyName, "EccentricChamfer.png");
+            btnEccentricData.LargeImage = CreateImage(assemblyName, "Eccentric.png");
             pulldownRebar.AddPushButton(btnEccentricData);
+
+            // panel thư viện
+            RibbonPanel panelLibrary = application.CreateRibbonPanel(tabName, "Thư viện");
+
+            // Stack button: Tải family móng
+            PushButtonData btnLoadFoundationData = new PushButtonData(
+                "btnLoadFoundation",
+                "Tải family\nmóng",
+                assemblyPath,
+                loadFoundationFamilyPath
+            );
+            btnLoadFoundationData.Image = CreateImage(assemblyName, "LoadFoundation.png");
+
+            // Stack button: Tải family thép
+            PushButtonData btnLoadRebarData = new PushButtonData(
+                "btnLoadRebar",
+                "Tải family\nthép",
+                assemblyPath,
+                loadRebarFamilyPath
+            );
+            btnLoadRebarData.Image = CreateImage(assemblyName, "LoadRebar.png");
+
+            // Thêm 2 stack button vào panel
+            panelLibrary.AddStackedItems(
+                btnLoadFoundationData,
+                btnLoadRebarData
+            );
 
             return Result.Succeeded;
         }
