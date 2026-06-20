@@ -1,4 +1,4 @@
-﻿using AddinVeMong.Commands;
+using AddinVeMong.Commands;
 using AddinVeMong.Models;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
@@ -13,127 +13,13 @@ namespace AddinVeMong.ViewModels
         private readonly Document _doc;
         private readonly List<Element> _selectedFootings;
 
-        public FootingRebarModel Model { get; set; }
-
         public new ICommand DrawRebarCommand { get; }
-
-        #region Properties Binding
-        public int Cover
-        {
-            get => Model.Cover;
-            set { Model.Cover = value; OnPropertyChanged(); }
-        }
-
-        public int LongDiameter
-        {
-            get => Model.LongDiameter;
-            set { Model.LongDiameter = value; OnPropertyChanged(); }
-        }
-
-        public int LongSpacing
-        {
-            get => Model.LongSpacing;
-            set { Model.LongSpacing = value; OnPropertyChanged(); }
-        }
-
-        public int LongQuantity
-        {
-            get => Model.LongQuantity;
-            set { Model.LongQuantity = value; OnPropertyChanged(); }
-        }
-
-        public int LongHookLength
-        {
-            get => Model.LongHookLength;
-            set { Model.LongHookLength = value; OnPropertyChanged(); }
-        }
-
-        public int ShortDiameter
-        {
-            get => Model.ShortDiameter;
-            set { Model.ShortDiameter = value; OnPropertyChanged(); }
-        }
-
-        public int ShortSpacing
-        {
-            get => Model.ShortSpacing;
-            set { Model.ShortSpacing = value; OnPropertyChanged(); }
-        }
-
-        public int ShortQuantity
-        {
-            get => Model.ShortQuantity;
-            set { Model.ShortQuantity = value; OnPropertyChanged(); }
-        }
-
-        public int ShortHookLength
-        {
-            get => Model.ShortHookLength;
-            set { Model.ShortHookLength = value; OnPropertyChanged(); }
-        }
-
-        public int ColumnWidthX
-        {
-            get => Model.ColumnWidthX;
-            set { Model.ColumnWidthX = value; OnPropertyChanged(); }
-        }
-
-        public int ColumnWidthY
-        {
-            get => Model.ColumnWidthY;
-            set { Model.ColumnWidthY = value; OnPropertyChanged(); }
-        }
-
-        public int StarterDiameter
-        {
-            get => Model.StarterDiameter;
-            set { Model.StarterDiameter = value; OnPropertyChanged(); }
-        }
-
-        public int StarterHookLength
-        {
-            get => Model.StarterHookLength;
-            set { Model.StarterHookLength = value; OnPropertyChanged(); }
-        }
-
-        public int StarterLength
-        {
-            get => Model.StarterLength;
-            set { Model.StarterLength = value; OnPropertyChanged(); }
-        }
-
-        public int StirrupDiameter
-        {
-            get => Model.StirrupDiameter;
-            set { Model.StirrupDiameter = value; OnPropertyChanged(); }
-        }
-
-        public int StirrupSpacing
-        {
-            get => Model.StirrupSpacing;
-            set { Model.StirrupSpacing = value; OnPropertyChanged(); }
-        }
-
-        public int EccentricityX
-        {
-            get => Model.EccentricityX;
-            set { Model.EccentricityX = value; OnPropertyChanged(); }
-        }
-
-        public int EccentricityY
-        {
-            get => Model.EccentricityY;
-            set { Model.EccentricityY = value; OnPropertyChanged(); }
-        }
-        #endregion
 
         public EccentricRebarViewModel(ExternalCommandData commandData, List<Element> selectedFootings)
             : base(commandData, selectedFootings)
         {
             _doc = commandData.Application.ActiveUIDocument.Document;
             _selectedFootings = selectedFootings ?? new List<Element>();
-
-            Model = new FootingRebarModel();
 
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
         }
@@ -166,10 +52,10 @@ namespace AddinVeMong.ViewModels
                         return;
                     }
 
-                    RebarBarType? longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.LongDiameter) < 0.1);
-                    RebarBarType? shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.ShortDiameter) < 0.1);
-                    RebarBarType? starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StarterDiameter) < 0.1);
-                    RebarBarType? stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StirrupDiameter) < 0.1);
+                    RebarBarType? longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.LongDiameter) < 0.1);
+                    RebarBarType? shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.ShortDiameter) < 0.1);
+                    RebarBarType? starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.StarterDiameter) < 0.1);
+                    RebarBarType? stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.StirrupDiameter) < 0.1);
 
                     if (longBarType == null) longBarType = barTypes.FirstOrDefault();
                     if (shortBarType == null) shortBarType = barTypes.FirstOrDefault();
@@ -210,7 +96,7 @@ namespace AddinVeMong.ViewModels
                         if (pHeight == null) continue;
 
                         double footingHeightMm = UnitUtils.ConvertFromInternalUnits(pHeight.AsDouble(), UnitTypeId.Millimeters);
-                        double coverFoot = UnitUtils.ConvertToInternalUnits(this.Cover, UnitTypeId.Millimeters);
+                        double coverFoot = UnitUtils.ConvertToInternalUnits(RebarData.Cover, UnitTypeId.Millimeters);
                         double heightFoot = UnitUtils.ConvertToInternalUnits(footingHeightMm, UnitTypeId.Millimeters);
 
                         Transform tf = footingInstance.GetTransform();
@@ -220,17 +106,17 @@ namespace AddinVeMong.ViewModels
                         XYZ footingCenter = tf.Origin;
 
                         double zBottom = -heightFoot + coverFoot;
-                        double longDiaFoot = UnitUtils.ConvertToInternalUnits(this.LongDiameter, UnitTypeId.Millimeters);
+                        double longDiaFoot = UnitUtils.ConvertToInternalUnits(RebarData.LongDiameter, UnitTypeId.Millimeters);
                         
-                        double colXFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthX, UnitTypeId.Millimeters);
-                        double colYFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthY, UnitTypeId.Millimeters);
-                        double eccXFoot = UnitUtils.ConvertToInternalUnits(this.EccentricityX, UnitTypeId.Millimeters);
-                        double eccYFoot = UnitUtils.ConvertToInternalUnits(this.EccentricityY, UnitTypeId.Millimeters);
+                        double colXFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthX, UnitTypeId.Millimeters);
+                        double colYFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthY, UnitTypeId.Millimeters);
+                        double eccXFoot = UnitUtils.ConvertToInternalUnits(RebarData.EccentricityX, UnitTypeId.Millimeters);
+                        double eccYFoot = UnitUtils.ConvertToInternalUnits(RebarData.EccentricityY, UnitTypeId.Millimeters);
 
-                        double starterHookFoot = UnitUtils.ConvertToInternalUnits(this.StarterHookLength, UnitTypeId.Millimeters);
-                        double starterLenFoot = UnitUtils.ConvertToInternalUnits(this.StarterLength, UnitTypeId.Millimeters);
+                        double starterHookFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterHookLength, UnitTypeId.Millimeters);
+                        double starterLenFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterLength, UnitTypeId.Millimeters);
 
-                        double zStarterBottom = zBottom + longDiaFoot + UnitUtils.ConvertToInternalUnits(this.ShortDiameter, UnitTypeId.Millimeters);
+                        double zStarterBottom = zBottom + longDiaFoot + UnitUtils.ConvertToInternalUnits(RebarData.ShortDiameter, UnitTypeId.Millimeters);
 
                         XYZ columnCenter = footingCenter + (uX * eccXFoot) + (uY * eccYFoot);
                         XYZ starterBaseCenter = columnCenter + uZ * zStarterBottom;
@@ -277,7 +163,7 @@ namespace AddinVeMong.ViewModels
 
                             if (stirrupRebar != null)
                             {
-                                double stirrupSpcFoot = UnitUtils.ConvertToInternalUnits(this.StirrupSpacing, UnitTypeId.Millimeters);
+                                double stirrupSpcFoot = UnitUtils.ConvertToInternalUnits(RebarData.StirrupSpacing, UnitTypeId.Millimeters);
                                 double heightInsideFooting = Math.Abs(zStarterBottom);
                                 double heightOutsideFooting = stirrupSpcFoot * 2;
                                 double totalStirrupDistributionLength = heightInsideFooting + heightOutsideFooting;
