@@ -12,7 +12,7 @@ namespace AddinVeMong.Models
         // 2. Thép cạnh dài
         private int _longDiameter = 12;
         public int LongDiameter { get => _longDiameter; set { _longDiameter = value; OnPropertyChanged(); } }
-        private int _longSpacing = 150;
+        private int _longSpacing = 100;
         public int LongSpacing { get => _longSpacing; set { _longSpacing = value; OnPropertyChanged(); } }
         private int _longQuantity = 10;
         public int LongQuantity { get => _longQuantity; set { _longQuantity = value; OnPropertyChanged(); } }
@@ -20,11 +20,11 @@ namespace AddinVeMong.Models
         public int LongHookLength { get => _longHookLength; set { _longHookLength = value; OnPropertyChanged(); } }
 
         // 3. Thép cạnh ngắn
-        private int _shortDiameter = 12;
+        private int _shortDiameter = 10;
         public int ShortDiameter { get => _shortDiameter; set { _shortDiameter = value; OnPropertyChanged(); } }
-        private int _shortSpacing = 150;
+        private int _shortSpacing = 250;
         public int ShortSpacing { get => _shortSpacing; set { _shortSpacing = value; OnPropertyChanged(); } }
-        private int _shortQuantity = 8;
+        private int _shortQuantity = 6;
         public int ShortQuantity { get => _shortQuantity; set { _shortQuantity = value; OnPropertyChanged(); } }
         private int _shortHookLength = 150;
         public int ShortHookLength { get => _shortHookLength; set { _shortHookLength = value; OnPropertyChanged(); } }
@@ -34,7 +34,7 @@ namespace AddinVeMong.Models
         public int StarterDiameter { get => _starterDiameter; set { _starterDiameter = value; OnPropertyChanged(); } }
         private int _starterHookLength = 250;
         public int StarterHookLength { get => _starterHookLength; set { _starterHookLength = value; OnPropertyChanged(); } }
-        private int _starterLength = 600;
+        private int _starterLength = 750;
         public int StarterLength { get => _starterLength; set { _starterLength = value; OnPropertyChanged(); } }
         private int _stirrupDiameter = 6;
         public int StirrupDiameter { get => _stirrupDiameter; set { _stirrupDiameter = value; OnPropertyChanged(); } }
@@ -46,9 +46,9 @@ namespace AddinVeMong.Models
         public int ColumnWidthY { get => _columnWidthY; set { _columnWidthY = value; OnPropertyChanged(); } }
 
         // 5. Thuộc tính lệch tâm (Dành riêng cho file Eccentric dùng chung sau này)
-        private int _eccentricityX = 0;
+        private int _eccentricityX = 100;
         public int EccentricityX { get => _eccentricityX; set { _eccentricityX = value; OnPropertyChanged(); } }
-        private int _eccentricityY = 0;
+        private int _eccentricityY = 200;
         public int EccentricityY { get => _eccentricityY; set { _eccentricityY = value; OnPropertyChanged(); } }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -214,7 +214,7 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2. ĐỘ LỆCH TÂM CỘT.
+        ///   Looks up a localized string similar to ĐỘ LỆCH TÂM CỘT.
         /// </summary>
         public static string SecEccentricity {
             get {

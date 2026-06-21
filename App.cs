@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Autodesk.Revit.UI;
 using System.Reflection;
 using System.Windows.Media.Imaging;
-using Autodesk.Revit.UI;
 
 namespace AddinVeMong
 {
@@ -9,7 +8,7 @@ namespace AddinVeMong
     {
         public Result OnStartup(UIControlledApplication application)
         {
-            string tabName = "Vẽ Móng";
+            string tabName = "Thép";
 
             application.CreateRibbonTab(tabName);
 
@@ -28,14 +27,14 @@ namespace AddinVeMong
             // panel Giới thiệu
             RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
 
-            PushButtonData btnAboutData = new PushButtonData("btnAbout", "Giới thiệu", assemblyPath, aboutCommandPath);
+            PushButtonData btnAboutData = new("btnAbout", "Giới thiệu", assemblyPath, aboutCommandPath);
             PushButton btnAbout = panelAbout.AddItem(btnAboutData) as PushButton;
             btnAbout.LargeImage = CreateImage(assemblyName, "About.png");
 
-            PushButtonData btnSupportData = new PushButtonData("btnSupport", "Hỗ trợ", assemblyPath, supportCommandPath);
+            PushButtonData btnSupportData = new("btnSupport", "Hỗ trợ", assemblyPath, supportCommandPath);
             btnSupportData.Image = CreateImage(assemblyName, "Help.png");
 
-            PushButtonData btnSettingsData = new PushButtonData("btnSettings", "Cài đặt", assemblyPath, settingCommandPath);
+            PushButtonData btnSettingsData = new("btnSettings", "Cài đặt", assemblyPath, settingCommandPath);
             btnSettingsData.Image = CreateImage(assemblyName, "Setting.png");
 
             panelAbout.AddStackedItems(btnSupportData, btnSettingsData);
@@ -49,7 +48,7 @@ namespace AddinVeMong
             pulldownRebar.LargeImage = CreateImage(assemblyName, "Rebar.png");
 
             // 2. Thêm nút con: Mở UI Móng đơn đúng tâm
-            PushButtonData btnConcentricData = new PushButtonData(
+            PushButtonData btnConcentricData = new(
                 "btnDungTam",
                 "Móng đơn đúng tâm",
                 assemblyPath,
@@ -59,7 +58,7 @@ namespace AddinVeMong
             pulldownRebar.AddPushButton(btnConcentricData);
 
             // 3. Thêm nút con: Mở UI Móng đơn lệch tâm
-            PushButtonData btnEccentricData = new PushButtonData(
+            PushButtonData btnEccentricData = new(
                 "btnLechTam",
                 "Móng đơn lệch tâm",
                 assemblyPath,
@@ -72,7 +71,7 @@ namespace AddinVeMong
             RibbonPanel panelLibrary = application.CreateRibbonPanel(tabName, "Thư viện");
 
             // Stack button: Tải family móng
-            PushButtonData btnLoadFoundationData = new PushButtonData(
+            PushButtonData btnLoadFoundationData = new(
                 "btnLoadFoundation",
                 "Tải family\nmóng",
                 assemblyPath,
@@ -81,7 +80,7 @@ namespace AddinVeMong
             btnLoadFoundationData.Image = CreateImage(assemblyName, "LoadFoundation.png");
 
             // Stack button: Tải family thép
-            PushButtonData btnLoadRebarData = new PushButtonData(
+            PushButtonData btnLoadRebarData = new(
                 "btnLoadRebar",
                 "Tải family\nthép",
                 assemblyPath,

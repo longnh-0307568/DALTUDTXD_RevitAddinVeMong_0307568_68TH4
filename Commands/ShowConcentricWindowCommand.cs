@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AddinVeMong.ViewModels;
+using AddinVeMong.Views;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection; // Thư viện này để dùng được PickObjects
-using AddinVeMong.Views;
-using AddinVeMong.ViewModels;
 
 namespace AddinVeMong.Commands
 {

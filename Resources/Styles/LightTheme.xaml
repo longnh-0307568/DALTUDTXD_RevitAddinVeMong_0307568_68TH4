@@ -4,6 +4,7 @@
     <SolidColorBrush x:Key="WindowBackgroundColor" Color="#F5F5F5"/>
     <SolidColorBrush x:Key="ControlBackgroundColor" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="BorderColor" Color="#DCDCDC"/>
+    <SolidColorBrush x:Key="HeaderTextPrimaryColor" Color="#1565C0"/>
     <SolidColorBrush x:Key="TextPrimaryColor" Color="#222222"/>
     <SolidColorBrush x:Key="TextSecondaryColor" Color="#555555"/>
     <SolidColorBrush x:Key="PrimaryButtonBgColor" Color="#1565C0"/>

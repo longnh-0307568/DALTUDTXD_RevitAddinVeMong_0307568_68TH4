@@ -35,7 +35,7 @@
                 <Expander IsExpanded="True" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecGeneral}" 
-                                   Foreground="{DynamicResource TextPrimaryColor}" 
+                                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -57,7 +57,7 @@
                 <Expander IsExpanded="True" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecEccentricity}" 
-                                   Foreground="{DynamicResource TextPrimaryColor}" 
+                                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -84,7 +84,7 @@
                 <Expander IsExpanded="False" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecLongBar}" 
-                                   Foreground="{DynamicResource TextPrimaryColor}" 
+                                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -124,7 +124,7 @@
                 <Expander IsExpanded="False" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecShortBar}" 
-                                   Foreground="{DynamicResource TextPrimaryColor}" 
+                                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -164,7 +164,7 @@
                 <Expander IsExpanded="False" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecColumn}" 
-                                   Foreground="{DynamicResource TextPrimaryColor}" 
+                                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -192,7 +192,7 @@
                                  Tag="(Ví dụ: 220, 400)" Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
                         <TextBlock Text="{x:Static lang:Resource.MainDiameter}" Foreground="{DynamicResource TextPrimaryColor}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Normal" Margin="5,0,10,0"/>
-                        <ComboBox SelectedValue="{Binding StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
+                        <ComboBox SelectedValue="{Binding RebarData.StarterDiameter}" Grid.Row="2" Grid.Column="1" Margin="5,4" VerticalContentAlignment="Center">
                             <sys:Int32>16</sys:Int32>
                             <sys:Int32>18</sys:Int32>
                             <sys:Int32>20</sys:Int32>

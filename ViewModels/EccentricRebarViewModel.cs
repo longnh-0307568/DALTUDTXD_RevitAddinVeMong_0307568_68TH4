@@ -3,207 +3,149 @@ using AddinVeMong.Models;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
 namespace AddinVeMong.ViewModels
 {
-    public class EccentricRebarViewModel : ConcentricRebarViewModel
+    public class EccentricRebarViewModel : INotifyPropertyChanged
     {
+        private readonly ExternalCommandData _commandData;
         private readonly Document _doc;
+        private readonly UIDocument _uiDoc;
         private readonly List<Element> _selectedFootings;
 
-        public FootingRebarModel Model { get; set; }
-
-        public new ICommand DrawRebarCommand { get; }
-
-        #region Properties Binding
-        public int Cover
+        // Đối tượng dữ liệu nhận liên kết (Binding) trực tiếp từ EccentricRebarView
+        private FootingRebarModel _rebarData = new FootingRebarModel();
+        public FootingRebarModel RebarData
         {
-            get => Model.Cover;
-            set { Model.Cover = value; OnPropertyChanged(); }
+            get => _rebarData;
+            set { _rebarData = value; OnPropertyChanged(); }
+        }
+        private ObservableCollection<BarPreviewX> _previewShortBars;
+        public ObservableCollection<BarPreviewX> PreviewShortBars
+        {
+            get => _previewShortBars;
+            set { _previewShortBars = value; OnPropertyChanged(); }
         }
 
-        public int LongDiameter
+        private ObservableCollection<BarPreviewY> _previewLongBars;
+        public ObservableCollection<BarPreviewY> PreviewLongBars
         {
-            get => Model.LongDiameter;
-            set { Model.LongDiameter = value; OnPropertyChanged(); }
+            get => _previewLongBars;
+            set { _previewLongBars = value; OnPropertyChanged(); }
         }
 
-        public int LongSpacing
-        {
-            get => Model.LongSpacing;
-            set { Model.LongSpacing = value; OnPropertyChanged(); }
-        }
+        public ICommand DrawRebarCommand { get; }
 
-        public int LongQuantity
-        {
-            get => Model.LongQuantity;
-            set { Model.LongQuantity = value; OnPropertyChanged(); }
-        }
-
-        public int LongHookLength
-        {
-            get => Model.LongHookLength;
-            set { Model.LongHookLength = value; OnPropertyChanged(); }
-        }
-
-        public int ShortDiameter
-        {
-            get => Model.ShortDiameter;
-            set { Model.ShortDiameter = value; OnPropertyChanged(); }
-        }
-
-        public int ShortSpacing
-        {
-            get => Model.ShortSpacing;
-            set { Model.ShortSpacing = value; OnPropertyChanged(); }
-        }
-
-        public int ShortQuantity
-        {
-            get => Model.ShortQuantity;
-            set { Model.ShortQuantity = value; OnPropertyChanged(); }
-        }
-
-        public int ShortHookLength
-        {
-            get => Model.ShortHookLength;
-            set { Model.ShortHookLength = value; OnPropertyChanged(); }
-        }
-
-        public int ColumnWidthX
-        {
-            get => Model.ColumnWidthX;
-            set { Model.ColumnWidthX = value; OnPropertyChanged(); }
-        }
-
-        public int ColumnWidthY
-        {
-            get => Model.ColumnWidthY;
-            set { Model.ColumnWidthY = value; OnPropertyChanged(); }
-        }
-
-        public int StarterDiameter
-        {
-            get => Model.StarterDiameter;
-            set { Model.StarterDiameter = value; OnPropertyChanged(); }
-        }
-
-        public int StarterHookLength
-        {
-            get => Model.StarterHookLength;
-            set { Model.StarterHookLength = value; OnPropertyChanged(); }
-        }
-
-        public int StarterLength
-        {
-            get => Model.StarterLength;
-            set { Model.StarterLength = value; OnPropertyChanged(); }
-        }
-
-        public int StirrupDiameter
-        {
-            get => Model.StirrupDiameter;
-            set { Model.StirrupDiameter = value; OnPropertyChanged(); }
-        }
-
-        public int StirrupSpacing
-        {
-            get => Model.StirrupSpacing;
-            set { Model.StirrupSpacing = value; OnPropertyChanged(); }
-        }
-
-        public int EccentricityX
-        {
-            get => Model.EccentricityX;
-            set { Model.EccentricityX = value; OnPropertyChanged(); }
-        }
-
-        public int EccentricityY
-        {
-            get => Model.EccentricityY;
-            set { Model.EccentricityY = value; OnPropertyChanged(); }
-        }
-        #endregion
-
+        // Khởi tạo/Constructor
         public EccentricRebarViewModel(ExternalCommandData commandData, List<Element> selectedFootings)
-            : base(commandData, selectedFootings)
         {
-            _doc = commandData.Application.ActiveUIDocument.Document;
-            _selectedFootings = selectedFootings ?? new List<Element>();
-
-            Model = new FootingRebarModel();
+            _commandData = commandData;
+            _uiDoc = commandData.Application.ActiveUIDocument;
+            _doc = _uiDoc.Document;
+            _selectedFootings = selectedFootings;
 
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
+
+            PreviewShortBars = new();
+            PreviewLongBars = new();
+
+            // Theo dõi thay đổi preview
+            RebarData.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(FootingRebarModel.ShortQuantity))
+                {
+                    UpdateShortBarsPreview();
+                }
+                else if (e.PropertyName == nameof(FootingRebarModel.LongQuantity))
+                {
+                    UpdateLongBarsPreview();
+                }
+            };
+            UpdateShortBarsPreview();
+            UpdateLongBarsPreview();
         }
 
+        private void UpdateShortBarsPreview()
+        {
+            if (PreviewShortBars == null) return;
+            PreviewShortBars.Clear();
+
+            int quantity = RebarData.ShortQuantity; // Lấy từ Model
+            if (quantity <= 1) return;
+
+            double startX = 5;
+            double endX = 265;
+            double step = (endX - startX) / (quantity - 1);
+
+            for (int i = 0; i < quantity; i++)
+            {
+                PreviewShortBars.Add(new BarPreviewX { XPosition = startX + (i * step) });
+            }
+        }
+
+        private void UpdateLongBarsPreview()
+        {
+            if (PreviewLongBars == null) return;
+            PreviewLongBars.Clear();
+
+            int quantity = RebarData.LongQuantity; // Lấy từ Model
+            if (quantity <= 1) return;
+
+            double startY = 5;
+            double endY = 175;
+            double step = (endY - startY) / (quantity - 1);
+
+            for (int i = 0; i < quantity; i++)
+            {
+                PreviewLongBars.Add(new BarPreviewY { YPosition = startY + (i * step) });
+            }
+        }
+
+        // --- HÀM THỰC THI CHÍNH KHI NHẤN NÚT "CREATE" ---
         private void ExecuteDrawRebar(object parameter)
         {
             try
             {
-                if (_selectedFootings == null || _selectedFootings.Count == 0)
+                View3D activeView3D = _doc.ActiveView as View3D;
+
+                var barTypes = new FilteredElementCollector(_doc)
+                    .OfClass(typeof(RebarBarType))
+                    .Cast<RebarBarType>()
+                    .ToList();
+
+                if (barTypes.Count == 0)
                 {
-                    TaskDialog.Show("Thông báo", "Không tìm thấy dữ liệu móng được chọn.");
+                    TaskDialog.Show("Lỗi", "Dự án không có bất kỳ RebarBarType nào. Vui lòng load một Family thép (Rebar) vào dự án trước.");
                     return;
                 }
 
-                View3D activeView3D = _doc.ActiveView as View3D;
+                RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.LongDiameter) < 0.1);
+                RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.ShortDiameter) < 0.1);
+                RebarBarType starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.StarterDiameter) < 0.1);
+                RebarBarType stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.StirrupDiameter) < 0.1);
+
+                if (longBarType == null) longBarType = barTypes.FirstOrDefault();
+                if (shortBarType == null) shortBarType = barTypes.FirstOrDefault();
+                if (starterBarType == null) starterBarType = barTypes.FirstOrDefault();
+                if (stirrupBarType == null) stirrupBarType = barTypes.FirstOrDefault();
+
+                RebarStyle styleStandard = RebarStyle.Standard;
+                RebarStyle styleStirrup = RebarStyle.StirrupTie;
 
                 using (Transaction trans = new Transaction(_doc, "Vẽ thép móng lệch tâm"))
                 {
                     trans.Start();
 
-                    var barTypes = new FilteredElementCollector(_doc)
-                        .OfClass(typeof(RebarBarType))
-                        .Cast<RebarBarType>()
-                        .ToList();
-
-                    if (barTypes.Count == 0)
+                    foreach (Element footing in _selectedFootings)
                     {
-                        TaskDialog.Show("Thiếu dữ liệu", "Dự án chưa được tải Family thép.");
-                        trans.RollBack();
-                        return;
-                    }
+                        if (!(footing is FamilyInstance footingInstance)) continue;
 
-                    RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.LongDiameter) < 0.1);
-                    RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.ShortDiameter) < 0.1);
-                    RebarBarType starterBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StarterDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StarterDiameter) < 0.1);
-                    RebarBarType stirrupBarType = barTypes.FirstOrDefault(t => t.Name.Contains(this.StirrupDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - this.StirrupDiameter) < 0.1);
-
-                    if (longBarType == null) longBarType = barTypes.FirstOrDefault();
-                    if (shortBarType == null) shortBarType = barTypes.FirstOrDefault();
-                    if (starterBarType == null) starterBarType = barTypes.FirstOrDefault();
-                    if (stirrupBarType == null) stirrupBarType = barTypes.FirstOrDefault();
-
-                    RebarStyle styleStandard = RebarStyle.Standard;
-                    RebarStyle styleStirrup = RebarStyle.StirrupTie;
-
-                    foreach (Element footingElement in _selectedFootings)
-                    {
-                        FamilyInstance footingInstance = footingElement as FamilyInstance;
-                        if (footingInstance == null) continue;
-
-                        Element columnElement = null;
-                        var boundingBox = footingElement.get_BoundingBox(null);
-                        if (boundingBox != null)
-                        {
-                            XYZ tolerance = new XYZ(0.1, 0.1, 2.0);
-                            Outline outline = new Outline(boundingBox.Min, boundingBox.Max + tolerance);
-                            BoundingBoxIntersectsFilter boxFilter = new BoundingBoxIntersectsFilter(outline);
-
-                            var connectedColumns = new FilteredElementCollector(_doc)
-                                .OfCategory(BuiltInCategory.OST_StructuralColumns)
-                                .OfClass(typeof(FamilyInstance))
-                                .WherePasses(boxFilter)
-                                .ToList();
-
-                            if (connectedColumns.Count > 0) columnElement = connectedColumns.First();
-                        }
-
-                        Element columnHostElement = columnElement ?? footingElement;
-
-                        ElementType footingType = _doc.GetElement(footingElement.GetTypeId()) as ElementType;
+                        ElementType footingType = _doc.GetElement(footing.GetTypeId()) as ElementType;
                         if (footingType == null) continue;
 
                         Parameter pLength = footingType.LookupParameter("Length");
@@ -216,33 +158,35 @@ namespace AddinVeMong.ViewModels
                         double footingWidthMm = UnitUtils.ConvertFromInternalUnits(pWidth.AsDouble(), UnitTypeId.Millimeters);
                         double footingHeightMm = UnitUtils.ConvertFromInternalUnits(pHeight.AsDouble(), UnitTypeId.Millimeters);
 
-                        double coverFoot = UnitUtils.ConvertToInternalUnits(this.Cover, UnitTypeId.Millimeters);
-                        double lengthFoot = UnitUtils.ConvertToInternalUnits(footingLengthMm, UnitTypeId.Millimeters);
-                        double widthFoot = UnitUtils.ConvertToInternalUnits(footingWidthMm, UnitTypeId.Millimeters);
-                        double heightFoot = UnitUtils.ConvertToInternalUnits(footingHeightMm, UnitTypeId.Millimeters);
-
                         Transform tf = footingInstance.GetTransform();
                         XYZ uX = tf.BasisX;
                         XYZ uY = tf.BasisY;
                         XYZ uZ = tf.BasisZ;
                         XYZ footingCenter = tf.Origin;
 
+                        BoundingBoxXYZ bbox = footing.get_BoundingBox(null);
+
+                        double coverFoot = UnitUtils.ConvertToInternalUnits(RebarData.Cover, UnitTypeId.Millimeters);
+                        double lengthFoot = UnitUtils.ConvertToInternalUnits(footingLengthMm, UnitTypeId.Millimeters);
+                        double widthFoot = UnitUtils.ConvertToInternalUnits(footingWidthMm, UnitTypeId.Millimeters);
+                        double heightFoot = UnitUtils.ConvertToInternalUnits(footingHeightMm, UnitTypeId.Millimeters);
+
                         double zBottom = -heightFoot + coverFoot;
                         XYZ baseCenter = footingCenter + uZ * zBottom;
 
-                        List<Curve> curvesLong = new List<Curve>();
-                        List<Curve> curvesShort = new List<Curve>();
+                        List<Curve> curvesLong = new();
+                        List<Curve> curvesShort = new();
                         XYZ normalLong, normalShort;
 
-                        double hookLong = UnitUtils.ConvertToInternalUnits(this.LongHookLength, UnitTypeId.Millimeters);
-                        double hookShort = UnitUtils.ConvertToInternalUnits(this.ShortHookLength, UnitTypeId.Millimeters);
-                        double longDiaFoot = UnitUtils.ConvertToInternalUnits(this.LongDiameter, UnitTypeId.Millimeters);
+                        double hookLong = UnitUtils.ConvertToInternalUnits(RebarData.LongHookLength, UnitTypeId.Millimeters);
+                        double hookShort = UnitUtils.ConvertToInternalUnits(RebarData.ShortHookLength, UnitTypeId.Millimeters);
+                        double longDiaFoot = UnitUtils.ConvertToInternalUnits(RebarData.LongDiameter, UnitTypeId.Millimeters);
 
-                        double longSpacingFoot = UnitUtils.ConvertToInternalUnits(this.LongSpacing, UnitTypeId.Millimeters);
-                        double shortSpacingFoot = UnitUtils.ConvertToInternalUnits(this.ShortSpacing, UnitTypeId.Millimeters);
+                        double longSpacingFoot = UnitUtils.ConvertToInternalUnits(RebarData.LongSpacing, UnitTypeId.Millimeters);
+                        double shortSpacingFoot = UnitUtils.ConvertToInternalUnits(RebarData.ShortSpacing, UnitTypeId.Millimeters);
 
-                        double totalDistLong = (this.LongQuantity > 1) ? longSpacingFoot * (this.LongQuantity - 1) : 0;
-                        double totalDistShort = (this.ShortQuantity > 1) ? shortSpacingFoot * (this.ShortQuantity - 1) : 0;
+                        double totalDistLong = (RebarData.LongQuantity > 1) ? (RebarData.LongQuantity - 1) * longSpacingFoot : 0;
+                        double totalDistShort = (RebarData.ShortQuantity > 1) ? (RebarData.ShortQuantity - 1) * shortSpacingFoot : 0;
 
                         if (lengthFoot >= widthFoot)
                         {
@@ -252,6 +196,7 @@ namespace AddinVeMong.ViewModels
                             XYZ p1 = p2 + uZ * hookLong;
                             XYZ p4 = p3 + uZ * hookLong;
                             curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
+
                             normalLong = uX;
 
                             double startY_Short = -totalDistShort / 2;
@@ -261,6 +206,7 @@ namespace AddinVeMong.ViewModels
                             XYZ q1 = q2 + uZ * hookShort;
                             XYZ q4 = q3 + uZ * hookShort;
                             curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
+
                             normalShort = uY;
                         }
                         else
@@ -271,6 +217,7 @@ namespace AddinVeMong.ViewModels
                             XYZ p1 = p2 + uZ * hookLong;
                             XYZ p4 = p3 + uZ * hookLong;
                             curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
+
                             normalLong = uY;
 
                             double startX_Short = -totalDistShort / 2;
@@ -280,90 +227,92 @@ namespace AddinVeMong.ViewModels
                             XYZ q1 = q2 + uZ * hookShort;
                             XYZ q4 = q3 + uZ * hookShort;
                             curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
+
                             normalShort = uX;
                         }
 
                         if (longBarType != null && curvesLong.Count > 0)
                         {
-                            Rebar rebarLong = Rebar.CreateFromCurves(_doc, styleStandard, longBarType, null, null, footingElement, normalLong, curvesLong, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+                            Rebar rebarLong = Rebar.CreateFromCurves(_doc, styleStandard, longBarType, null, null, footing, normalLong, curvesLong, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
                             if (rebarLong != null)
                             {
-                                rebarLong.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(this.LongQuantity, totalDistLong, true, true, true);
+                                rebarLong.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(RebarData.LongQuantity, totalDistLong, true, true, true);
                                 SetRebarSolid3D(rebarLong, activeView3D);
                             }
                         }
 
                         if (shortBarType != null && curvesShort.Count > 0)
                         {
-                            Rebar rebarShort = Rebar.CreateFromCurves(_doc, styleStandard, shortBarType, null, null, footingElement, normalShort, curvesShort, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+                            Rebar rebarShort = Rebar.CreateFromCurves(_doc, styleStandard, shortBarType, null, null, footing, normalShort, curvesShort, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
                             if (rebarShort != null)
                             {
-                                rebarShort.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(this.ShortQuantity, totalDistShort, true, true, true);
+                                rebarShort.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(RebarData.ShortQuantity, totalDistShort, true, true, true);
                                 SetRebarSolid3D(rebarShort, activeView3D);
                             }
                         }
 
-                        double colXFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthX, UnitTypeId.Millimeters);
-                        double colYFoot = UnitUtils.ConvertToInternalUnits(this.ColumnWidthY, UnitTypeId.Millimeters);
-                        double eccXFoot = UnitUtils.ConvertToInternalUnits(this.EccentricityX, UnitTypeId.Millimeters);
-                        double eccYFoot = UnitUtils.ConvertToInternalUnits(this.EccentricityY, UnitTypeId.Millimeters);
+                        double eccXFoot = UnitUtils.ConvertToInternalUnits(RebarData.EccentricityX, UnitTypeId.Millimeters);
+                        double eccYFoot = UnitUtils.ConvertToInternalUnits(RebarData.EccentricityY, UnitTypeId.Millimeters);
+                        XYZ eccentricCenter = footingCenter + uX * eccXFoot + uY * eccYFoot;
 
-                        double starterHookFoot = UnitUtils.ConvertToInternalUnits(this.StarterHookLength, UnitTypeId.Millimeters);
-                        double starterLenFoot = UnitUtils.ConvertToInternalUnits(this.StarterLength, UnitTypeId.Millimeters);
+                        double colXFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthX, UnitTypeId.Millimeters);
+                        double colYFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthY, UnitTypeId.Millimeters);
+                        double starterHookFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterHookLength, UnitTypeId.Millimeters);
 
-                        double zStarterBottom = zBottom + longDiaFoot + UnitUtils.ConvertToInternalUnits(this.ShortDiameter, UnitTypeId.Millimeters);
+                        double zStarterBottom = zBottom + longDiaFoot + UnitUtils.ConvertToInternalUnits(RebarData.ShortDiameter, UnitTypeId.Millimeters);
+                        double starterLenFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterLength, UnitTypeId.Millimeters) + Math.Abs(zStarterBottom);
 
-                        XYZ columnCenter = footingCenter + (uX * eccXFoot) + (uY * eccYFoot);
-                        XYZ starterBaseCenter = columnCenter + uZ * zStarterBottom;
+                        XYZ corner1 = eccentricCenter + uX * (colXFoot / 2 - coverFoot) + uY * (colYFoot / 2 - coverFoot);
+                        XYZ corner2 = eccentricCenter - uX * (colXFoot / 2 - coverFoot) + uY * (colYFoot / 2 - coverFoot);
+                        XYZ corner3 = eccentricCenter - uX * (colXFoot / 2 - coverFoot) - uY * (colYFoot / 2 - coverFoot);
+                        XYZ corner4 = eccentricCenter + uX * (colXFoot / 2 - coverFoot) - uY * (colYFoot / 2 - coverFoot);
 
-                        XYZ corner1 = starterBaseCenter + uX * (colXFoot / 2) + uY * (colYFoot / 2);
-                        XYZ corner2 = starterBaseCenter + uX * (-colXFoot / 2) + uY * (colYFoot / 2);
-                        XYZ corner3 = starterBaseCenter + uX * (-colXFoot / 2) + uY * (-colYFoot / 2);
-                        XYZ corner4 = starterBaseCenter + uX * (colXFoot / 2) + uY * (-colYFoot / 2);
+                        List<XYZ> starterCorners = new List<XYZ> { corner1, corner2, corner3, corner4 };
 
-                        List<XYZ> columnCorners = new List<XYZ> { corner1, corner2, corner3, corner4 };
-                        List<XYZ> hookDirections = new List<XYZ> { uX, -uX, -uX, uX };
-                        List<XYZ> starterNormals = new List<XYZ> { uY, uY, uY, uY };
-
-                        for (int i = 0; i < 4; i++)
+                        foreach (XYZ cornerPt in starterCorners)
                         {
-                            XYZ cPt = columnCorners[i];
-                            XYZ hDir = hookDirections[i];
-                            XYZ sNormal = starterNormals[i];
+                            XYZ basePt = new XYZ(cornerPt.X, cornerPt.Y, zStarterBottom);
+                            XYZ topPt = basePt + uZ * starterLenFoot;
 
-                            List<Curve> sCurves = new List<Curve>();
-                            XYZ pBẻChân = cPt + hDir * starterHookFoot;
-                            XYZ pĐỉnhChờ = cPt + uZ * (starterLenFoot + Math.Abs(zStarterBottom));
+                            List<Curve> starterCurves = new List<Curve>();
+                            XYZ bẻGiòGàDir = (cornerPt - eccentricCenter).Normalize();
+                            XYZ hookStart = basePt + bẻGiòGàDir * starterHookFoot;
 
-                            sCurves.Add(Line.CreateBound(pBẻChân, cPt));
-                            sCurves.Add(Line.CreateBound(cPt, pĐỉnhChờ));
+                            starterCurves.Add(Line.CreateBound(hookStart, basePt));
+                            starterCurves.Add(Line.CreateBound(basePt, topPt));
+
+                            XYZ sNormal = bẻGiòGàDir.CrossProduct(uZ).Normalize();
 
                             if (starterBarType != null)
                             {
-                                Rebar starterRebar = Rebar.CreateFromCurves(_doc, styleStandard, starterBarType, null, null, columnHostElement, sNormal, sCurves, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
+                                Rebar starterRebar = Rebar.CreateFromCurves(_doc, styleStandard, starterBarType, null, null, footing, sNormal, starterCurves, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
                                 if (starterRebar != null) SetRebarSolid3D(starterRebar, activeView3D);
                             }
                         }
 
                         CurveLoop stirrupLoop = new CurveLoop();
-                        stirrupLoop.Append(Line.CreateBound(corner1, corner2));
-                        stirrupLoop.Append(Line.CreateBound(corner2, corner3));
-                        stirrupLoop.Append(Line.CreateBound(corner3, corner4));
-                        stirrupLoop.Append(Line.CreateBound(corner4, corner1));
+                        XYZ stirrupBaseCenter = eccentricCenter + uZ * zStarterBottom;
 
-                        if (stirrupBarType != null && stirrupLoop.Count() > 0)
+                        XYZ s1 = stirrupBaseCenter + uX * (colXFoot / 2) + uY * (colYFoot / 2);
+                        XYZ s2 = stirrupBaseCenter + uX * (-colXFoot / 2) + uY * (colYFoot / 2);
+                        XYZ s3 = stirrupBaseCenter + uX * (-colXFoot / 2) + uY * (-colYFoot / 2);
+                        XYZ s4 = stirrupBaseCenter + uX * (colXFoot / 2) + uY * (-colYFoot / 2);
+
+                        stirrupLoop.Append(Line.CreateBound(s1, s2));
+                        stirrupLoop.Append(Line.CreateBound(s2, s3));
+                        stirrupLoop.Append(Line.CreateBound(s3, s4));
+                        stirrupLoop.Append(Line.CreateBound(s4, s1));
+
+                        List<Curve> finalStirrupProfile = stirrupLoop.ToList();
+
+                        if (stirrupBarType != null && finalStirrupProfile.Count > 0)
                         {
-                            List<Curve> finalStirrupProfile = stirrupLoop.ToList();
-                            Rebar stirrupRebar = Rebar.CreateFromCurves(_doc, styleStirrup, stirrupBarType, null, null, columnHostElement, uZ, finalStirrupProfile, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
-
+                            Rebar stirrupRebar = Rebar.CreateFromCurves(_doc, styleStirrup, stirrupBarType, null, null, footing, uZ, finalStirrupProfile, RebarHookOrientation.Right, RebarHookOrientation.Right, true, true);
                             if (stirrupRebar != null)
                             {
-                                double stirrupSpcFoot = UnitUtils.ConvertToInternalUnits(this.StirrupSpacing, UnitTypeId.Millimeters);
-                                double heightInsideFooting = Math.Abs(zStarterBottom);
-                                double heightOutsideFooting = stirrupSpcFoot * 2;
-                                double totalStirrupDistributionLength = heightInsideFooting + heightOutsideFooting;
-
-                                stirrupRebar.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(stirrupSpcFoot, totalStirrupDistributionLength, true, true, true);
+                                double stirrupSpcFoot = UnitUtils.ConvertToInternalUnits(RebarData.StirrupSpacing, UnitTypeId.Millimeters);
+                                double heightInsideFooting = Math.Abs(zStarterBottom - bbox.Max.Z);
+                                stirrupRebar.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(stirrupSpcFoot, heightInsideFooting, true, true, true);
                                 SetRebarSolid3D(stirrupRebar, activeView3D);
                             }
                         }
@@ -380,8 +329,29 @@ namespace AddinVeMong.ViewModels
             }
             catch (Exception ex)
             {
-                TaskDialog.Show("Lỗi thực thi", $"Có lỗi xảy ra: {ex.Message}");
+                TaskDialog.Show("Lỗi hệ thống", $"Có lỗi xảy ra: {ex.Message}");
             }
+        }
+
+        protected void SetRebarSolid3D(Rebar rebar, View3D view3D)
+        {
+            if (rebar == null || view3D == null) return;
+            try
+            {
+                rebar.SetUnobscuredInView(view3D, true);
+                Parameter solidParam = rebar.LookupParameter("Solid In View");
+                if (solidParam != null && !solidParam.IsReadOnly)
+                {
+                    solidParam.Set(1);
+                }
+            }
+            catch { }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

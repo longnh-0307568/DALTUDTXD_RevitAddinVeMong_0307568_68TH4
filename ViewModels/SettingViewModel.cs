@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AddinVeMong.Commands;
 using System.Globalization;
-using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using AddinVeMong.Commands;
 
 namespace AddinVeMong.ViewModels
 {

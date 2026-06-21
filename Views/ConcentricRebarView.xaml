@@ -35,7 +35,7 @@
                 <Expander IsExpanded="True" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecGeneral}" 
-                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -57,7 +57,7 @@
                 <Expander IsExpanded="False" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecLongBar}" 
-                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -97,7 +97,7 @@
                 <Expander IsExpanded="False" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecShortBar}" 
-                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                    FontWeight="Bold"/>
                     </Expander.Header>
 
@@ -137,7 +137,7 @@
                 <Expander IsExpanded="False" Margin="0,5">
                     <Expander.Header>
                         <TextBlock Text="{x:Static lang:Resource.SecColumn}" 
-                   Foreground="{DynamicResource TextPrimaryColor}" 
+                   Foreground="{DynamicResource HeaderTextPrimaryColor}" 
                    FontWeight="Bold"/>
                     </Expander.Header>
 

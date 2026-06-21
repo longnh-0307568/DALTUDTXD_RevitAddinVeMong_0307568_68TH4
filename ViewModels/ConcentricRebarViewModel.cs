@@ -26,18 +26,17 @@ namespace AddinVeMong.ViewModels
         private readonly ExternalCommandData _commandData;
         private readonly Document _doc;
         private readonly UIDocument _uiDoc;
-        private readonly List<Element> _selectedFootings;
+        private readonly List<Element> _selectedFootings; // Dach sách móng chọn trong Revit
 
-        #region Cấu trúc Dữ liệu Model Chung
+
         private FootingRebarModel _rebarData = new FootingRebarModel();
         public FootingRebarModel RebarData
         {
             get => _rebarData;
             set { _rebarData = value; OnPropertyChanged(); }
         }
-        #endregion
 
-        #region Các thuộc tính hiển thị Preview (Giữ nguyên)
+        // Collection lưu danh sách vị trí thép để bind ra giao diện
         private ObservableCollection<BarPreviewX> _previewShortBars;
         public ObservableCollection<BarPreviewX> PreviewShortBars
         {
@@ -51,19 +50,20 @@ namespace AddinVeMong.ViewModels
             get => _previewLongBars;
             set { _previewLongBars = value; OnPropertyChanged(); }
         }
-        #endregion
 
         public ICommand DrawRebarCommand { get; }
 
         public ConcentricRebarViewModel(ExternalCommandData commandData, List<Element> footings)
         {
+            // Lưu các thông tin từ Revit để sử dụng sau này(Document, UIDocument, danh sách móng)
             _commandData = commandData;
             _doc = commandData.Application.ActiveUIDocument.Document;
             _uiDoc = commandData.Application.ActiveUIDocument;
             _selectedFootings = footings;
 
-            PreviewShortBars = new ObservableCollection<BarPreviewX>();
-            PreviewLongBars = new ObservableCollection<BarPreviewY>();
+            // Khởi tạo danh sách chứa các thanh thép preview (dùng để hiển thị lên UI)
+            PreviewShortBars = new(); // net8
+            PreviewLongBars = new();
 
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
 
@@ -80,17 +80,19 @@ namespace AddinVeMong.ViewModels
                 }
             };
 
+            //Khởi tạo lần đầu: Vẽ ra hình ảnh mặc định ngay khi mở bảng điều khiển
             UpdateShortBarsPreview();
             UpdateLongBarsPreview();
         }
 
         private void UpdateShortBarsPreview()
         {
+            // Kiểm tra danh sách khởi tạo chưa?
             if (PreviewShortBars == null) return;
             PreviewShortBars.Clear();
 
             int quantity = RebarData.ShortQuantity; // Lấy từ Model
-            if (quantity <= 1) return;
+            if (quantity <= 1) return; // Dưới 1 thanh bỏ qua vẽ
 
             double startX = 5;
             double endX = 265;
@@ -120,10 +122,12 @@ namespace AddinVeMong.ViewModels
             }
         }
 
+        // Vẽ thép
         private void ExecuteDrawRebar(object parameter)
         {
             try
             {
+                // Kiểm tra đảm bảo người dùng đã chọn móng trước khi nhấn nút, 
                 if (_selectedFootings == null || _selectedFootings.Count == 0)
                 {
                     TaskDialog.Show("Thông báo", "Không tìm thấy dữ liệu móng được chọn.");
@@ -132,10 +136,12 @@ namespace AddinVeMong.ViewModels
 
                 View3D activeView3D = _doc.ActiveView as View3D;
 
+                // Bắt đầu một transaction: Mọi thay đổi trong Revit đều phải nằm trong này
                 using (Transaction trans = new Transaction(_doc, "Tạo Thép Móng Hàng Loạt"))
                 {
                     trans.Start();
 
+                    // Tìm kiếm tất cả các loại thép (RebarBarType)
                     var barTypes = new FilteredElementCollector(_doc)
                         .OfClass(typeof(RebarBarType))
                         .Cast<RebarBarType>()
@@ -144,7 +150,7 @@ namespace AddinVeMong.ViewModels
                     if (barTypes.Count == 0)
                     {
                         TaskDialog.Show("Thiếu Dữ Liệu", "Dự án chưa được tải Family Thép.");
-                        trans.RollBack();
+                        trans.RollBack(); // Hủy bỏ các thay đổi nếu có
                         return;
                     }
 
@@ -162,10 +168,11 @@ namespace AddinVeMong.ViewModels
                     RebarStyle styleStandard = RebarStyle.Standard;
                     RebarStyle styleStirrup = RebarStyle.StirrupTie;
 
+                    //Duyệt qua từng móng được chọn, dùng thuật toán quét không gian (BoundingBox) để tìm cột tương ứng phía trên
                     foreach (Element footingElement in _selectedFootings)
                     {
-                        FamilyInstance footingInstance = footingElement as FamilyInstance;
-                        if (footingInstance == null) continue;
+                        // Kiểm tra kiểu đối tượng
+                        if (footingElement is not FamilyInstance footingInstance) continue; // dùng Pattern Matching net8 cho gọn
 
                         Element columnElement = null;
                         var boundingBox = footingElement.get_BoundingBox(null);
@@ -214,8 +221,8 @@ namespace AddinVeMong.ViewModels
                         double zBottom = -heightFoot + coverFoot;
                         XYZ baseCenter = footingCenter + uZ * zBottom;
 
-                        List<Curve> curvesLong = new List<Curve>();
-                        List<Curve> curvesShort = new List<Curve>();
+                        List<Curve> curvesLong = new();
+                        List<Curve> curvesShort = new();
                         XYZ normalLong, normalShort;
 
                         // Tham chiếu từ model (RebarData.LongHookLength, RebarData.ShortHookLength,...)
@@ -229,6 +236,17 @@ namespace AddinVeMong.ViewModels
                         double totalDistLong = (RebarData.LongQuantity > 1) ? (RebarData.LongQuantity - 1) * longSpacingFoot : 0;
                         double totalDistShort = (RebarData.ShortQuantity > 1) ? (RebarData.ShortQuantity - 1) * shortSpacingFoot : 0;
 
+                        // Công thức chung
+                        // 1. Công thức tính điểm định vị hình học cho thép chữ U (Curves):
+                        //    - Điểm góc uốn đáy 2 (p2/q2): baseCenter + (VectorU_Rải * startX/Y) + (VectorU * (-Cạnh_Móng / 2 + coverFoot))
+                        //    - Điểm góc uốn đáy 3 (p3/q3): baseCenter + (VectorU_Rải * startX/Y) + (VectorU_Thanh * (Cạnh_Móng / 2 - coverFoot))
+                        //    - Điểm đỉnh móc 1    (p1/q1): p2_or_q2 + uZ * hookLong/Short
+                        //    - Điểm đỉnh móc 4    (p4/q4): p3_or_q3 + uZ * hookLong/Short
+                        //
+                        // 2. Quy ước phân lớp cao độ để tránh xung đột hình học:
+                        //    - Thép lớp dưới (baseCenter)     : Lấy cao độ đáy zBottom = -heightFoot + coverFoot
+                        //    - Thép lớp trên (baseCenterShort): Tịnh tiến lên một khoảng bằng đường kính lớp dưới = zBottom + longDiaFoot
+
                         if (lengthFoot >= widthFoot)
                         {
                             double startX_Long = -totalDistLong / 2;
@@ -237,6 +255,8 @@ namespace AddinVeMong.ViewModels
                             XYZ p1 = p2 + uZ * hookLong;
                             XYZ p4 = p3 + uZ * hookLong;
                             curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
+
+                            // Đặt theo phương Y
                             normalLong = uX;
 
                             double startY_Short = -totalDistShort / 2;
@@ -246,6 +266,7 @@ namespace AddinVeMong.ViewModels
                             XYZ q1 = q2 + uZ * hookShort;
                             XYZ q4 = q3 + uZ * hookShort;
                             curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
+
                             normalShort = uY;
                         }
                         else
@@ -256,6 +277,7 @@ namespace AddinVeMong.ViewModels
                             XYZ p1 = p2 + uZ * hookLong;
                             XYZ p4 = p3 + uZ * hookLong;
                             curvesLong.AddRange(new[] { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) });
+
                             normalLong = uY;
 
                             double startX_Short = -totalDistShort / 2;
@@ -265,6 +287,8 @@ namespace AddinVeMong.ViewModels
                             XYZ q1 = q2 + uZ * hookShort;
                             XYZ q4 = q3 + uZ * hookShort;
                             curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
+
+                            
                             normalShort = uX;
                         }
 
@@ -288,13 +312,33 @@ namespace AddinVeMong.ViewModels
                             }
                         }
 
-                        // Tham chiếu từ model (RebarData.ColumnWidthX, RebarData.ColumnWidthY,...)
+                        //Công thức chung
+                        // 1. Công thức cao độ đáy thép chờ (zStarterBottom):
+                        //  zStarterBottom = zBottom + longDiaFoot + shortDiaFoot
+                        //   (Nằm trên cả 2 lớp thép móng để tránh xung đột va chạm hình học)
+                        //
+                        // 2. Công thức chiều dài thanh thép chờ tính từ đáy (starterLenFoot):
+                        //    starterLenFoot = StarterLength_nhập + |zStarterBottom|
+                        //
+                        // 3. Tính vị trí 4 góc chân cột (Định tâm đối xứng qua starterBaseCenter):
+                        //    corner1 = starterBaseCenter + uX * (colXFoot / 2) + uY * (colYFoot / 2)
+                        //    corner2 = starterBaseCenter - uX * (colXFoot / 2) + uY * (colYFoot / 2)
+                        //    corner3 = starterBaseCenter - uX * (colXFoot / 2) - uY * (colYFoot / 2)
+                        //    corner4 = starterBaseCenter + uX * (colXFoot / 2) - uY * (colYFoot / 2)
+                        //
+                        //    - uX, uY, uZ: Lần lượt là các vector chỉ phương đơn vị của hệ trục tọa độ móng.
+                        //    - hookDirections: Vector chỉ phương hướng neo vào đáy móng.
+                        //    - starterNormals: Vector pháp tuyến của mặt phẳng chứa thanh thép (hướng rải thép).
                         double colXFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthX, UnitTypeId.Millimeters);
                         double colYFoot = UnitUtils.ConvertToInternalUnits(RebarData.ColumnWidthY, UnitTypeId.Millimeters);
                         double starterHookFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterHookLength, UnitTypeId.Millimeters);
-                        double starterLenFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterLength, UnitTypeId.Millimeters);
 
+                        // Tính toán cao độ đặt chân thép chờ
                         double zStarterBottom = zBottom + longDiaFoot + UnitUtils.ConvertToInternalUnits(RebarData.ShortDiameter, UnitTypeId.Millimeters);
+
+                        double starterLenFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterLength, UnitTypeId.Millimeters) + Math.Abs(zStarterBottom);
+                        
+                        // Xác định tâm của mặt phẳng đặt chân thép chờ dựa theo vector chỉ phương trục đứng uZ
                         XYZ starterBaseCenter = footingCenter + uZ * zStarterBottom;
 
                         XYZ corner1 = starterBaseCenter + uX * (colXFoot / 2) + uY * (colYFoot / 2);
@@ -314,7 +358,7 @@ namespace AddinVeMong.ViewModels
 
                             List<Curve> sCurves = new List<Curve>();
                             XYZ pBẻChân = cPt + hDir * starterHookFoot;
-                            XYZ pĐỉnhChờ = cPt + uZ * (starterLenFoot + Math.Abs(zStarterBottom));
+                            XYZ pĐỉnhChờ = cPt + uZ * starterLenFoot;
 
                             sCurves.Add(Line.CreateBound(pBẻChân, cPt));
                             sCurves.Add(Line.CreateBound(cPt, pĐỉnhChờ));
@@ -380,13 +424,11 @@ namespace AddinVeMong.ViewModels
             catch { }
         }
 
-        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
 
         public class FootingSelectionFilter : Autodesk.Revit.UI.Selection.ISelectionFilter
         {
