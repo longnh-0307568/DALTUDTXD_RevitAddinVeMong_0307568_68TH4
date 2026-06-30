@@ -124,13 +124,13 @@
     <value>1. GENERAL PARAMETERS (FOOTING &amp; CONCRETE)</value>
   </data>
   <data name="SecLongBar" xml:space="preserve">
-    <value>2. LONG REBAR (X-DIRECTION)</value>
+    <value>LONG REBAR</value>
   </data>
   <data name="SecShortBar" xml:space="preserve">
-    <value>3. SHORT REBAR (Y-DIRECTION)</value>
+    <value>SHORT REBAR</value>
   </data>
   <data name="SecColumn" xml:space="preserve">
-    <value>4. COLUMN STARTER &amp; STIRRUP BARS</value>
+    <value>COLUMN STARTER &amp; STIRRUP BARS</value>
   </data>
   <data name="ConcreteCover" xml:space="preserve">
     <value>Concrete Cover (mm):</value>
@@ -200,5 +200,11 @@
   </data>
   <data name="EccentricityY" xml:space="preserve">
     <value>Eccentricity Y (mm):</value>
+  </data>
+  <data name="HeaderBar" xml:space="preserve">
+    <value>LONG BAR</value>
+  </data>
+  <data name="HeaderGeneral" xml:space="preserve">
+    <value>GENERAL</value>
   </data>
 </root>

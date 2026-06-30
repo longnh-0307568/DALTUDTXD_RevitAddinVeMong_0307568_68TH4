@@ -160,6 +160,24 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to THÉP CẠNH DÀI.
+        /// </summary>
+        public static string HeaderBar {
+            get {
+                return ResourceManager.GetString("HeaderBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to THÔNG TIN CHUNG.
+        /// </summary>
+        public static string HeaderGeneral {
+            get {
+                return ResourceManager.GetString("HeaderGeneral", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chiều dài bẻ móc (mm):.
         /// </summary>
         public static string HookLength {
@@ -205,7 +223,7 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 4. THÉP CỔ CỘT &amp; ĐAI.
+        ///   Looks up a localized string similar to THÉP CỔ CỘT &amp; ĐAI.
         /// </summary>
         public static string SecColumn {
             get {
@@ -232,7 +250,7 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2. THÉP CẠNH DÀI (PHƯƠNG X).
+        ///   Looks up a localized string similar to THÉP CẠNH DÀI.
         /// </summary>
         public static string SecLongBar {
             get {
@@ -241,7 +259,7 @@ namespace AddinVeMong.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 3. THÉP CẠNH NGẮN (PHƯƠNG Y).
+        ///   Looks up a localized string similar to THÉP CẠNH NGẮN.
         /// </summary>
         public static string SecShortBar {
             get {

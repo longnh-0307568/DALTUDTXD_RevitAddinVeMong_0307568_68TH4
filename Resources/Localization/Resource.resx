@@ -124,13 +124,13 @@
     <value>1. THÔNG SỐ CHUNG (MÓNG &amp; BÊ TÔNG)</value>
   </data>
   <data name="SecLongBar" xml:space="preserve">
-    <value>2. THÉP CẠNH DÀI (PHƯƠNG X)</value>
+    <value>THÉP CẠNH DÀI</value>
   </data>
   <data name="SecShortBar" xml:space="preserve">
-    <value>3. THÉP CẠNH NGẮN (PHƯƠNG Y)</value>
+    <value>THÉP CẠNH NGẮN</value>
   </data>
   <data name="SecColumn" xml:space="preserve">
-    <value>4. THÉP CỔ CỘT &amp; ĐAI</value>
+    <value>THÉP CỔ CỘT &amp; ĐAI</value>
   </data>
   <data name="ConcreteCover" xml:space="preserve">
     <value>Lớp bê tông bảo vệ (mm):</value>
@@ -200,5 +200,11 @@
   </data>
   <data name="EccentricityY" xml:space="preserve">
     <value>Độ lệch tâm Y (mm):</value>
+  </data>
+  <data name="HeaderBar" xml:space="preserve">
+    <value>THÉP CẠNH DÀI</value>
+  </data>
+  <data name="HeaderGeneral" xml:space="preserve">
+    <value>THÔNG TIN CHUNG</value>
   </data>
 </root>
