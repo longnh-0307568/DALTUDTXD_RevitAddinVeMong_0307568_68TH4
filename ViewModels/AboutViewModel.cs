@@ -11,10 +11,10 @@ namespace AddinVeMong.ViewModels
 
         public AboutViewModel()
         {
-            ProjectTitle = "ADD-IN THIẾT KẾ MÓNG ĐƠN VÁT";
+            ProjectTitle = "ADD-IN THIẾT KẾ MÓNG ĐƠN";
 
             // Giới thiệu ngắn gọn dưới 5 dòng
-            Description = "Công cụ hỗ trợ kỹ sư tự động hóa quá trình mô hình cốt thép móng đơn vát trong Revit.\n" +
+            Description = "Công cụ hỗ trợ kỹ sư tự động hóa quá trình mô hình cốt thép móng đơn trong Revit.\n" +
                           "Chức năng chính: Quản lý thông số hình học, tự động bố trí thép cạnh dài, thép cạnh ngắn,\n" +
                           "thép cổ cột và thép đai. Giúp tăng tốc độ thiết kế.";
 
@@ -22,9 +22,8 @@ namespace AddinVeMong.ViewModels
             VersionInfo = $"Phiên bản: {version}";
 
             // Placeholder thành viên
-            MemberPlaceholder = "Họ và tên: [Tên của Bạn ở đây]\n" +
-                                "MSSV: [Mã số sinh viên]\n" +
-                                "Lớp: [Tên lớp/đồ án]";
+            MemberPlaceholder = "Sinh viên 1: Nguyễn Hoàng Long\n" +
+                                "Sinh viên 2: Đoàn Quang Ánh\n";
         }
     }
 }
