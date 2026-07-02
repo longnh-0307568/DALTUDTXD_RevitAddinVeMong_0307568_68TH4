@@ -21,9 +21,6 @@ namespace AddinVeMong
             string showConcentricUIPath = "AddinVeMong.Commands.ShowConcentricWindowCommand";
             string showEccentricUIPath = "AddinVeMong.Commands.ShowEccentricWindowCommand";
 
-            string loadFoundationFamilyPath = "AddinVeMong.Commands.LoadFoundationFamilyCommand";
-            string loadRebarFamilyPath = "AddinVeMong.Commands.LoadRebarFamilyCommand";
-
             // panel Giới thiệu
             RibbonPanel panelAbout = application.CreateRibbonPanel(tabName, "Giới thiệu");
 
@@ -66,33 +63,6 @@ namespace AddinVeMong
             );
             btnEccentricData.LargeImage = CreateImage(assemblyName, "Eccentric.png");
             pulldownRebar.AddPushButton(btnEccentricData);
-
-            // panel thư viện
-            RibbonPanel panelLibrary = application.CreateRibbonPanel(tabName, "Thư viện");
-
-            // Stack button: Tải family móng
-            PushButtonData btnLoadFoundationData = new(
-                "btnLoadFoundation",
-                "Tải family\nmóng",
-                assemblyPath,
-                loadFoundationFamilyPath
-            );
-            btnLoadFoundationData.Image = CreateImage(assemblyName, "LoadFoundation.png");
-
-            // Stack button: Tải family thép
-            PushButtonData btnLoadRebarData = new(
-                "btnLoadRebar",
-                "Tải family\nthép",
-                assemblyPath,
-                loadRebarFamilyPath
-            );
-            btnLoadRebarData.Image = CreateImage(assemblyName, "LoadRebar.png");
-
-            // Thêm 2 stack button vào panel
-            panelLibrary.AddStackedItems(
-                btnLoadFoundationData,
-                btnLoadRebarData
-            );
 
             return Result.Succeeded;
         }

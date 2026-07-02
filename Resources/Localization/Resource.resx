@@ -207,4 +207,7 @@
   <data name="HeaderGeneral" xml:space="preserve">
     <value>THÔNG TIN CHUNG</value>
   </data>
+  <data name="WindowTitleB" xml:space="preserve">
+    <value>Thiết lập cốt thép móng lệch tâm</value>
+  </data>
 </root>

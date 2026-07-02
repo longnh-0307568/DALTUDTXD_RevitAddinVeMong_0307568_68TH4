@@ -207,4 +207,7 @@
   <data name="HeaderGeneral" xml:space="preserve">
     <value>GENERAL</value>
   </data>
+  <data name="WindowTitleB" xml:space="preserve">
+    <value>Eccentric Footing Rebar Settings</value>
+  </data>
 </root>

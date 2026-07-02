@@ -329,5 +329,14 @@ namespace AddinVeMong.Resources.Localization {
                 return ResourceManager.GetString("WindowTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thiết lập cốt thép móng lệch tâm.
+        /// </summary>
+        public static string WindowTitleB {
+            get {
+                return ResourceManager.GetString("WindowTitleB", resourceCulture);
+            }
+        }
     }
 }

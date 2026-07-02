@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:lang="clr-namespace:AddinVeMong.Resources.Localization"
         mc:Ignorable="d"
-        Title="{x:Static lang:Resource.WindowTitle}" Height="680" Width="980" 
+        Title="{x:Static lang:Resource.WindowTitleB}" Height="680" Width="980" 
         WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBackgroundColor}" ResizeMode="NoResize">
     <Window.Resources>
         <ResourceDictionary>

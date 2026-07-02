@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Thông tin phần mềm" Height="400" Width="550" 
+        Title="Thông tin phần mềm" Height="400" Width="850" 
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
         Background="{DynamicResource WindowBackgroundColor}">
 
