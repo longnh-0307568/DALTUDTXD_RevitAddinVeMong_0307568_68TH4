@@ -265,6 +265,8 @@ namespace AddinVeMong.ViewModels
                         List<XYZ> hookDirections = new List<XYZ> { uX, -uX, -uX, uX };
                         List<XYZ> starterNormals = new List<XYZ> { uY, uY, uY, uY };
 
+                        double deltaShortLenFoot = UnitUtils.ConvertToInternalUnits(180, UnitTypeId.Millimeters); // Khoảng chênh lệch chiều dài giữa thanh dài và thanh ngắn (150mm)
+
                         for (int i = 0; i < 4; i++)
                         {
                             XYZ cPt = columnCorners[i];
@@ -272,11 +274,19 @@ namespace AddinVeMong.ViewModels
                             XYZ sNormal = starterNormals[i];
 
                             List<Curve> sCurves = new List<Curve>();
-                            XYZ pBẻChân = cPt + hDir * starterHookFoot;
-                            XYZ pĐỉnhChờ = cPt + uZ * starterLenFoot;
+                            XYZ pHook = cPt + hDir * starterHookFoot;
 
-                            sCurves.Add(Line.CreateBound(pBẻChân, cPt));
-                            sCurves.Add(Line.CreateBound(cPt, pĐỉnhChờ));
+                            // Phân loại: i = 0, 2 là thanh dài; i = 1, 3 là thanh ngắn
+                            double currentStarterLen = starterLenFoot;
+                            if (i == 1 || i == 3)
+                            {
+                                currentStarterLen -= deltaShortLenFoot;
+                            }
+
+                            XYZ starterTopPoint = cPt + uZ * currentStarterLen; // starterTopPoint đỉnh chờ
+
+                            sCurves.Add(Line.CreateBound(pHook, cPt));
+                            sCurves.Add(Line.CreateBound(cPt, starterTopPoint));
 
                             if (starterBarType != null)
                             {

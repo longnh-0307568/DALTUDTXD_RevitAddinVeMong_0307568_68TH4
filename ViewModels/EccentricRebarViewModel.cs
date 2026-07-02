@@ -202,19 +202,30 @@ namespace AddinVeMong.ViewModels
 
                         List<XYZ> starterCorners = new List<XYZ> { corner1, corner2, corner3, corner4 };
 
-                        foreach (XYZ cornerPt in starterCorners)
+                        double deltaShortLenFoot = UnitUtils.ConvertToInternalUnits(150, UnitTypeId.Millimeters); // Khoảng chênh lệch giữa thanh dài và ngắn (150mm)
+
+                        for (int i = 0; i < starterCorners.Count; i++)
                         {
+                            XYZ cornerPt = starterCorners[i];
                             XYZ basePt = new XYZ(cornerPt.X, cornerPt.Y, zStarterBottom);
-                            XYZ topPt = basePt + uZ * starterLenFoot;
+
+                            // Phân loại chiều dài: i = 0, 2 (thanh dài) | i = 1, 3 (thanh ngắn)
+                            double currentLen = starterLenFoot;
+                            if (i == 1 || i == 3)
+                            {
+                                currentLen -= deltaShortLenFoot;
+                            }
+
+                            XYZ starterTopPoint = basePt + uZ * currentLen;
 
                             List<Curve> starterCurves = new List<Curve>();
-                            XYZ bẻGiòGàDir = (cornerPt - eccentricCenter).Normalize();
-                            XYZ hookStart = basePt + bẻGiòGàDir * starterHookFoot;
+                            XYZ hookDirection = (cornerPt - eccentricCenter).Normalize();
+                            XYZ pHook = basePt + hookDirection * starterHookFoot; // Đổi hookStart -> pHook
 
-                            starterCurves.Add(Line.CreateBound(hookStart, basePt));
-                            starterCurves.Add(Line.CreateBound(basePt, topPt));
+                            starterCurves.Add(Line.CreateBound(pHook, basePt));
+                            starterCurves.Add(Line.CreateBound(basePt, starterTopPoint));
 
-                            XYZ sNormal = bẻGiòGàDir.CrossProduct(uZ).Normalize();
+                            XYZ sNormal = hookDirection.CrossProduct(uZ).Normalize();
 
                             if (starterBarType != null)
                             {
