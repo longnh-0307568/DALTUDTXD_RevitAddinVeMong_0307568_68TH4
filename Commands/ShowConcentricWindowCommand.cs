@@ -52,15 +52,15 @@ namespace AddinVeMong.Commands
                     return Result.Cancelled;
                 }
 
-                // Khởi tạo giao diện cửa sổ (View) 
-                ConcentricRebarView window = new ConcentricRebarView();
+                // Khởi tạo ViewModel trước
+                ConcentricRebarViewModel viewModel = new ConcentricRebarViewModel(commandData, selectedFootings);
 
+                //  Khởi tạo giao diện cửa sổ (View) và truyền trực tiếp viewModel vào trong ngoặc
+                ConcentricRebarView window = new ConcentricRebarView(viewModel);
 
-                // Ép cửa sổ Form Thép nhận theme hiện tại từ ThemeManager (Ghi đè hoàn toàn LightTheme trong XAML)
+                // Nnhận theme hiện tại từ ThemeManager
                 window.Resources.MergedDictionaries.Add(Helpers.ThemeManager.CurrentThemeResource);
 
-                // Khởi tạo bộ não xử lý (ViewModel)
-                ConcentricRebarViewModel viewModel = new ConcentricRebarViewModel(commandData, selectedFootings);
                 window.DataContext = viewModel;
 
                 window.ShowDialog();

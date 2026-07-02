@@ -16,115 +16,36 @@
                 <ResourceDictionary Source="pack://application:,,,/AddinVeMong;component/Resources/Styles/TextBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <!-- Tìm đến đoạn này trong Window.Resources của file ConcentricRebarView.xaml -->
             <DataTemplate x:Key="PreviewTemplate">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                <Border Padding="10" Background="{DynamicResource ControlBackgroundColor}" CornerRadius="5" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" VerticalAlignment="Stretch" Margin="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="{x:Static lang:Resource.ElevationView}" Foreground="{DynamicResource TextPrimaryColor}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
-                    <Border Grid.Row="0" Padding="10" Background="{DynamicResource ControlBackgroundColor}" CornerRadius="5" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" VerticalAlignment="Stretch" Margin="0,0,0,5">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{x:Static lang:Resource.ElevationView}" Foreground="{DynamicResource TextPrimaryColor}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                            <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Canvas Width="400" Height="400" Background="White">
-                                    <Rectangle Canvas.Left="50" Canvas.Top="250" Width="300" Height="80" Fill="#EAEAEA" Stroke="#555555" StrokeThickness="2" ToolTip="Khối móng đơn"/>
-                                    <Rectangle Canvas.Left="155" Canvas.Top="120" Width="90" Height="130" Fill="#DCDCD5" Stroke="#555555" StrokeThickness="2" ToolTip="Cổ cột"/>
-                                    <Rectangle Canvas.Left="60" Canvas.Top="260" Width="280" Height="65" Stroke="#999999" StrokeDashArray="4,4" StrokeThickness="1"/>
-                                    <Line X1="65" Y1="313" X2="335" Y2="313" Stroke="Red" StrokeThickness="3" ToolTip="{x:Static lang:Resource.SecLongBar}"/>
-                                    <ItemsControl ItemsSource="{Binding PreviewShortBars}" Canvas.Left="65" Canvas.Top="303">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <Canvas IsItemsHost="True"/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemContainerStyle>
-                                            <Style TargetType="ContentPresenter">
-                                                <Setter Property="Canvas.Left" Value="{Binding XPosition}"/>
-                                                <Setter Property="Canvas.Top" Value="0"/>
-                                            </Style>
-                                        </ItemsControl.ItemContainerStyle>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Ellipse Width="8" Height="8" Fill="Blue" ToolTip="{x:Static lang:Resource.SecShortBar}"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                    <Path Stroke="Green" StrokeThickness="4" Data="M 135,300 L 165,300 L 165,20" ToolTip="Thép chờ cổ cột"/>
-                                    <Path Stroke="Green" StrokeThickness="4" Data="M 265,300 L 235,300 L 235,20" ToolTip="Thép chờ cổ cột"/>
-                                    <Line X1="150" Y1="150" X2="250" Y2="150" Stroke="#FFA500" StrokeThickness="1"/>
-                                    <Line X1="150" Y1="180" X2="250" Y2="180" Stroke="#FFA500" StrokeThickness="1"/>
-                                    <Line X1="150" Y1="210" X2="250" Y2="210" Stroke="#FFA500" StrokeThickness="1"/>
-                                    <Line X1="150" Y1="240" X2="250" Y2="240" Stroke="#FFA500" StrokeThickness="1"/>
-                                    <Line X1="150" Y1="270" X2="250" Y2="270" Stroke="#FFA500" StrokeThickness="1"/>
-                                    <Line X1="150" Y1="290" X2="250" Y2="290" Stroke="#FFA500" StrokeThickness="1"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Grid>
-                    </Border>
+                        <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Canvas x:Name="canvas1" Width="400" Height="400" Background="White">
+                                <!-- 1. Đường viền bê tông móng và cổ cột -->
+                                <Path x:Name="PathProfile" Fill="#EAEAEA" Stroke="#555555" StrokeThickness="2" ToolTip="Khối móng và cổ cột"/>
 
-                    <Border Grid.Row="1" Padding="10" Background="{DynamicResource ControlBackgroundColor}" CornerRadius="5" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" VerticalAlignment="Stretch" Margin="0,5,0,0">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{x:Static lang:Resource.PlanView}" Foreground="{DynamicResource TextPrimaryColor}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                            <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Canvas Width="400" Height="400" Background="White">
-                                    <Rectangle Canvas.Left="50" Canvas.Top="100" Width="300" Height="200" Fill="#EAEAEA" Stroke="#555555" StrokeThickness="2" ToolTip="Khối móng đơn (Mặt bằng)"/>
-                                    <Rectangle Canvas.Left="145" Canvas.Top="160" Width="110" Height="80" Fill="#DCDCD5" Stroke="#555555" StrokeThickness="2" ToolTip="Cổ cột (Mặt bằng)"/>
-                                    <Rectangle Canvas.Left="60" Canvas.Top="110" Width="280" Height="180" Stroke="#999999" StrokeDashArray="4,4" StrokeThickness="1"/>
-                                    <ItemsControl ItemsSource="{Binding PreviewLongBars}" Canvas.Left="60" Canvas.Top="110">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <Canvas IsItemsHost="True"/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemContainerStyle>
-                                            <Style TargetType="ContentPresenter">
-                                                <Setter Property="Canvas.Top" Value="{Binding YPosition}"/>
-                                                <Setter Property="Canvas.Left" Value="0"/>
-                                            </Style>
-                                        </ItemsControl.ItemContainerStyle>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Line X1="0" Y1="0" X2="280" Y2="0" Stroke="Red" StrokeThickness="2" ToolTip="{x:Static lang:Resource.SecLongBar}"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                    <ItemsControl ItemsSource="{Binding PreviewShortBars}" Canvas.Left="65" Canvas.Top="110">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <Canvas IsItemsHost="True"/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemContainerStyle>
-                                            <Style TargetType="ContentPresenter">
-                                                <Setter Property="Canvas.Left" Value="{Binding XPosition}"/>
-                                                <Setter Property="Canvas.Top" Value="0"/>
-                                            </Style>
-                                        </ItemsControl.ItemContainerStyle>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Line X1="0" Y1="0" X2="0" Y2="180" Stroke="Blue" StrokeThickness="2" ToolTip="{x:Static lang:Resource.SecShortBar}"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                    <Ellipse Canvas.Left="150" Canvas.Top="165" Width="8" Height="8" Fill="Green" ToolTip="Thép chờ dọc cột"/>
-                                    <Ellipse Canvas.Left="242" Canvas.Top="165" Width="8" Height="8" Fill="Green" ToolTip="Thép chờ dọc cột"/>
-                                    <Ellipse Canvas.Left="150" Canvas.Top="227" Width="8" Height="8" Fill="Green" ToolTip="Thép chờ dọc cột"/>
-                                    <Ellipse Canvas.Left="242" Canvas.Top="227" Width="8" Height="8" Fill="Green" ToolTip="Thép chờ dọc cột"/>
-                                    <Rectangle Canvas.Left="148" Canvas.Top="163" Width="102" Height="72" Stroke="#FFA500" StrokeThickness="1.5" ToolTip="Thép đai cột"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Grid>
-                    </Border>
-                </Grid>
+                                <!-- 2. Thép đai rải trong cổ cột -->
+                                <Path x:Name="PathStirrup" Stroke="Red" StrokeThickness="1.5" ToolTip="Thép đai cổ cột"/>
+
+                                <!-- 3. Thép dọc cạnh dài (Thanh màu đỏ chạy ngang đáy) -->
+                                <Path x:Name="PathLongRebar" Stroke="Red" StrokeThickness="3" ToolTip="{x:Static lang:Resource.SecLongBar}"/>
+
+                                <!-- 4. Thép dọc cạnh ngắn-->
+                                <Path x:Name="PathShortRebar" Fill="Red" Stroke="Red" StrokeThickness="1" ToolTip="{x:Static lang:Resource.SecShortBar}"/>
+
+                                <!-- 5. Thép chờ cổ cột (2 thanh bẻ) -->
+                                <Path x:Name="PathColumnRebar" Stroke="Red" StrokeThickness="3" StrokeStartLineCap="Round" StrokeEndLineCap="Round" ToolTip="Thép chờ cổ cột"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Grid>
+                </Border>
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
