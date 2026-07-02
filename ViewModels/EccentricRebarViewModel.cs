@@ -25,19 +25,6 @@ namespace AddinVeMong.ViewModels
             get => _rebarData;
             set { _rebarData = value; OnPropertyChanged(); }
         }
-        private ObservableCollection<BarPreviewX> _previewShortBars;
-        public ObservableCollection<BarPreviewX> PreviewShortBars
-        {
-            get => _previewShortBars;
-            set { _previewShortBars = value; OnPropertyChanged(); }
-        }
-
-        private ObservableCollection<BarPreviewY> _previewLongBars;
-        public ObservableCollection<BarPreviewY> PreviewLongBars
-        {
-            get => _previewLongBars;
-            set { _previewLongBars = value; OnPropertyChanged(); }
-        }
 
         public ICommand DrawRebarCommand { get; }
 
@@ -50,60 +37,6 @@ namespace AddinVeMong.ViewModels
             _selectedFootings = selectedFootings;
 
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
-
-            PreviewShortBars = new();
-            PreviewLongBars = new();
-
-            // Theo dõi thay đổi preview
-            RebarData.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(FootingRebarModel.ShortQuantity))
-                {
-                    UpdateShortBarsPreview();
-                }
-                else if (e.PropertyName == nameof(FootingRebarModel.LongQuantity))
-                {
-                    UpdateLongBarsPreview();
-                }
-            };
-            UpdateShortBarsPreview();
-            UpdateLongBarsPreview();
-        }
-
-        private void UpdateShortBarsPreview()
-        {
-            if (PreviewShortBars == null) return;
-            PreviewShortBars.Clear();
-
-            int quantity = RebarData.ShortQuantity; // Lấy từ Model
-            if (quantity <= 1) return;
-
-            double startX = 5;
-            double endX = 265;
-            double step = (endX - startX) / (quantity - 1);
-
-            for (int i = 0; i < quantity; i++)
-            {
-                PreviewShortBars.Add(new BarPreviewX { XPosition = startX + (i * step) });
-            }
-        }
-
-        private void UpdateLongBarsPreview()
-        {
-            if (PreviewLongBars == null) return;
-            PreviewLongBars.Clear();
-
-            int quantity = RebarData.LongQuantity; // Lấy từ Model
-            if (quantity <= 1) return;
-
-            double startY = 5;
-            double endY = 175;
-            double step = (endY - startY) / (quantity - 1);
-
-            for (int i = 0; i < quantity; i++)
-            {
-                PreviewLongBars.Add(new BarPreviewY { YPosition = startY + (i * step) });
-            }
         }
 
         // --- HÀM THỰC THI CHÍNH KHI NHẤN NÚT "CREATE" ---

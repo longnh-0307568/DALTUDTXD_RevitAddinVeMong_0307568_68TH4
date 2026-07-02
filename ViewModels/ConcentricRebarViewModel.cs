@@ -11,44 +11,18 @@ using System.Windows.Input;
 
 namespace AddinVeMong.ViewModels
 {
-    public class BarPreviewX
-    {
-        public double XPosition { get; set; }
-    }
-
-    public class BarPreviewY
-    {
-        public double YPosition { get; set; }
-    }
-
     public class ConcentricRebarViewModel : INotifyPropertyChanged
     {
         private readonly ExternalCommandData _commandData;
         private readonly Document _doc;
         private readonly UIDocument _uiDoc;
-        private readonly List<Element> _selectedFootings; // Dach sách móng chọn trong Revit
-
+        private readonly List<Element> _selectedFootings; // Danh sách móng chọn trong Revit
 
         private FootingRebarModel _rebarData = new FootingRebarModel();
         public FootingRebarModel RebarData
         {
             get => _rebarData;
             set { _rebarData = value; OnPropertyChanged(); }
-        }
-
-        // Collection lưu danh sách vị trí thép để bind ra giao diện
-        private ObservableCollection<BarPreviewX> _previewShortBars;
-        public ObservableCollection<BarPreviewX> PreviewShortBars
-        {
-            get => _previewShortBars;
-            set { _previewShortBars = value; OnPropertyChanged(); }
-        }
-
-        private ObservableCollection<BarPreviewY> _previewLongBars;
-        public ObservableCollection<BarPreviewY> PreviewLongBars
-        {
-            get => _previewLongBars;
-            set { _previewLongBars = value; OnPropertyChanged(); }
         }
 
         public ICommand DrawRebarCommand { get; }
@@ -61,65 +35,7 @@ namespace AddinVeMong.ViewModels
             _uiDoc = commandData.Application.ActiveUIDocument;
             _selectedFootings = footings;
 
-            // Khởi tạo danh sách chứa các thanh thép preview (dùng để hiển thị lên UI)
-            PreviewShortBars = new(); // net8
-            PreviewLongBars = new();
-
             DrawRebarCommand = new RelayCommand(ExecuteDrawRebar);
-
-            // Khi dữ liệu số lượng trong Model thay đổi, tự động gọi hàm Preview của ViewModel
-            RebarData.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(FootingRebarModel.ShortQuantity))
-                {
-                    UpdateShortBarsPreview();
-                }
-                else if (e.PropertyName == nameof(FootingRebarModel.LongQuantity))
-                {
-                    UpdateLongBarsPreview();
-                }
-            };
-
-            //Khởi tạo lần đầu: Vẽ ra hình ảnh mặc định ngay khi mở bảng điều khiển
-            UpdateShortBarsPreview();
-            UpdateLongBarsPreview();
-        }
-
-        private void UpdateShortBarsPreview()
-        {
-            // Kiểm tra danh sách khởi tạo chưa?
-            if (PreviewShortBars == null) return;
-            PreviewShortBars.Clear();
-
-            int quantity = RebarData.ShortQuantity; // Lấy từ Model
-            if (quantity <= 1) return; // Dưới 1 thanh bỏ qua vẽ
-
-            double startX = 5;
-            double endX = 265;
-            double step = (endX - startX) / (quantity - 1);
-
-            for (int i = 0; i < quantity; i++)
-            {
-                PreviewShortBars.Add(new BarPreviewX { XPosition = startX + (i * step) });
-            }
-        }
-
-        private void UpdateLongBarsPreview()
-        {
-            if (PreviewLongBars == null) return;
-            PreviewLongBars.Clear();
-
-            int quantity = RebarData.LongQuantity; // Lấy từ Model
-            if (quantity <= 1) return;
-
-            double startY = 5;
-            double endY = 175;
-            double step = (endY - startY) / (quantity - 1);
-
-            for (int i = 0; i < quantity; i++)
-            {
-                PreviewLongBars.Add(new BarPreviewY { YPosition = startY + (i * step) });
-            }
         }
 
         // Vẽ thép
@@ -288,7 +204,6 @@ namespace AddinVeMong.ViewModels
                             XYZ q4 = q3 + uZ * hookShort;
                             curvesShort.AddRange(new[] { Line.CreateBound(q1, q2), Line.CreateBound(q2, q3), Line.CreateBound(q3, q4) });
 
-                            
                             normalShort = uX;
                         }
 
@@ -337,7 +252,7 @@ namespace AddinVeMong.ViewModels
                         double zStarterBottom = zBottom + longDiaFoot + UnitUtils.ConvertToInternalUnits(RebarData.ShortDiameter, UnitTypeId.Millimeters);
 
                         double starterLenFoot = UnitUtils.ConvertToInternalUnits(RebarData.StarterLength, UnitTypeId.Millimeters) + Math.Abs(zStarterBottom);
-                        
+
                         // Xác định tâm của mặt phẳng đặt chân thép chờ dựa theo vector chỉ phương trục đứng uZ
                         XYZ starterBaseCenter = footingCenter + uZ * zStarterBottom;
 

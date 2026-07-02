@@ -46,13 +46,16 @@ namespace AddinVeMong.Commands
                 }
 
                 // 3. Khởi tạo View và truyền dữ liệu
-                EccentricRebarView window = new EccentricRebarView();
+                // Khởi tạo ViewModel trước
+                EccentricRebarViewModel viewModel = new EccentricRebarViewModel(commandData, selectedFootings);
 
-                // Gán theme
+                // 2. Khởi tạo giao diện cửa sổ (View) và truyền trực tiếp viewModel vào trong ngoặc
+                EccentricRebarView window = new EccentricRebarView(viewModel);
+
+                // Ép cửa sổ Form Thép nhận theme hiện tại từ ThemeManager
                 window.Resources.MergedDictionaries.Add(Helpers.ThemeManager.CurrentThemeResource);
 
-                // Khởi tạo ViewModel với danh sách móng đã chọn
-                EccentricRebarViewModel viewModel = new EccentricRebarViewModel(commandData, selectedFootings);
+                // (Dòng này có thể giữ lại hoặc bỏ vì bên trong hàm khởi tạo của View đã tự gán DataContext rồi)
                 window.DataContext = viewModel;
 
                 window.ShowDialog();
