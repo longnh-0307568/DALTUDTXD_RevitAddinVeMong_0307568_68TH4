@@ -35,6 +35,7 @@ namespace AddinVeMong.ViewModels
             {
                 trans.Start();
 
+                // Lấy toàn bộ các kiểu đường kính thép (RebarBarType) có trong dự án
                 var barTypes = new FilteredElementCollector(_doc)
                     .OfClass(typeof(RebarBarType))
                     .Cast<RebarBarType>()
@@ -47,6 +48,7 @@ namespace AddinVeMong.ViewModels
                     return;
                 }
 
+                // Tìm kiếm RebarBarType phù hợp dựa trên tên cấu hình hoặc giá trị quy đổi từ đơn vị Internal (Feet) sang Millimeters.
                 RebarBarType defType = barTypes.FirstOrDefault();
                 RebarBarType longBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.LongDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.LongDiameter) < 0.1) ?? defType;
                 RebarBarType shortBarType = barTypes.FirstOrDefault(t => t.Name.Contains(RebarData.ShortDiameter.ToString()) || Math.Abs(UnitUtils.ConvertFromInternalUnits(t.get_Parameter(BuiltInParameter.REBAR_BAR_DIAMETER).AsDouble(), UnitTypeId.Millimeters) - RebarData.ShortDiameter) < 0.1) ?? defType;
@@ -61,6 +63,7 @@ namespace AddinVeMong.ViewModels
                     var boundingBox = footingElement.get_BoundingBox(null);
                     if (boundingBox != null)
                     {
+                        // Mở rộng Bounding Box của móng lên trên 2 mét theo trục Z để tìm các cấu kiện thuộc Category cột kết cấu (OST_StructuralColumns) giao cắt hoặc cắm vào móng
                         Outline outline = new(boundingBox.Min, boundingBox.Max + new XYZ(0.1, 0.1, 2.0));
                         var connectedColumns = new FilteredElementCollector(_doc)
                             .OfCategory(BuiltInCategory.OST_StructuralColumns)
@@ -70,11 +73,12 @@ namespace AddinVeMong.ViewModels
 
                         if (connectedColumns.Count > 0) columnElement = connectedColumns.First();
                     }
-
+                    // Biến xác định Host để đặt thép chờ và thép đai
                     Element columnHostElement = columnElement ?? footingElement;
 
                     if (_doc.GetElement(footingElement.GetTypeId()) is not ElementType footingType) continue;
 
+                    //Lấy các Parameter kích thước từ Type (ElementType) của móng
                     Parameter pLength = footingType.LookupParameter("Length");
                     Parameter pWidth = footingType.LookupParameter("Width");
                     Parameter pHeight = footingType.LookupParameter("Foundation Thickness") ?? footingType.LookupParameter("Thickness");
@@ -102,6 +106,7 @@ namespace AddinVeMong.ViewModels
                     double totalDistLong = (RebarData.LongQuantity > 1) ? (RebarData.LongQuantity - 1) * longSpacingFoot : 0;
                     double totalDistShort = (RebarData.ShortQuantity > 1) ? (RebarData.ShortQuantity - 1) * shortSpacingFoot : 0;
 
+                    //Điểm đặt(Origin) và hướng rải thép được tính từ tâm móng(tf.Origin)
                     // thép phương dài
                     double startX_Long = -totalDistLong / 2;
                     XYZ p2 = baseCenter + uX * startX_Long + uY * (-lengthFoot / 2 + coverFoot);
@@ -173,6 +178,8 @@ namespace AddinVeMong.ViewModels
                         if (stirrupRebar != null)
                         {
                             double stirrupSpcFoot = UnitUtils.ConvertToInternalUnits(RebarData.StirrupSpacing, UnitTypeId.Millimeters);
+                            //Thiết lập rải thép đai theo dạng khoảng cách tối đa (Maximum Spacing).
+                            //Chiều cao rải thép đai bao gồm chiều sâu chôn trong móng cộng thêm một khoảng nhô lên (stirrupSpcFoot * 2)
                             stirrupRebar.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(stirrupSpcFoot, Math.Abs(zStarterBottom) + (stirrupSpcFoot * 2), true, true, true);
                         }
                     }
